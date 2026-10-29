@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open-Source Events & RSVP App | Convertix Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-200 antialiased selection:bg-rose-500/20 selection:text-rose-300 p-4 sm:p-8">
+
+  <!-- Top App Bar -->
+  <div class="max-w-4xl mx-auto mb-6 flex items-center justify-between bg-slate-900/80 border border-white/10 rounded-2xl p-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-lg font-bold">
+        🎟️
+      </div>
+      <div>
+        <h1 class="text-sm sm:text-base font-extrabold text-white leading-tight">OpenEvents — Zero-Fee Event Ticketing & RSVP Engine</h1>
+        <p class="text-[11px] text-slate-400">Zero commission fees • Replaces Eventbrite (8% fee) & Meetup ($30/mo)</p>
+      </div>
+    </div>
+    <a href="../#portfolio" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-white transition-colors">
+      ← Agency Home
+    </a>
+  </div>
+
+  <main class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- Event Banner & Countdown -->
+    <div class="md:col-span-2 space-y-6">
+      
+      <!-- Event Header Card -->
+      <div class="bg-slate-900/90 border border-white/10 rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/20 text-xs font-bold mb-4">
+          <span>● Live Community Workshop</span>
+          <span>•</span>
+          <span>Limited to 50 Seats</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+          The Future of Web Design & 24/7 AI Automation
+        </h2>
+        
+        <p class="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+          Join local founders and tech creators for an intensive 2-hour masterclass on building high-converting web engines, eliminating SaaS fees, and setting up instant WhatsApp lead automation.
+        </p>
+
+        <!-- Key Meta -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10 text-xs">
+          <div>
+            <span class="text-slate-500 block text-[10px] uppercase font-bold">Date & Time</span>
+            <span class="text-white font-bold block mt-0.5" id="event-date-display">Nov 15, 2026 • 6:30 PM</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block text-[10px] uppercase font-bold">Location</span>
+            <span class="text-white font-bold block mt-0.5">Nexus Hub & Live Stream</span>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <span class="text-slate-500 block text-[10px] uppercase font-bold">Calendar Export</span>
+            <button onclick="addEventToCalendar()" class="text-rose-400 hover:underline font-semibold block mt-0.5">
+              + Google / iCal
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Countdown Timer -->
+        <div class="mt-6 bg-slate-800/60 border border-white/10 rounded-2xl p-4 flex items-center justify-between text-center">
+          <div class="flex-1">
+            <span class="text-xl sm:text-2xl font-extrabold text-white block" id="cd-days">16</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Days</span>
+          </div>
+          <span class="text-slate-600 font-bold">:</span>
+          <div class="flex-1">
+            <span class="text-xl sm:text-2xl font-extrabold text-white block" id="cd-hours">08</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Hours</span>
+          </div>
+          <span class="text-slate-600 font-bold">:</span>
+          <div class="flex-1">
+            <span class="text-xl sm:text-2xl font-extrabold text-white block" id="cd-mins">42</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Mins</span>
+          </div>
+          <span class="text-slate-600 font-bold">:</span>
+          <div class="flex-1">
+            <span class="text-xl sm:text-2xl font-extrabold text-rose-400 block" id="cd-secs">30</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Secs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticket Tier Selection -->
+      <div class="bg-slate-900/90 border border-white/10 rounded-3xl p-6 space-y-3">
+        <h3 class="text-base font-bold text-white mb-2">Select Your Ticket Tier</h3>
+
+        <!-- Tier 1 -->
+        <label class="ticket-tier flex items-center justify-between p-4 rounded-2xl border-2 border-rose-500 bg-rose-500/10 cursor-pointer transition-all">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="ticket_tier" value="Free Community Pass" data-price="0" checked onchange="updateTicketPrice()" class="accent-rose-500">
+            <div>
+              <span class="font-bold text-white text-xs sm:text-sm block">Community Access Pass</span>
+              <span class="text-slate-400 text-[11px]">General seating + Livestream recording access</span>
+            </div>
+          </div>
+          <span class="text-xs font-extrabold text-emerald-400">Free</span>
+        </label>
+
+        <!-- Tier 2 -->
+        <label class="ticket-tier flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-slate-800/50 hover:border-white/20 cursor-pointer transition-all">
+          <div class="flex items-center gap-3">
+            <input type="radio" name="ticket_tier" value="VIP Founder Pass" data-price="499" onchange="updateTicketPrice()" class="accent-rose-500">
+            <div>
+              <span class="font-bold text-white text-xs sm:text-sm block">VIP Founder Pass + Workshop BOM</span>
+              <span class="text-slate-400 text-[11px]">Front-row priority seat, code templates & 1-on-1 Q&A</span>
+            </div>
+          </div>
+          <span class="text-xs font-extrabold text-white">₹499</span>
+        </label>
+      </div>
+
+    </div>
+
+    <!-- RSVP Checkout & Confirmation -->
+    <div class="bg-slate-900/90 border border-white/10 rounded-3xl p-6 flex flex-col justify-between">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-rose-400 block mb-1">Instant Pass</span>
+        <h3 class="text-lg font-bold text-white mb-4">Attendee Details</h3>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Your Full Name *</label>
+            <input type="text" id="att-name" placeholder="Vikram Malhotra" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-white/10 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">WhatsApp Number *</label>
+            <input type="tel" id="att-phone" placeholder="+91 98765 43210" class="w-full px-3 py-2.5 rounded-xl bg-slate-800 border border-white/10 text-xs text-white focus:outline-none focus:border-rose-500">
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-400 mb-1">Number of Seats</label>
+            <select id="att-qty" onchange="updateTicketPrice()" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-white/10 text-xs text-white focus:outline-none focus:border-rose-500">
+              <option value="1">1 Ticket</option>
+              <option value="2">2 Tickets</option>
+              <option value="3">3 Tickets</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Summary Pill -->
+        <div class="mt-6 bg-slate-800/60 border border-white/10 rounded-2xl p-4 text-xs space-y-1.5">
+          <div class="flex justify-between text-slate-400">
+            <span>Ticket:</span>
+            <span id="sum-tier" class="text-white font-semibold">Community Access</span>
+          </div>
+          <div class="flex justify-between border-t border-white/5 pt-1.5">
+            <span class="text-slate-300 font-bold">Total:</span>
+            <span id="sum-total" class="text-rose-400 font-extrabold text-sm">₹0 (Free)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 space-y-2">
+        <button onclick="confirmRsvpWhatsApp()" class="w-full py-3.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-rose-500/20">
+          <span>Claim Ticket & Send on WhatsApp</span>
+          <span>🎟️</span>
+        </button>
+
+        <button onclick="addEventToCalendar()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors border border-white/10">
+          <span>Add to Google Calendar</span>
+          <span>📅</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Live countdown simulation
+    let secondsLeft = 16 * 86400 + 8 * 3600 + 42 * 60 + 30;
+    setInterval(() => {
+      if (secondsLeft <= 0) return;
+      secondsLeft--;
+      const d = Math.floor(secondsLeft / 86400);
+      const h = Math.floor((secondsLeft % 86400) / 3600);
+      const m = Math.floor((secondsLeft % 3600) / 60);
+      const s = secondsLeft % 60;
+      document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+      document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+      document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+    }, 1000);
+
+    function updateTicketPrice() {
+      const selectedRadio = document.querySelector('input[name="ticket_tier"]:checked');
+      const unitPrice = Number(selectedRadio.dataset.price);
+      const qty = Number(document.getElementById('att-qty').value);
+      const total = unitPrice * qty;
+
+      document.querySelectorAll('.ticket-tier').forEach(t => {
+        t.className = 'ticket-tier flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-slate-800/50 hover:border-white/20 cursor-pointer transition-all';
+      });
+      selectedRadio.closest('.ticket-tier').className = 'ticket-tier flex items-center justify-between p-4 rounded-2xl border-2 border-rose-500 bg-rose-500/10 cursor-pointer transition-all';
+
+      document.getElementById('sum-tier').textContent = selectedRadio.value;
+      document.getElementById('sum-total').textContent = total === 0 ? '₹0 (Free)' : `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function confirmRsvpWhatsApp() {
+      const name = document.getElementById('att-name').value.trim() || 'Attendee';
+      const phone = document.getElementById('att-phone').value.trim() || 'Not specified';
+      const qty = document.getElementById('att-qty').value;
+      const tier = document.querySelector('input[name="ticket_tier"]:checked').value;
+      const total = document.getElementById('sum-total').textContent;
+
+      const text = encodeURIComponent(
+        `*Event RSVP Ticket Confirmation* 🎟️\n\n` +
+        `• *Event:* Web Design & AI Automation Masterclass\n` +
+        `• *Attendee:* ${name}\n` +
+        `• *WhatsApp:* ${phone}\n` +
+        `• *Tier:* ${tier} (${qty} Ticket${qty > 1 ? 's' : ''})\n` +
+        `• *Amount:* ${total}\n\n` +
+        `Hi! Please confirm my registration and send my digital entry barcode pass.`
+      );
+
+      window.open(`https://wa.me/917410123901?text=${text}`, '_blank');
+    }
+
+    function addEventToCalendar() {
+      const title = encodeURIComponent("The Future of Web Design & 24/7 AI Automation");
+      const details = encodeURIComponent("Convertix Studio Masterclass. Location: Nexus Hub & Livestream.");
+      const gcal = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=Nexus+Hub&dates=20261115T130000Z/20261115T150000Z`;
+      window.open(gcal, '_blank');
+    }
+  </script>
+</body>
+</html>
