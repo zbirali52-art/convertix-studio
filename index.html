@@ -8,13 +8,14 @@
   <meta name="description" content="Award-winning, mobile-first websites and 24/7 AI lead assistants for businesses worldwide. Starting at ₹1,000 ($15) with 100% Pay After Delivery terms and free cloud hosting.">
   <meta name="keywords" content="affordable web design, ₹1000 website, pay after delivery, AI receptionist, Netlify hosting, local business website">
   
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="tailwind.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 </head>
 <body class="selection:bg-indigo-500/20 selection:text-indigo-300 relative">
 
   <!-- Atmospheric Background Canvas -->
+  <canvas id="ambient-canvas" class="ambient-canvas" aria-hidden="true"></canvas>
   <div class="global-cursor-aura" aria-hidden="true"></div>
   <div class="global-cursor-grid" aria-hidden="true"></div>
   <div class="noise-overlay" aria-hidden="true"></div>
@@ -75,6 +76,12 @@
           </button>
         </div>
 
+        <!-- Micro-Haptic Audio Toggle -->
+        <button id="sound-toggle-btn" onclick="toggleSound()" class="flex items-center gap-1.5 bg-white/5 hover:bg-white/10 px-2.5 py-1.5 rounded-xl border border-white/10 text-xs text-slate-400 hover:text-white transition-all" title="Toggle Tactile Audio Haptics" aria-pressed="false" aria-label="Toggle Tactile Audio Haptics">
+          <span id="sound-icon">🔇</span>
+          <span class="hidden xl:inline text-[10px] font-semibold">Sound</span>
+        </button>
+
         <!-- Header CTA -->
         <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20build%20my%20website%20for%20%E2%82%B91%2C000%20(Pay%20After%20Delivery)." target="_blank" rel="noopener" class="track-magnetic hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-extrabold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 transition-all shadow-md shadow-emerald-500/20">
           <span>Claim Site (<span class="price-btn-text">₹1,000</span>)</span>
@@ -116,6 +123,67 @@
         <span>Test Live Interactive Demos</span>
         <span>⚡</span>
       </a>
+    </div>
+
+    <!-- Hero Section 3D Floating Mockup Stage -->
+    <div class="hero-mockup-stage relative w-full max-w-5xl mx-auto my-12 py-8 px-4 flex items-center justify-center min-h-[380px] sm:min-h-[460px]">
+      
+      <!-- Central Desktop Studio Mockup -->
+      <div class="mockup-desktop w-full max-w-2xl bg-[#080d1a] border border-white/15 rounded-2xl shadow-2xl overflow-hidden transition-transform duration-300 transform-gpu z-10">
+        <!-- Glass Chrome Header -->
+        <div class="h-9 bg-slate-900/90 border-b border-white/10 px-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+          </div>
+          <div class="px-3 py-0.5 rounded-md bg-white/5 border border-white/5 text-[10px] font-mono text-slate-400">
+            convertix.studio/preview/apex-dental
+          </div>
+          <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">100% Approved</span>
+        </div>
+        <!-- Viewport Graphic UI -->
+        <div class="p-4 sm:p-6 bg-gradient-to-b from-[#0a1022] to-[#04060d] space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">🦷</div>
+              <div class="text-left">
+                <div class="text-xs font-bold text-white">Apex Dental &amp; Implant Care</div>
+                <div class="text-[10px] text-slate-400">Dr. Amit Sharma • High-Converting Suite</div>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full"><span class="price-btn-text">₹1,000</span> Flat</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-300">📅 Instant Booking</div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-300">💬 WhatsApp Sync</div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5 text-slate-300">⚡ Netlify Edge CDN</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Floating Mobile iPhone Chassis -->
+      <div class="mockup-mobile hidden sm:block absolute -left-4 md:left-2 bottom-4 w-52 bg-[#050812] border-2 border-slate-700/80 rounded-[2.2rem] shadow-2xl p-2.5 z-20 transform-gpu">
+        <div class="w-16 h-3 bg-slate-800 rounded-full mx-auto mb-2"></div>
+        <div class="bg-slate-900 rounded-2xl p-3 border border-white/10 text-left space-y-2">
+          <div class="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">WhatsApp Handoff</div>
+          <div class="text-[11px] font-bold text-white">Slot Confirmed: Today 2:30 PM</div>
+          <div class="text-[9px] text-slate-400">Client: Rahul M. • Zero Advance Paid</div>
+        </div>
+      </div>
+
+      <!-- Right Floating Glassmorphic HUD Badges -->
+      <div class="mockup-badge hidden sm:flex flex-col gap-2.5 absolute -right-4 md:right-4 top-6 z-20 transform-gpu">
+        <div class="px-3.5 py-2 rounded-xl bg-slate-900/90 border border-emerald-500/30 backdrop-blur-md shadow-xl flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-[11px] font-bold text-white">⚡ 100/100 Core Web Vitals</span>
+        </div>
+        <div class="px-3.5 py-2 rounded-xl bg-slate-900/90 border border-indigo-500/30 backdrop-blur-md shadow-xl flex items-center gap-2">
+          <span class="text-xs">🤖</span>
+          <span class="text-[11px] font-bold text-indigo-300">24/7 AI: Responding in 2s</span>
+        </div>
+      </div>
+
     </div>
 
     <!-- Live Performance Metrics Grid -->
@@ -530,17 +598,25 @@
       <div class="space-y-2 mb-3">
         <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Tap a question to test response:</span>
         <div class="flex flex-wrap gap-2 text-xs">
-          <button onclick="simulateChatMessage('Emergency tooth pain! Do you have slots today?')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-slate-300 transition-colors">
+          <button type="button" onclick="simulateChatMessage('Emergency tooth pain! Do you have slots today?')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-slate-300 transition-colors">
             🦷 "Emergency tooth pain"
           </button>
-          <button onclick="simulateChatMessage('How much is dental cleaning and scaling?')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-slate-300 transition-colors">
+          <button type="button" onclick="simulateChatMessage('How much is dental cleaning and scaling?')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-slate-300 transition-colors">
             💰 "How much is cleaning?"
           </button>
-          <button onclick="simulateChatMessage('What are your clinic opening hours?')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-slate-300 transition-colors">
+          <button type="button" onclick="simulateChatMessage('What are your clinic opening hours?')" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] text-slate-300 transition-colors">
             ⏱️ "What are clinic hours?"
           </button>
         </div>
       </div>
+
+      <!-- Interactive User Chat Input Form -->
+      <form id="chat-form" onsubmit="event.preventDefault(); submitChatMessage();" class="mt-3 flex gap-2">
+        <input type="text" id="chat-user-input" placeholder="Ask AI receptionist anything..." class="flex-1 px-3 py-2 bg-[#06080f] border border-white/10 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400">
+        <button type="submit" id="chat-submit-btn" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-colors shrink-0">
+          Send
+        </button>
+      </form>
     </div>
   </section>
 
@@ -800,7 +876,12 @@
 
       <!-- Modal Body (Iframe Container) -->
       <div class="flex-1 bg-slate-950/60 overflow-hidden flex items-center justify-center p-2 sm:p-4 relative">
-        <div id="demo-frame-wrapper" class="w-full h-full max-w-full rounded-xl overflow-hidden border border-white/10 shadow-inner bg-slate-900 transition-all duration-300">
+        <div id="demo-frame-wrapper" class="device-chassis-mobile titanium w-full h-full max-w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 transition-all duration-300 relative">
+          <!-- Dynamic Island / Sensor Notch for mobile mode -->
+          <div id="demo-dynamic-island" class="dynamic-island sensor-notch hidden absolute top-2 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-30 pointer-events-none flex items-center justify-between px-3 shadow-md">
+            <span class="camera-dot w-2.5 h-2.5 rounded-full bg-slate-950 border border-white/20"></span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse"></span>
+          </div>
           <iframe id="demo-iframe" src="" class="w-full h-full border-0" title="Interactive Demo Preview"></iframe>
         </div>
       </div>
