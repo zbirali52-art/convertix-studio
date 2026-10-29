@@ -1,4 +1,4 @@
-// Convertix Studio Interactive Client App
+// Convertix Studio Interactive Client App & Unified 60fps Tracking Engine
 
 // State configuration
 let currentCurrency = 'INR'; // 'INR' or 'USD'
@@ -41,17 +41,94 @@ const PRICING = {
 document.addEventListener('DOMContentLoaded', () => {
   setupCurrencyListeners();
   setupSliderListener();
-  setupSpotlightCards();
+  setupUnifiedTrackingEngine();
   updateCalculator();
 });
 
-// Interactive Mouse-Tracking Spotlight on Cards
-function setupSpotlightCards() {
-  document.querySelectorAll('.spotlight-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
+// ================= UNIFIED 60FPS TRACKING ENGINE =================
+function setupUnifiedTrackingEngine() {
+  // Skip on touch-only devices to preserve 100/100 mobile scrolling performance
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const root = document.documentElement;
+  const cards = document.querySelectorAll('.track-card');
+  const magnetics = document.querySelectorAll('.track-magnetic');
+  const subs = document.querySelectorAll('.track-sub');
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let ticking = false;
+
+  function updateTracking() {
+    // 1. Whole-Website Global Coordinates
+    root.style.setProperty('--gx', `${mouseX}px`);
+    root.style.setProperty('--gy', `${mouseY}px`);
+
+    // 2. Card Proximity & 3D Tilt Tracking
+    cards.forEach(card => {
       const rect = card.getBoundingClientRect();
-      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      // Skip offscreen cards
+      if (rect.bottom < -120 || rect.top > window.innerHeight + 120) return;
+
+      const x = mouseX - rect.left;
+      const y = mouseY - rect.top;
+      card.style.setProperty('--cx', `${x}px`);
+      card.style.setProperty('--cy', `${y}px`);
+
+      // If cursor is directly inside the card, apply subtle 3D tilt
+      const isInside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+      if (isInside) {
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -3.2; // Max ~3deg tilt
+        const rotateY = ((x - centerX) / centerX) * 3.2;
+        card.style.setProperty('--rx', `${rotateX.toFixed(2)}deg`);
+        card.style.setProperty('--ry', `${rotateY.toFixed(2)}deg`);
+      } else {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      }
+    });
+
+    // 3. Sub-Element Micro-Tracking (Highlight on hover)
+    subs.forEach(sub => {
+      const rect = sub.getBoundingClientRect();
+      if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
+        sub.style.setProperty('--sx', `${mouseX - rect.left}px`);
+        sub.style.setProperty('--sy', `${mouseY - rect.top}px`);
+      }
+    });
+
+    ticking = false;
+  }
+
+  window.addEventListener('pointermove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!ticking) {
+      window.requestAnimationFrame(updateTracking);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // 4. Magnetic CTA Pull Tracking for Buttons
+  magnetics.forEach(btn => {
+    btn.addEventListener('pointermove', e => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const pullX = ((x - rect.width / 2) / (rect.width / 2)) * 7; // Max 7px pull
+      const pullY = ((y - rect.height / 2) / (rect.height / 2)) * 5;
+
+      btn.style.setProperty('--bx', `${x}px`);
+      btn.style.setProperty('--by', `${y}px`);
+      btn.style.setProperty('--mx', `${pullX.toFixed(1)}px`);
+      btn.style.setProperty('--my', `${pullY.toFixed(1)}px`);
+    });
+
+    btn.addEventListener('pointerleave', () => {
+      btn.style.setProperty('--mx', '0px');
+      btn.style.setProperty('--my', '0px');
     });
   });
 }
