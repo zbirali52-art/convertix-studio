@@ -1,0 +1,81 @@
+/* Custom Styling for Convertix Studio */
+
+/* Custom smooth scroll and scrollbar */
+html {
+  scroll-behavior: smooth;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080c14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Glassmorphism accents */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Gradient borders */
+.gradient-border-emerald {
+  position: relative;
+}
+.gradient-border-emerald::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(99, 102, 241, 0.2), transparent);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Interactive chat simulator styling */
+#chat-box {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+#chat-box::-webkit-scrollbar {
+  width: 4px;
+}
+#chat-box::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 2px;
+}
+
+/* Range input customization */
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #34d399;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+  border: 2px solid #080c14;
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #34d399;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+  border: 2px solid #080c14;
+}
