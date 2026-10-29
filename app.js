@@ -108,19 +108,29 @@
 
   const DEMO_MAP = {
     dental: {
-      title: 'Apex Dental & Implant Care (Healthcare Demo)',
+      title: 'me.aid Dental & Implant Care (Healthcare Demo)',
       url: 'demos/dental.html',
-      msg: 'Hi, I want a website like the Apex Dental clinic demo for ₹1,000.'
+      msg: 'Hi, I want a website like the me.aid Dental clinic demo for ₹1,000.'
+    },
+    trucking: {
+      title: 'T.ROAD Heavy Freight & Logistics Demo',
+      url: 'demos/trucking.html',
+      msg: 'Hi, I want a website like the T.ROAD Freight Logistics demo for ₹1,000.'
     },
     cafe: {
-      title: 'Urban Crust Artisan Cafe (Food & QR Menu Demo)',
-      url: 'demos/cafe.html',
-      msg: 'Hi, I want a website like the Urban Crust Cafe demo for ₹1,000.'
+      title: 'T.ROAD Freight & Logistics Demo (Legacy Cafe Mirror)',
+      url: 'demos/trucking.html',
+      msg: 'Hi, I want a website like the T.ROAD Freight Logistics demo for ₹1,000.'
+    },
+    restaurant: {
+      title: 'Chix Kitchen Gourmet Fast Food Diner Demo',
+      url: 'demos/restaurant.html',
+      msg: 'Hi, I want a website like the Chix Kitchen Fast Food demo for ₹1,000.'
     },
     interiors: {
-      title: 'Vesta Living Interiors (Architecture & Estimator Demo)',
-      url: 'demos/interiors.html',
-      msg: 'Hi, I want a website like the Vesta Living Interiors demo for ₹1,000.'
+      title: 'Chix Kitchen Diner Demo (Legacy Interiors Mirror)',
+      url: 'demos/restaurant.html',
+      msg: 'Hi, I want a website like the Chix Kitchen Fast Food demo for ₹1,000.'
     },
     // Open Source Modules
     bookings: {
@@ -222,6 +232,35 @@
     if (e.key === 'Escape' && demoModal && !demoModal.classList.contains('hidden')) {
       window.closeDemoModal();
     }
+  });
+
+  // Inline Card Viewport Switcher (Desktop / Mobile)
+  $$('.preview-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetKey = btn.getAttribute('data-preview-target');
+      const mode = btn.getAttribute('data-preview-mode');
+      const group = btn.closest('[role="group"]');
+      if (group) {
+        group.querySelectorAll('.preview-toggle').forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+      }
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-pressed', 'true');
+
+      const shell = document.querySelector(`[data-preview-shell="${targetKey}"]`);
+      if (shell) {
+        if (mode === 'mobile') {
+          shell.classList.add('is-mobile');
+        } else {
+          shell.classList.remove('is-mobile');
+        }
+      }
+      if (window.soundEngine && typeof window.soundEngine.playClick === 'function') {
+        window.soundEngine.playClick();
+      }
+    });
   });
 
   /* ---------------- 4. Lost Revenue ROI Calculator ---------------- */
