@@ -1,230 +1,829 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Urban Crust Artisan Cafe | Wood-Fired Pizza & Specialty Coffee</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T.ROAD Freight &amp; Logistics | Always On-Time</title>
+<meta name="description" content="Zero-CDN interactive freight logistics demo with live mileage and rate calculator, fleet tabs, shipment tracker and WhatsApp quote dispatch.">
+<style>
+  @font-face{font-family:'InterLocal';src:url('../fonts/inter-latin.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
+  :root{
+    --void:#010203;--asphalt:#0D0D11;--steel:#323232;--steel-2:#1A1D24;--steel-3:#24272F;
+    --steel-blue:#2B5672;--steel-blue-2:#1B3B50;
+    --amber:#F59E0B;--amber-bright:#FFB52E;--white:#FFFFFF;
+    --muted:#9AA0AA;--muted-2:#6F7682;--line:#2B2C31;--line-2:#3A3B42;
+    --display:'Arial Narrow','Roboto Condensed','Haettenschweiler',Impact,'Franklin Gothic Condensed',sans-serif;
+    --body:'InterLocal','Inter','Segoe UI',system-ui,sans-serif;
+    --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--asphalt);color:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  button,input,select{font:inherit;color:inherit}
+  button{cursor:pointer;border:0;background:none}
+  svg{display:block}
+  ::selection{background:rgba(245,158,11,.28);color:#fff}
+  .wrap{width:min(1240px,calc(100% - 40px));margin-inline:auto}
+  .mono{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  /* Agency banner */
+  .agency-bar{position:sticky;top:0;z-index:130;background:var(--void);border-bottom:1px solid #1E2025;font-size:11px}
+  .agency-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;padding-block:6px}
+  .agency-left{display:flex;align-items:center;gap:8px;min-width:0}
+  .live-dot{width:7px;height:7px;background:#5EE6A8;box-shadow:0 0 0 4px rgba(94,230,168,.12);animation:pulse 1.8s infinite;flex:0 0 auto}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .agency-left span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#A7ACB5}
+  .agency-left strong{color:#fff}
+  .claim-link{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:var(--void);font-weight:800;padding:6px 11px;white-space:nowrap;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;transition:background .18s ease}
+  .claim-link:hover{background:var(--amber-bright)}
+
+  /* Nav */
+  .site-nav{position:sticky;top:38px;z-index:110;background:rgba(13,13,17,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:70px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:27px;font-weight:800;letter-spacing:-.035em;text-transform:uppercase;line-height:1}
+  .brand-mark{width:36px;height:36px;background:var(--amber);display:grid;place-items:center;color:var(--void);font-family:var(--mono);font-size:16px;font-weight:800}
+  .brand span i{color:var(--amber);font-style:normal}
+  .nav-links{display:flex;align-items:center;gap:26px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#A7ACB5}
+  .nav-links a{padding:7px 0;border-bottom:1px solid transparent;transition:color .18s ease,border-color .18s ease}
+  .nav-links a:hover{color:var(--amber);border-color:var(--amber)}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--steel);border:1px solid #575960;color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:11px 15px;transition:all .18s ease}
+  .nav-cta:hover{background:var(--amber);border-color:var(--amber);color:var(--void)}
+
+  /* Hero */
+  .hero{position:relative;background:var(--void);overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(180deg,#000,transparent 88%);pointer-events:none}
+  .hero-glow{position:absolute;width:720px;height:420px;right:-80px;top:80px;background:radial-gradient(ellipse,rgba(245,158,11,.13),transparent 68%);pointer-events:none;filter:blur(4px)}
+  .hero-inner{position:relative;z-index:1;padding:42px 0 0}
+  .hero-kicker{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:26px}
+  .hero-kicker .mono{color:var(--amber)}
+  .hero-kicker .mono:last-child{color:var(--muted-2)}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(64px,12.8vw,178px);line-height:.83;letter-spacing:-.045em;text-transform:uppercase;max-width:1120px}
+  .hero h1 span{display:block}
+  .hero h1 .outline{color:transparent;-webkit-text-stroke:1.5px #5B5E66;text-stroke:1.5px #5B5E66}
+  .hero h1 .amber{color:var(--amber)}
+  .hero-bottom{display:grid;grid-template-columns:1.02fr .98fr;gap:40px;align-items:end;padding:28px 0 0}
+  .hero-copy p{max-width:540px;font-size:13px;line-height:1.65;color:#B1B5BD;margin-bottom:20px}
+  .hero-copy p strong{color:#fff}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;padding:13px 19px;border:1px solid transparent;transition:all .18s ease;white-space:nowrap}
+  .btn-amber{background:var(--amber);color:var(--void);border-color:var(--amber)}
+  .btn-amber:hover{background:var(--amber-bright);border-color:var(--amber-bright);transform:translateY(-1px)}
+  .btn-outline{background:transparent;color:#fff;border-color:#5A5C63}
+  .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+  .hero-stats{display:flex;border-top:1px solid var(--line);padding-top:18px}
+  .hero-stat{flex:1;padding-right:14px;border-right:1px solid var(--line);margin-right:14px}
+  .hero-stat:last-child{border:0;margin:0;padding-right:0}
+  .hero-stat b{display:block;font-family:var(--display);font-size:32px;line-height:1;letter-spacing:-.03em}
+  .hero-stat span{font-family:var(--mono);font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);display:block;margin-top:5px}
+
+  /* Tracker widget */
+  .tracker-card{background:linear-gradient(160deg,rgba(43,86,114,.34),rgba(26,29,36,.94));border:1px solid #3B4651;padding:20px;position:relative;overflow:hidden}
+  .tracker-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:repeating-linear-gradient(90deg,var(--amber) 0 16px,transparent 16px 28px)}
+  .tracker-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px}
+  .tracker-head h2{font-family:var(--display);font-size:22px;letter-spacing:-.02em;text-transform:uppercase;line-height:1}
+  .tracker-head p{margin-top:4px;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:#9FB6C4;text-transform:uppercase}
+  .tracker-live{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8px;letter-spacing:.09em;color:#8FE1B9;border:1px solid rgba(94,230,168,.26);padding:5px 7px;white-space:nowrap}
+  .tracker-live span{width:5px;height:5px;background:#5EE6A8;border-radius:50%;animation:pulse 1.7s infinite}
+  .tracker-id{display:flex;gap:0;margin-bottom:16px}
+  .tracker-id input{flex:1;min-width:0;background:rgba(0,0,0,.3);border:1px solid #3B4651;border-right:0;padding:9px 10px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;outline:none}
+  .tracker-id input:focus{border-color:var(--amber)}
+  .tracker-id button{background:var(--amber);color:var(--void);font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:800;padding:0 12px}
+  .tracker-route{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px;font-size:10px;color:#C4C8CF}
+  .tracker-route b{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:#fff}
+  .tracker-route span{font-family:var(--mono);font-size:8px;color:#93A0AA;text-transform:uppercase}
+  .tracker-line{position:relative;height:4px;background:#262A31;margin-bottom:8px}
+  .tracker-progress{position:absolute;left:0;top:0;bottom:0;width:38%;background:var(--amber);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+  .tracker-truck{position:absolute;left:38%;top:50%;transform:translate(-50%,-50%);width:26px;height:16px;background:var(--void);border:1px solid var(--amber);display:grid;place-items:center;transition:left .6s cubic-bezier(.2,.7,.2,1);font-size:9px}
+  .tracker-milestones{display:flex;justify-content:space-between;gap:4px;margin-bottom:13px}
+  .tracker-milestones span{font-family:var(--mono);font-size:7px;letter-spacing:.04em;color:#747B85;text-transform:uppercase;text-align:center}
+  .tracker-status{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #3B4651;padding-top:12px}
+  .tracker-status-label{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--amber);text-transform:uppercase;display:block;margin-bottom:2px}
+  .tracker-status strong{font-size:11px;color:#fff;font-weight:600}
+  .tracker-eta{text-align:right}
+  .tracker-eta b{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em;color:#fff;line-height:1}
+  .tracker-eta span{font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;color:#9FB6C4;text-transform:uppercase}
+  .tracker-advance{width:100%;margin-top:12px;background:transparent;border:1px solid #56636D;color:#D3D8DE;font-family:var(--mono);font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;padding:8px;transition:all .18s ease}
+  .tracker-advance:hover{background:var(--steel-blue);border-color:var(--steel-blue);color:#fff}
+
+  /* Hazard ticker */
+  .ticker{background:var(--amber);color:var(--void);border-block:1px solid #B97905;overflow:hidden;white-space:nowrap;padding:9px 0}
+  .ticker-track{display:inline-flex;align-items:center;gap:28px;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;animation:ticker 28s linear infinite;will-change:transform}
+  .ticker-track span{display:inline-flex;align-items:center;gap:28px}
+  .ticker-track span::after{content:"◆";font-size:8px}
+  @keyframes ticker{to{transform:translateX(-50%)}}
+
+  /* Sections */
+  section{padding:78px 0}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:26px;margin-bottom:32px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  .eyebrow{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:9px}
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber)}
+  .section-head h2{font-family:var(--display);font-size:clamp(36px,5.6vw,60px);line-height:.92;text-transform:uppercase;letter-spacing:-.035em;max-width:720px;font-weight:800}
+  .section-head p{max-width:300px;font-size:11px;line-height:1.65;color:var(--muted);margin-bottom:3px}
+
+  /* Quote engine */
+  .quote-section{background:var(--void);border-block:1px solid var(--line);position:relative;overflow:hidden}
+  .quote-section::after{content:"T.ROAD";position:absolute;right:-40px;bottom:-70px;font-family:var(--display);font-size:260px;font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.018);pointer-events:none;line-height:.7}
+  .quote-shell{position:relative;z-index:1;border:1px solid #39424B;background:linear-gradient(135deg,#10151A,#0B0C10 62%);display:grid;grid-template-columns:1.08fr .92fr}
+  .quote-controls{padding:28px;border-right:1px solid #2F353D}
+  .quote-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid #2F353D;padding-bottom:16px;margin-bottom:20px}
+  .quote-top h3{font-family:var(--display);font-size:30px;line-height:1;text-transform:uppercase;letter-spacing:-.02em}
+  .quote-top p{font-family:var(--mono);font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:#8E98A3;margin-top:5px}
+  .quote-top .mono{text-align:right;color:#8E98A3;line-height:1.5}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{min-width:0}
+  .field label{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#9AA3AE;margin-bottom:6px}
+  .field label b{color:var(--amber);font-weight:600}
+  .field select,.field input[type="text"],.field input[type="tel"]{width:100%;background:#0A0B0D;border:1px solid #3A3D44;padding:10px;font-size:11.5px;outline:none;transition:border .16s ease}
+  .field select:focus,.field input:focus{border-color:var(--amber)}
+  .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#858B94 50%),linear-gradient(135deg,#858B94 50%,transparent 50%);background-position:calc(100% - 14px) 50%,calc(100% - 9px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:28px}
+  .range-row{display:flex;align-items:center;gap:11px}
+  .range-row input[type="range"]{width:100%;accent-color:var(--amber);height:3px;cursor:pointer}
+  .range-value{font-family:var(--mono);font-size:10px;color:var(--amber);white-space:nowrap;min-width:58px;text-align:right}
+  .quote-breakdown{display:grid;gap:6px;margin-top:16px;padding-top:14px;border-top:1px solid #2F353D;font-family:var(--mono);font-size:9px;color:#929AA4}
+  .quote-breakdown div{display:flex;justify-content:space-between;gap:12px}
+  .quote-breakdown b{color:#D8DCE1;font-weight:500}
+  .quote-output{padding:28px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(ellipse at 100% 0%,rgba(245,158,11,.11),transparent 58%)}
+  .quote-rate-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#8E98A3}
+  .quote-rate{font-family:var(--display);font-size:clamp(46px,7vw,70px);line-height:.9;letter-spacing:-.04em;color:var(--amber);margin:7px 0 2px}
+  .quote-rate small{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:#9AA3AE;display:block;margin-top:7px}
+  .quote-mileage{display:flex;gap:0;margin:16px 0 20px;border-top:1px solid #2F353D;border-bottom:1px solid #2F353D;padding:11px 0}
+  .quote-mileage div{flex:1;border-right:1px solid #2F353D;padding-right:12px;margin-right:12px}
+  .quote-mileage div:last-child{border:0;margin:0;padding:0}
+  .quote-mileage b{display:block;font-family:var(--mono);font-size:14px;color:#fff;letter-spacing:-.02em}
+  .quote-mileage span{font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:#8E98A3}
+  .quote-note{font-size:9.5px;line-height:1.55;color:#8E98A3;margin-bottom:13px}
+  .quote-note strong{color:#D8DCE1}
+  .quote-output .btn{width:100%}
+  .quote-disclaimer{font-family:var(--mono);font-size:7.5px;letter-spacing:.03em;line-height:1.5;color:#646B75;margin-top:9px;text-align:center}
+
+  /* Fleet */
+  .fleet-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+  .fleet-tabs::-webkit-scrollbar{display:none}
+  .fleet-tab{flex:0 0 auto;background:transparent;border:1px solid transparent;border-bottom:0;color:#8E959F;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:12px 16px;position:relative;top:1px;transition:all .18s ease}
+  .fleet-tab:hover{color:#fff}
+  .fleet-tab[aria-selected="true"]{background:var(--steel-2);border-color:var(--line-2);color:var(--amber);border-bottom:1px solid var(--steel-2)}
+  .fleet-panel{display:none;grid-template-columns:1.06fr .94fr;border:1px solid var(--line-2);background:linear-gradient(135deg,var(--steel-2),#0B0C0F 74%);overflow:hidden}
+  .fleet-panel.active{display:grid}
+  .fleet-visual{position:relative;min-height:310px;background:linear-gradient(150deg,#1F242B,#111317);display:flex;align-items:center;justify-content:center;padding:25px;overflow:hidden}
+  .fleet-visual::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:34px 34px}
+  .fleet-visual svg{position:relative;z-index:1;width:100%;max-width:520px;height:auto;filter:drop-shadow(0 22px 28px rgba(0,0,0,.34))}
+  .fleet-badge{position:absolute;left:14px;top:14px;z-index:2;background:var(--amber);color:var(--void);font-family:var(--mono);font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 7px}
+  .fleet-details{padding:26px;border-left:1px solid var(--line-2);display:flex;flex-direction:column;justify-content:center}
+  .fleet-details h3{font-family:var(--display);font-size:34px;line-height:.95;text-transform:uppercase;letter-spacing:-.03em;margin-bottom:7px}
+  .fleet-details>p{font-size:11px;line-height:1.6;color:#9AA0AA;margin-bottom:17px;max-width:420px}
+  .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line);margin-bottom:17px}
+  .spec{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px}
+  .spec span{display:block;font-family:var(--mono);font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;color:#7D8590;margin-bottom:3px}
+  .spec b{font-family:var(--mono);font-size:10.5px;font-weight:600;color:#F1F3F5}
+  .fleet-tags{display:flex;flex-wrap:wrap;gap:5px}
+  .fleet-tags span{font-family:var(--mono);font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;border:1px solid #3A3D44;padding:4px 6px;color:#B4B9C0}
+
+  /* Services */
+  .service-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+  .service{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;transition:background .2s ease}
+  .service:hover{background:var(--steel-2)}
+  .service .num{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.08em}
+  .service h3{font-family:var(--display);font-size:24px;line-height:1;text-transform:uppercase;letter-spacing:-.02em;margin-top:22px;max-width:230px}
+  .service p{font-size:9.5px;line-height:1.55;color:#8E959F;margin-top:9px;max-width:260px}
+  .service .arrow{align-self:flex-end;font-family:var(--mono);color:#6F7682;transition:color .18s ease,transform .18s ease}
+  .service:hover .arrow{color:var(--amber);transform:translate(2px,-2px)}
+
+  /* Proof */
+  .proof{background:var(--steel-blue-2);border-block:1px solid #355A72;position:relative;overflow:hidden}
+  .proof::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 1px,transparent 1px 13px);pointer-events:none}
+  .proof-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .proof h2{font-family:var(--display);font-size:clamp(36px,5.6vw,64px);line-height:.94;text-transform:uppercase;letter-spacing:-.035em;margin-bottom:15px}
+  .proof p{font-size:12px;line-height:1.7;color:rgba(255,255,255,.67);max-width:540px}
+  .proof-quote{border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.18);padding:24px}
+  .proof-quote .stars{color:var(--amber);letter-spacing:2px;font-size:13px;margin-bottom:11px}
+  .proof-quote blockquote{font-size:13px;line-height:1.6;color:#fff;margin-bottom:15px}
+  .proof-quote .who{font-family:var(--mono);font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.56)}
+  .proof-stats{display:flex;gap:26px;margin-top:26px;border-top:1px solid rgba(255,255,255,.18);padding-top:16px}
+  .proof-stats b{display:block;font-family:var(--display);font-size:28px;line-height:1}
+  .proof-stats span{font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+
+  /* CTA / footer */
+  .cta{background:var(--void);border-block:1px solid var(--line);padding:42px 0}
+  .cta-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cta h2{font-family:var(--display);font-size:clamp(30px,4.5vw,48px);line-height:.95;text-transform:uppercase;letter-spacing:-.03em}
+  .cta p{font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;color:#8E959F;margin-top:5px;text-transform:uppercase}
+  .cta-actions{display:flex;gap:9px;flex-wrap:wrap}
+  footer{padding:25px 0 32px}
+  .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;color:#717883}
+  .footer-inner strong{color:#fff}
+  .footer-links{display:flex;gap:16px}
+  .footer-links a:hover{color:var(--amber)}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);z-index:200;background:#fff;color:#0D0D11;font-family:var(--mono);font-size:10px;line-height:1.45;padding:11px 16px;box-shadow:0 18px 38px rgba(0,0,0,.34);opacity:0;pointer-events:none;transition:all .25s ease;max-width:min(90vw,460px);text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.error{background:#DC3A3A;color:#fff}
+
+  @media(max-width:980px){
+    .hero-bottom{grid-template-columns:1fr;gap:30px}
+    .quote-shell{grid-template-columns:1fr}
+    .quote-controls{border-right:0;border-bottom:1px solid #2F353D}
+    .fleet-panel.active{grid-template-columns:1fr}
+    .fleet-details{border-left:0;border-top:1px solid var(--line-2)}
+    .service-grid{grid-template-columns:repeat(2,1fr)}
+    .proof-grid{grid-template-columns:1fr;gap:28px}
+  }
+  @media(max-width:760px){
+    .wrap{width:min(100% - 28px,1240px)}
+    .nav-links{display:none}
+    .nav-inner{min-height:60px}
+    .brand{font-size:23px}
+    .brand-mark{width:32px;height:32px}
+    .nav-cta{font-size:8.5px;padding:9px 10px}
+    .hero-inner{padding-top:28px}
+    .hero h1{font-size:clamp(54px,20vw,104px)}
+    .hero-kicker{gap:10px}
+    .hero-kicker .mono{font-size:8px}
+    .hero-stat b{font-size:25px}
+    section{padding:52px 0}
+    .section-head{display:block}
+    .section-head p{margin-top:12px}
+    .quote-controls,.quote-output{padding:20px}
+    .form-grid{grid-template-columns:1fr}
+    .service-grid{grid-template-columns:1fr}
+    .service{min-height:140px}
+    .fleet-details{padding:20px}
+    .fleet-visual{min-height:230px;padding:18px}
+    .agency-left span{font-size:10px}
+    .claim-link{font-size:9px;padding:5px 8px}
+    .cta-inner{display:block}
+    .cta-actions{margin-top:18px}
+  }
+  @media(max-width:430px){
+    .agency-left span{max-width:145px}
+    .hero-stats{flex-wrap:wrap;gap:10px 0}
+    .hero-stat{flex:1 1 33%;border-right:0;margin-right:0;padding-right:0}
+    .quote-mileage div{padding-right:8px;margin-right:8px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+  }
+</style>
 </head>
-<body class="bg-[#121110] text-[#f4efe8] antialiased selection:bg-amber-500/20 selection:text-amber-400 pb-28">
+<body>
 
-  <!-- Agency Preview Banner -->
-  <aside class="sticky top-0 z-50 bg-[#1c1917] text-white text-xs py-2 px-4 flex items-center justify-between border-b border-amber-950/40">
-    <div class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      <span class="text-stone-300">Live Sample Site • Built by <strong class="text-amber-400">Convertix Studio</strong></span>
-    </div>
-    <a href="../#pricing" class="px-2.5 py-1 rounded bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition-colors">
-      Get a Site Like This (₹1,000) →
-    </a>
-  </aside>
+<!-- Sticky agency banner -->
+<aside class="agency-bar" aria-label="Agency preview banner">
+  <div class="wrap">
+    <div class="agency-left"><span class="live-dot" aria-hidden="true"></span><span>Live Sample Site • Built by <strong>Convertix Studio</strong></span></div>
+    <a class="claim-link" href="../#pricing">Claim Site (₹1,000 / $15) →</a>
+  </div>
+</aside>
 
-  <!-- Cafe Header -->
-  <header class="bg-[#181614] border-b border-stone-800">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-          🍕
+<!-- Industrial nav -->
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="T.ROAD home"><span class="brand-mark" aria-hidden="true">TR</span><span>T<i>.</i>ROAD</span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#fleet">Fleet</a>
+      <a href="#services">Services</a>
+      <a href="#quote">Get a quote</a>
+    </nav>
+    <a class="nav-cta" href="#quote">Get a quote <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title" style="padding:0">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-kicker">
+        <span class="mono">Est. 2002 // Nationwide freight network</span>
+        <span class="mono">24/7 dispatch // DOT &amp; MC compliant</span>
+      </div>
+      <h1 id="hero-title">
+        <span>Trucking</span>
+        <span class="outline">Services</span>
+        <span class="amber">Always on-time.</span>
+      </h1>
+
+      <div class="hero-bottom">
+        <div class="hero-copy">
+          <p><strong>Local, regional and nationwide freight — moved with industrial precision.</strong> Full truckload, LTL, temperature-controlled and heavy haul. One dispatch team, one live rate, zero guesswork.</p>
+          <div class="hero-actions">
+            <a class="btn btn-amber" href="#quote">Get a freight quote <span aria-hidden="true">→</span></a>
+            <a class="btn btn-outline" href="#fleet">Explore the fleet</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat"><b>1,240+</b><span>Loads / month</span></div>
+            <div class="hero-stat"><b>98.7%</b><span>On-time delivery</span></div>
+            <div class="hero-stat"><b>48</b><span>States covered</span></div>
+          </div>
         </div>
-        <div>
-          <h1 class="text-base font-extrabold text-white leading-none">Urban Crust Artisan Cafe</h1>
-          <p class="text-[11px] text-stone-400">Wood-Fired Pizzeria & Specialty Roasters</p>
+
+        <!-- Live shipment tracker -->
+        <div class="tracker-card" aria-labelledby="tracker-title">
+          <div class="tracker-head">
+            <div>
+              <h2 id="tracker-title">Live shipment tracker</h2>
+              <p>SIMULATED DISPATCH FEED · UPDATE EVERY CHECKPOINT</p>
+            </div>
+            <span class="tracker-live"><span aria-hidden="true"></span> LIVE</span>
+          </div>
+          <div class="tracker-id">
+            <label class="sr-only" for="tracking-input">Tracking number</label>
+            <input id="tracking-input" type="text" value="TRD-4821-IN" spellcheck="false" autocomplete="off">
+            <button type="button" onclick="advanceShipment()">Track</button>
+          </div>
+          <div class="tracker-route">
+            <div><b id="track-origin">MUMBAI, MH</b><br><span>Origin hub</span></div>
+            <div style="text-align:right"><b id="track-destination">BENGALURU, KA</b><br><span>Destination</span></div>
+          </div>
+          <div class="tracker-line" role="progressbar" aria-label="Shipment progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="38" id="tracker-progressbar">
+            <div class="tracker-progress" id="tracker-progress"></div>
+            <div class="tracker-truck" id="tracker-truck" aria-hidden="true">▰</div>
+          </div>
+          <div class="tracker-milestones">
+            <span>Picked up</span><span>In transit</span><span>At hub</span><span>Out for delivery</span><span>Delivered</span>
+          </div>
+          <div class="tracker-status">
+            <div><span class="tracker-status-label">Current status</span><strong id="tracker-status">In transit · NH48 corridor</strong></div>
+            <div class="tracker-eta"><b id="tracker-eta">06h 20m</b><span>Estimated arrival</span></div>
+          </div>
+          <button class="tracker-advance" type="button" onclick="advanceShipment()">Simulate next checkpoint →</button>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="text-xs font-semibold text-amber-400 bg-amber-950/60 px-3 py-1 rounded-full border border-amber-800/40">
-          ● Open (11 AM – 11:30 PM)
-        </span>
-      </div>
     </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="py-10 px-4 sm:px-6 max-w-4xl mx-auto text-center space-y-3">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-900/30 text-amber-300 border border-amber-700/30 text-xs font-bold">
-      ⭐ 4.8 Rating • 650+ Foodie Reviews
-    </div>
-    <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-      Real Sourdough Pizza & Single-Origin Coffee
-    </h2>
-    <p class="text-stone-400 text-xs sm:text-sm max-w-xl mx-auto">
-      Slow-fermented for 48 hours, baked in an authentic 450°C Italian oven. Select your favorites below to order straight to your table or doorstep via WhatsApp.
-    </p>
   </section>
 
-  <!-- Interactive Category Tabs -->
-  <section class="max-w-4xl mx-auto px-4 mb-6">
-    <div class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold scrollbar-none">
-      <button onclick="filterCategory('all')" class="cat-btn px-4 py-2 rounded-full bg-amber-500 text-stone-950 font-bold shrink-0">All Items</button>
-      <button onclick="filterCategory('pizza')" class="cat-btn px-4 py-2 rounded-full bg-stone-800 text-stone-300 hover:text-white shrink-0">Wood-Fired Pizza</button>
-      <button onclick="filterCategory('coffee')" class="cat-btn px-4 py-2 rounded-full bg-stone-800 text-stone-300 hover:text-white shrink-0">Specialty Coffee</button>
-      <button onclick="filterCategory('dessert')" class="cat-btn px-4 py-2 rounded-full bg-stone-800 text-stone-300 hover:text-white shrink-0">Desserts</button>
-    </div>
-  </section>
-
-  <!-- Interactive Menu Grid -->
-  <section class="max-w-4xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 gap-4" id="menu-container">
-    
-    <!-- Item 1 -->
-    <div class="menu-item bg-[#1a1815] border border-stone-800 p-4 rounded-2xl flex items-center justify-between gap-4" data-cat="pizza">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-bold border border-emerald-800/40">Veg</span>
-          <h3 class="font-bold text-white text-sm">Margherita Classica</h3>
-        </div>
-        <p class="text-xs text-stone-400">San Marzano tomatoes, fresh buffalo mozzarella, virgin olive oil, and basil.</p>
-        <div class="text-sm font-extrabold text-amber-400 pt-1">₹290</div>
-      </div>
-      <button onclick="addToCart('Margherita Classica', 290)" class="shrink-0 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors shadow-sm">
-        + Add
-      </button>
-    </div>
-
-    <!-- Item 2 -->
-    <div class="menu-item bg-[#1a1815] border border-stone-800 p-4 rounded-2xl flex items-center justify-between gap-4" data-cat="pizza">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded bg-red-950 text-red-400 font-bold border border-red-800/40">Chef Special</span>
-          <h3 class="font-bold text-white text-sm">Truffle Wild Mushroom</h3>
-        </div>
-        <p class="text-xs text-stone-400">Shiitake & button mushrooms, fontina cheese, white truffle oil drizzle.</p>
-        <div class="text-sm font-extrabold text-amber-400 pt-1">₹380</div>
-      </div>
-      <button onclick="addToCart('Truffle Wild Mushroom Pizza', 380)" class="shrink-0 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors shadow-sm">
-        + Add
-      </button>
-    </div>
-
-    <!-- Item 3 -->
-    <div class="menu-item bg-[#1a1815] border border-stone-800 p-4 rounded-2xl flex items-center justify-between gap-4" data-cat="pizza">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded bg-amber-950 text-amber-400 font-bold border border-amber-800/40">Spicy</span>
-          <h3 class="font-bold text-white text-sm">Smoked Pepperoni Feast</h3>
-        </div>
-        <p class="text-xs text-stone-400">Cured smoked pepperoni slices, chili flakes, aged cheddar, honey glaze.</p>
-        <div class="text-sm font-extrabold text-amber-400 pt-1">₹440</div>
-      </div>
-      <button onclick="addToCart('Smoked Pepperoni Feast', 440)" class="shrink-0 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors shadow-sm">
-        + Add
-      </button>
-    </div>
-
-    <!-- Item 4 -->
-    <div class="menu-item bg-[#1a1815] border border-stone-800 p-4 rounded-2xl flex items-center justify-between gap-4" data-cat="coffee">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded bg-stone-800 text-stone-300 font-bold">Cold</span>
-          <h3 class="font-bold text-white text-sm">Spanish Iced Latte</h3>
-        </div>
-        <p class="text-xs text-stone-400">Double shot espresso, chilled condensed milk, velvety whole milk.</p>
-        <div class="text-sm font-extrabold text-amber-400 pt-1">₹210</div>
-      </div>
-      <button onclick="addToCart('Spanish Iced Latte', 210)" class="shrink-0 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors shadow-sm">
-        + Add
-      </button>
-    </div>
-
-    <!-- Item 5 -->
-    <div class="menu-item bg-[#1a1815] border border-stone-800 p-4 rounded-2xl flex items-center justify-between gap-4" data-cat="coffee">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded bg-stone-800 text-stone-300 font-bold">Hot</span>
-          <h3 class="font-bold text-white text-sm">Belgian Hot Chocolate</h3>
-        </div>
-        <p class="text-xs text-stone-400">Rich 54% dark Callebaut chocolate melted into steamed milk.</p>
-        <div class="text-sm font-extrabold text-amber-400 pt-1">₹190</div>
-      </div>
-      <button onclick="addToCart('Belgian Hot Chocolate', 190)" class="shrink-0 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors shadow-sm">
-        + Add
-      </button>
-    </div>
-
-    <!-- Item 6 -->
-    <div class="menu-item bg-[#1a1815] border border-stone-800 p-4 rounded-2xl flex items-center justify-between gap-4" data-cat="dessert">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs px-2 py-0.5 rounded bg-amber-950 text-amber-400 font-bold">Warm</span>
-          <h3 class="font-bold text-white text-sm">Warm Nutella Skillet Cookie</h3>
-        </div>
-        <p class="text-xs text-stone-400">Freshly baked gooey chocolate chip cookie topped with vanilla gelato.</p>
-        <div class="text-sm font-extrabold text-amber-400 pt-1">₹230</div>
-      </div>
-      <button onclick="addToCart('Nutella Skillet Cookie', 230)" class="shrink-0 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs transition-colors shadow-sm">
-        + Add
-      </button>
-    </div>
-
-  </section>
-
-  <!-- Location & UPI Payment Info -->
-  <section class="max-w-4xl mx-auto px-4 mt-8 pt-8 border-t border-stone-800 text-center text-xs text-stone-400 space-y-2">
-    <p>📍 <strong>Location:</strong> Shop 4, Galleria Commercial Complex, Main Road</p>
-    <p>💳 <strong>Payment Accepted:</strong> UPI (GPay, PhonePe, Paytm), Cards & Cash</p>
-  </section>
-
-  <!-- Floating Interactive WhatsApp Cart Tray -->
-  <div id="cart-tray" class="fixed bottom-0 inset-x-0 z-40 bg-[#1c1917]/95 backdrop-blur-md border-t border-amber-900/40 p-3 max-w-xl mx-auto shadow-2xl transition-all translate-y-full">
-    <div class="flex items-center justify-between gap-4">
-      <div>
-        <div id="cart-count" class="text-xs font-bold text-white">0 Items Selected</div>
-        <div id="cart-total" class="text-sm font-extrabold text-amber-400">Total: ₹0</div>
-      </div>
-      <button onclick="checkoutWhatsApp()" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-950 font-extrabold text-xs flex items-center gap-2 shadow-lg transition-all">
-        <span>Send Order to WhatsApp</span>
-        <span>💬</span>
-      </button>
+  <!-- Hazard ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Always on-time</span><span>Full truckload</span><span>53ft dry van</span><span>Temperature controlled</span><span>Heavy haul</span><span>Nationwide dispatch</span>
+      <span>Always on-time</span><span>Full truckload</span><span>53ft dry van</span><span>Temperature controlled</span><span>Heavy haul</span><span>Nationwide dispatch</span>
     </div>
   </div>
 
-  <script>
-    let cart = [];
+  <!-- About / heritage -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="eyebrow">01 / Our journey</div><h2 id="about-title">Your destination.<br>Our discipline.</h2></div>
+        <p>Trusted transportation solutions since 2002. A modern fleet, an in-house dispatch desk and a refusal to miss the window.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:start" class="about-grid">
+        <div>
+          <p style="font-size:18px;line-height:1.65;color:#B1B5BD;max-width:760px;margin-bottom:18px">T.ROAD moves the loads that keep shelves stocked, factories running and construction sites on schedule. From a single pallet on an LTL lane to a 25-ton heavy haul, every shipment gets a named dispatcher, live checkpoint updates and a rate locked before pickup.</p>
+          <p style="font-size:12px;line-height:1.7;color:#8E959F;max-width:720px">We run our own Class 8 tractors, 53ft dry vans, flatbeds and reefer trailers — and a vetted carrier network for surge capacity. No broker hand-offs. No surprise line items. Just freight that shows up when it says it will.</p>
+        </div>
+        <div style="border:1px solid var(--line);padding:20px;background:var(--steel-2)">
+          <div class="mono" style="color:var(--amber);margin-bottom:13px">WHY SHIPPERS STAY</div>
+          <div style="display:grid;gap:12px">
+            <div style="display:flex;gap:10px;font-size:11px;color:#A7ACB5"><span style="color:var(--amber)">01</span><span><strong style="color:#fff">Live rate, not a range.</strong> Mileage, weight and category priced on screen.</span></div>
+            <div style="display:flex;gap:10px;font-size:11px;color:#A7ACB5"><span style="color:var(--amber)">02</span><span><strong style="color:#fff">One dispatch contact.</strong> A real person on WhatsApp from quote to POD.</span></div>
+            <div style="display:flex;gap:10px;font-size:11px;color:#A7ACB5"><span style="color:var(--amber)">03</span><span><strong style="color:#fff">Checked at every handoff.</strong> Sealed, scanned and photographed.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    function filterCategory(cat) {
-      document.querySelectorAll('.cat-btn').forEach(b => {
-        b.className = 'cat-btn px-4 py-2 rounded-full bg-stone-800 text-stone-300 hover:text-white shrink-0';
+  <!-- Freight quote engine -->
+  <section class="quote-section" id="quote" aria-labelledby="quote-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="eyebrow">02 / Instant logistics engine</div><h2 id="quote-title">Let's get moving.</h2></div>
+        <p>Enter the lane, load and weight. Your commercial estimate updates in real time — then dispatch it to our desk on WhatsApp.</p>
+      </div>
+
+      <div class="quote-shell">
+        <div class="quote-controls">
+          <div class="quote-top">
+            <div><h3>Freight rate calculator</h3><p>LIVE MILEAGE &amp; COST ESTIMATOR</p></div>
+            <div class="mono">24/7 NATIONWIDE<br>DISPATCH DESK</div>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="origin">Origin hub</label>
+              <select id="origin" onchange="updateQuote()">
+                <option value="Mumbai">Mumbai, MH</option>
+                <option value="Delhi">Delhi, DL</option>
+                <option value="Bengaluru">Bengaluru, KA</option>
+                <option value="Chennai">Chennai, TN</option>
+                <option value="Ahmedabad">Ahmedabad, GJ</option>
+                <option value="Kolkata">Kolkata, WB</option>
+                <option value="Hyderabad">Hyderabad, TS</option>
+                <option value="Pune">Pune, MH</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="destination">Destination</label>
+              <select id="destination" onchange="updateQuote()">
+                <option value="Bengaluru">Bengaluru, KA</option>
+                <option value="Delhi">Delhi, DL</option>
+                <option value="Mumbai">Mumbai, MH</option>
+                <option value="Chennai">Chennai, TN</option>
+                <option value="Ahmedabad">Ahmedabad, GJ</option>
+                <option value="Kolkata">Kolkata, WB</option>
+                <option value="Hyderabad">Hyderabad, TS</option>
+                <option value="Pune">Pune, MH</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="category">Freight category</label>
+              <select id="category" onchange="updateQuote()">
+                <option value="FTL" data-mult="1">Full Truckload (FTL)</option>
+                <option value="LTL" data-mult="1.35">Less Than Truckload (LTL)</option>
+                <option value="Refrigerated" data-mult="1.28">Refrigerated / Reefer</option>
+                <option value="Heavy Haul" data-mult="1.55">Heavy Haul</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="weight">Cargo weight <b id="weight-label">12 tons</b></label>
+              <div class="range-row">
+                <input id="weight" type="range" min="1" max="30" step="1" value="12" oninput="updateQuote()" aria-label="Cargo weight in tons">
+                <span class="range-value" id="weight-value">12 T</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="shipper-name">Shipper name</label>
+              <input id="shipper-name" type="text" placeholder="e.g. Riya Mehta" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="shipper-phone">Phone / WhatsApp</label>
+              <input id="shipper-phone" type="tel" inputmode="tel" placeholder="+91 98765 43210" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="quote-breakdown" aria-live="polite">
+            <div><span>Base dispatch</span><b>₹12,000</b></div>
+            <div><span>Distance component</span><b id="breakdown-distance">₹0</b></div>
+            <div><span>Weight component</span><b id="breakdown-weight">₹0</b></div>
+            <div><span>Category factor</span><b id="breakdown-category">FTL × 1.00</b></div>
+          </div>
+        </div>
+
+        <div class="quote-output">
+          <div>
+            <div class="quote-rate-label">Estimated commercial freight rate</div>
+            <div class="quote-rate" id="quote-rate">₹0</div>
+            <small id="quote-rate-sub">Inclusive of fuel &amp; standard permits · GST extra</small>
+
+            <div class="quote-mileage">
+              <div><b id="distance-km">0 km</b><span>Road distance</span></div>
+              <div><b id="distance-mi">0 mi</b><span>Mileage</span></div>
+              <div><b id="transit-time">0h</b><span>Est. transit</span></div>
+            </div>
+
+            <p class="quote-note"><strong>Live quote:</strong> based on your selected lane, tonnage and equipment. Final rate is confirmed after load dimensions and pickup window are verified.</p>
+          </div>
+          <div>
+            <button class="btn btn-amber" type="button" onclick="sendFreightQuote()">Dispatch quote on WhatsApp <span aria-hidden="true">💬</span></button>
+            <p class="quote-disclaimer">No payment now. A dispatcher will confirm availability and lock the rate with you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fleet -->
+  <section id="fleet" aria-labelledby="fleet-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="eyebrow">03 / Mighty fleet</div><h2 id="fleet-title">Built for the load.</h2></div>
+        <p>Four equipment classes, one standard: clean, inspected and ready before the pickup window opens.</p>
+      </div>
+
+      <div class="fleet-tabs" role="tablist" aria-label="Fleet vehicles">
+        <button class="fleet-tab" role="tab" id="tab-semi" aria-controls="panel-semi" aria-selected="true" onclick="selectFleet('semi')">01 Semi-Trucks</button>
+        <button class="fleet-tab" role="tab" id="tab-flatbed" aria-controls="panel-flatbed" aria-selected="false" onclick="selectFleet('flatbed')">02 Flatbeds</button>
+        <button class="fleet-tab" role="tab" id="tab-reefer" aria-controls="panel-reefer" aria-selected="false" onclick="selectFleet('reefer')">03 Reefer Trailers</button>
+        <button class="fleet-tab" role="tab" id="tab-heavy" aria-controls="panel-heavy" aria-selected="false" onclick="selectFleet('heavy')">04 Heavy Haulers</button>
+      </div>
+
+      <!-- Semi -->
+      <div class="fleet-panel active" id="panel-semi" role="tabpanel" aria-labelledby="tab-semi">
+        <div class="fleet-visual">
+          <span class="fleet-badge">Class 8 · Long haul</span>
+          <svg viewBox="0 0 640 280" role="img" aria-label="Illustration of a Class 8 semi truck with a 53 foot dry van trailer">
+            <defs><linearGradient id="semi-trailer" x1="0" x2="1"><stop offset="0" stop-color="#F2F3F5"/><stop offset="1" stop-color="#BFC4CB"/></linearGradient></defs>
+            <path d="M40 190h370v-98H40z" fill="url(#semi-trailer)" stroke="#7D848E" stroke-width="2"/>
+            <path d="M40 92h370" stroke="#8D949D" stroke-width="3"/>
+            <path d="M410 190h30l40-96h76l46 45v51z" fill="#F59E0B" stroke="#A96A05" stroke-width="2"/>
+            <path d="M456 100h72l34 35h-106z" fill="#1D2A31" stroke="#0D0D11" stroke-width="2"/>
+            <path d="M478 106h42l18 19h-60z" fill="#8FB4C9"/>
+            <path d="M410 152h162" stroke="#0D0D11" stroke-width="3"/>
+            <rect x="40" y="118" width="370" height="10" fill="#2B2C31" opacity=".3"/>
+            <text x="82" y="154" font-family="Arial Narrow, sans-serif" font-size="30" font-weight="700" fill="#2B2C31" letter-spacing="2">T.ROAD</text>
+            <text x="84" y="176" font-family="monospace" font-size="9" fill="#687079" letter-spacing="2">ALWAYS ON-TIME</text>
+            <circle cx="130" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="130" cy="216" r="12" fill="#8D949D"/>
+            <circle cx="240" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="240" cy="216" r="12" fill="#8D949D"/>
+            <circle cx="500" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="500" cy="216" r="12" fill="#8D949D"/>
+            <circle cx="565" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="565" cy="216" r="12" fill="#8D949D"/>
+            <path d="M0 246h640" stroke="#F59E0B" stroke-width="2" stroke-dasharray="20 14"/>
+          </svg>
+        </div>
+        <div class="fleet-details">
+          <h3>Semi-Tractor</h3>
+          <p>Long-haul workhorse for high-value, time-sensitive full truckloads. Air-ride suspension, satellite tracking and team drivers for 48-state lanes.</p>
+          <div class="spec-grid">
+            <div class="spec"><span>Payload</span><b>44,000 lbs</b></div>
+            <div class="spec"><span>Volume</span><b>4,200 cu ft</b></div>
+            <div class="spec"><span>Axle config</span><b>6×4 tandem</b></div>
+            <div class="spec"><span>Best for</span><b>FTL · long haul</b></div>
+          </div>
+          <div class="fleet-tags"><span>53ft dry van</span><span>Air ride</span><span>Team drivers</span><span>Live GPS</span></div>
+        </div>
+      </div>
+
+      <!-- Flatbed -->
+      <div class="fleet-panel" id="panel-flatbed" role="tabpanel" aria-labelledby="tab-flatbed" hidden>
+        <div class="fleet-visual">
+          <span class="fleet-badge">Open deck · Oversized</span>
+          <svg viewBox="0 0 640 280" role="img" aria-label="Illustration of a flatbed truck carrying construction material">
+            <path d="M40 188h390v-14H40z" fill="#7C828B" stroke="#4A4E55" stroke-width="2"/>
+            <path d="M58 174v-48h72v48M146 174v-34h56v34M218 174v-58h44v58" fill="#B9BDC3" stroke="#6C727A" stroke-width="2"/>
+            <path d="M58 126h72M146 140h56M218 116h44" stroke="#8E959F" stroke-width="3"/>
+            <path d="M430 188h28l38-94h72l43 44v50z" fill="#F59E0B" stroke="#A96A05" stroke-width="2"/>
+            <path d="M474 100h62l33 34h-95z" fill="#1D2A31" stroke="#0D0D11" stroke-width="2"/>
+            <path d="M493 106h36l17 18h-53z" fill="#8FB4C9"/>
+            <circle cx="125" cy="212" r="28" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="125" cy="212" r="11" fill="#8D949D"/>
+            <circle cx="245" cy="212" r="28" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="245" cy="212" r="11" fill="#8D949D"/>
+            <circle cx="505" cy="212" r="28" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="505" cy="212" r="11" fill="#8D949D"/>
+            <circle cx="568" cy="212" r="28" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="568" cy="212" r="11" fill="#8D949D"/>
+            <path d="M40 242h500" stroke="#F59E0B" stroke-width="2" stroke-dasharray="20 14"/>
+          </svg>
+        </div>
+        <div class="fleet-details">
+          <h3>Flatbed Transport</h3>
+          <p>Open-deck capacity for construction, steel, machinery and oversized freight. Tarps, straps and edge protection supplied as standard.</p>
+          <div class="spec-grid">
+            <div class="spec"><span>Payload</span><b>48,000 lbs</b></div>
+            <div class="spec"><span>Deck length</span><b>48–53 ft</b></div>
+            <div class="spec"><span>Axle config</span><b>Spread axle</b></div>
+            <div class="spec"><span>Best for</span><b>Oversized cargo</b></div>
+          </div>
+          <div class="fleet-tags"><span>Steel &amp; machinery</span><span>Tarped loads</span><span>RGN optional</span><span>Permit support</span></div>
+        </div>
+      </div>
+
+      <!-- Reefer -->
+      <div class="fleet-panel" id="panel-reefer" role="tabpanel" aria-labelledby="tab-reefer" hidden>
+        <div class="fleet-visual">
+          <span class="fleet-badge">−20°F to 65°F</span>
+          <svg viewBox="0 0 640 280" role="img" aria-label="Illustration of a refrigerated reefer trailer truck">
+            <path d="M40 190h370v-100H40z" fill="#DDE6EA" stroke="#71808A" stroke-width="2"/>
+            <path d="M40 96h370" stroke="#71808A" stroke-width="3"/>
+            <rect x="64" y="118" width="112" height="12" fill="#2B5672"/><rect x="64" y="140" width="82" height="8" fill="#7A9AAE"/>
+            <g transform="translate(258,152)" stroke="#2B5672" stroke-width="2" fill="none"><path d="M0-22V22M-19-11L19 11M-19 11L19-11"/><path d="M0-22l-5 6M0-22l5 6M0 22l-5-6M0 22l5-6"/></g>
+            <path d="M410 190h30l40-96h76l46 45v51z" fill="#F59E0B" stroke="#A96A05" stroke-width="2"/>
+            <path d="M456 100h72l34 35h-106z" fill="#1D2A31" stroke="#0D0D11" stroke-width="2"/>
+            <path d="M478 106h42l18 19h-60z" fill="#8FB4C9"/>
+            <rect x="410" y="118" width="34" height="44" fill="#2B5672" stroke="#1B3B50" stroke-width="2"/>
+            <circle cx="130" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="130" cy="216" r="12" fill="#8D949D"/>
+            <circle cx="240" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="240" cy="216" r="12" fill="#8D949D"/>
+            <circle cx="500" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="500" cy="216" r="12" fill="#8D949D"/>
+            <circle cx="565" cy="216" r="30" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="565" cy="216" r="12" fill="#8D949D"/>
+            <path d="M0 246h640" stroke="#F59E0B" stroke-width="2" stroke-dasharray="20 14"/>
+          </svg>
+        </div>
+        <div class="fleet-details">
+          <h3>Temperature-Controlled Reefer</h3>
+          <p>Precision climate control for food, pharma and perishables. Continuous temperature logging with alerts at every checkpoint.</p>
+          <div class="spec-grid">
+            <div class="spec"><span>Payload</span><b>43,000 lbs</b></div>
+            <div class="spec"><span>Range</span><b>−20°F to 65°F</b></div>
+            <div class="spec"><span>Axle config</span><b>Tandem</b></div>
+            <div class="spec"><span>Best for</span><b>Cold chain</b></div>
+          </div>
+          <div class="fleet-tags"><span>Food grade</span><span>Pharma ready</span><span>Temp logging</span><span>Pre-cooled</span></div>
+        </div>
+      </div>
+
+      <!-- Heavy -->
+      <div class="fleet-panel" id="panel-heavy" role="tabpanel" aria-labelledby="tab-heavy" hidden>
+        <div class="fleet-visual">
+          <span class="fleet-badge">Permitted · Escorted</span>
+          <svg viewBox="0 0 640 280" role="img" aria-label="Illustration of a heavy haul lowboy trailer carrying an excavator">
+            <path d="M40 188h390v-18H40z" fill="#5B6068" stroke="#383C42" stroke-width="2"/>
+            <path d="M56 188v34h36v-34M270 188v28h38v-28" fill="#3F444B" stroke="#2B2C31" stroke-width="2"/>
+            <g transform="translate(166,118)">
+              <rect x="0" y="30" width="104" height="26" fill="#F59E0B" stroke="#A96A05" stroke-width="2"/>
+              <path d="M22 30V10h48v20" fill="#2B2C31" stroke="#0D0D11" stroke-width="2"/>
+              <path d="M34 10V-2h24v12" fill="#8FB4C9" stroke="#0D0D11" stroke-width="2"/>
+              <path d="M104 46l44 22 -8 10 -44-18z" fill="#F59E0B" stroke="#A96A05" stroke-width="2"/>
+              <path d="M140 78l-18 22h-16l20-24z" fill="#2B2C31"/>
+              <circle cx="25" cy="58" r="13" fill="#1A1D24" stroke="#5B6068" stroke-width="3"/>
+              <circle cx="82" cy="58" r="13" fill="#1A1D24" stroke="#5B6068" stroke-width="3"/>
+            </g>
+            <path d="M430 188h28l38-94h72l43 44v50z" fill="#F59E0B" stroke="#A96A05" stroke-width="2"/>
+            <path d="M474 100h62l33 34h-95z" fill="#1D2A31" stroke="#0D0D11" stroke-width="2"/>
+            <path d="M493 106h36l17 18h-53z" fill="#8FB4C9"/>
+            <circle cx="95" cy="222" r="27" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="95" cy="222" r="10" fill="#8D949D"/>
+            <circle cx="290" cy="222" r="27" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="290" cy="222" r="10" fill="#8D949D"/>
+            <circle cx="505" cy="218" r="29" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="505" cy="218" r="11" fill="#8D949D"/>
+            <circle cx="568" cy="218" r="29" fill="#1A1D24" stroke="#5B6068" stroke-width="5"/><circle cx="568" cy="218" r="11" fill="#8D949D"/>
+            <path d="M0 252h640" stroke="#F59E0B" stroke-width="2" stroke-dasharray="20 14"/>
+          </svg>
+        </div>
+        <div class="fleet-details">
+          <h3>Heavy Hauler</h3>
+          <p>Lowboy and multi-axle configurations for excavators, transformers and industrial plant. Route surveys, permits and escort coordination included.</p>
+          <div class="spec-grid">
+            <div class="spec"><span>Payload</span><b>150,000 lbs</b></div>
+            <div class="spec"><span>Deck</span><b>Lowboy / RGN</b></div>
+            <div class="spec"><span>Axle config</span><b>9+ axle</b></div>
+            <div class="spec"><span>Best for</span><b>Superloads</b></div>
+          </div>
+          <div class="fleet-tags"><span>Route survey</span><span>Permits</span><span>Escorts</span><span>Multi-axle</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" aria-labelledby="services-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div><div class="eyebrow">04 / Logistics grid</div><h2 id="services-title">Six ways we move.</h2></div>
+        <p>One dispatch desk, six freight solutions. Every lane is quoted, tracked and proof-of-delivery verified.</p>
+      </div>
+      <div class="service-grid">
+        <a class="service" href="#quote"><span class="num">01</span><div><h3>Long-haul trucking</h3><p>Coast-to-coast FTL lanes with team drivers, GPS and guaranteed delivery windows.</p></div><span class="arrow">↗</span></a>
+        <a class="service" href="#quote"><span class="num">02</span><div><h3>Short-haul transportation</h3><p>Regional and metro deliveries with same-day pickup and flexible drop windows.</p></div><span class="arrow">↗</span></a>
+        <a class="service" href="#quote"><span class="num">03</span><div><h3>Temperature-controlled</h3><p>Reefer capacity with continuous temperature logging for food and pharma.</p></div><span class="arrow">↗</span></a>
+        <a class="service" href="#quote"><span class="num">04</span><div><h3>Supply chain management</h3><p>Lane planning, consolidation and dedicated fleet capacity for recurring shippers.</p></div><span class="arrow">↗</span></a>
+        <a class="service" href="#quote"><span class="num">05</span><div><h3>Flatbed trucking</h3><p>Open-deck transport for steel, machinery, construction and oversized loads.</p></div><span class="arrow">↗</span></a>
+        <a class="service" href="#quote"><span class="num">06</span><div><h3>Full truckload (FTL)</h3><p>Dedicated trailers, no co-loading, direct origin-to-destination moves.</p></div><span class="arrow">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof -->
+  <section class="proof" aria-labelledby="proof-title">
+    <div class="wrap proof-grid">
+      <div>
+        <div class="eyebrow" style="color:var(--amber)">05 / Shipper proof</div>
+        <h2 id="proof-title">Freight is a promise. We keep it.</h2>
+        <p>Shippers stay with T.ROAD because the rate holds, the trailer arrives clean, and the update comes before they have to ask. Our dispatch team averages a 4-minute response time on WhatsApp.</p>
+        <div class="proof-stats">
+          <div><b>98.7%</b><span>On-time</span></div>
+          <div><b>4 min</b><span>Avg. reply</span></div>
+          <div><b>0</b><span>Hidden fees</span></div>
+        </div>
+      </div>
+      <div class="proof-quote">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <blockquote>“We moved 14 reefer loads through T.ROAD last quarter. Every single one landed inside the window, and the temperature logs came through automatically. They've become our first call.”</blockquote>
+        <div class="who">Danielle Yliuay · Logistics Director, Northline Foods</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" aria-labelledby="cta-title" style="padding:42px 0">
+    <div class="wrap cta-inner">
+      <div><h2 id="cta-title">Let's get moving.</h2><p>24/7 dispatch · Quotes locked in minutes · Nationwide coverage</p></div>
+      <div class="cta-actions">
+        <a class="btn btn-amber" href="#quote">Build my quote <span aria-hidden="true">→</span></a>
+        <a class="btn btn-outline" href="https://wa.me/917410123901?text=Hi%20T.ROAD%2C%20I%20need%20a%20freight%20quote." target="_blank" rel="noopener">WhatsApp dispatch</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span><strong>T.ROAD</strong> · Freight &amp; logistics demo · <span id="footer-year"></span> Convertix Studio</span>
+    <div class="footer-links"><a href="../#portfolio">All demos</a><a href="../#pricing">Claim this site</a><a href="#top">Back to top ↑</a></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  (function(){
+    'use strict';
+    const PHONE = '917410123901';
+    const CITIES = {
+      Mumbai:{lat:19.0760,lon:72.8777}, Delhi:{lat:28.6139,lon:77.2090},
+      Bengaluru:{lat:12.9716,lon:77.5946}, Chennai:{lat:13.0827,lon:80.2707},
+      Ahmedabad:{lat:23.0225,lon:72.5714}, Kolkata:{lat:22.5726,lon:88.3639},
+      Hyderabad:{lat:17.3850,lon:78.4867}, Pune:{lat:18.5204,lon:73.8567}
+    };
+    const toast = document.getElementById('toast');
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    function showToast(msg, isError){
+      toast.textContent = msg;
+      toast.className = 'toast show' + (isError ? ' error' : '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(function(){ toast.className = 'toast'; }, 4200);
+    }
+    function inr(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
+    function haversine(a, b){
+      const R = 6371, dLat = (b.lat-a.lat)*Math.PI/180, dLon = (b.lon-a.lon)*Math.PI/180;
+      const la1 = a.lat*Math.PI/180, la2 = b.lat*Math.PI/180;
+      const h = Math.sin(dLat/2)**2 + Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)**2;
+      return 2 * R * Math.asin(Math.sqrt(h));
+    }
+
+    window.updateQuote = function(){
+      const origin = document.getElementById('origin').value;
+      const dest = document.getElementById('destination').value;
+      const catSel = document.getElementById('category');
+      const cat = catSel.value;
+      const mult = Number(catSel.selectedOptions[0].dataset.mult) || 1;
+      const tons = Number(document.getElementById('weight').value) || 1;
+      let km = 0;
+      if (origin === dest) km = 120;
+      else km = Math.max(180, Math.round(haversine(CITIES[origin], CITIES[dest]) * 1.22 / 10) * 10);
+      const miles = Math.round(km * 0.621371);
+      const distanceCost = km * 42;
+      const weightCost = tons * 1800;
+      const total = Math.round((12000 + distanceCost + weightCost) * mult);
+      const transit = Math.max(2, Math.round(km / 65 + 2));
+
+      document.getElementById('weight-value').textContent = tons + ' T';
+      document.getElementById('weight-label').textContent = tons + ' tons';
+      document.getElementById('breakdown-distance').textContent = inr(distanceCost);
+      document.getElementById('breakdown-weight').textContent = inr(weightCost);
+      document.getElementById('breakdown-category').textContent = cat + ' × ' + mult.toFixed(2);
+      document.getElementById('quote-rate').textContent = inr(total);
+      document.getElementById('quote-rate-sub').textContent = 'Inclusive of fuel & standard permits · GST extra · ' + cat;
+      document.getElementById('distance-km').textContent = km.toLocaleString('en-IN') + ' km';
+      document.getElementById('distance-mi').textContent = miles.toLocaleString('en-IN') + ' mi';
+      document.getElementById('transit-time').textContent = transit + 'h';
+    };
+
+    window.sendFreightQuote = function(){
+      const name = document.getElementById('shipper-name').value.trim();
+      const phone = document.getElementById('shipper-phone').value.trim();
+      const digits = phone.replace(/\D/g, '');
+      if (!name || name.length < 2){ showToast('Please add the shipper name so dispatch can address the quote.', true); document.getElementById('shipper-name').focus(); return; }
+      if (digits.length < 10){ showToast('Please add a valid phone number (10+ digits) for the WhatsApp quote.', true); document.getElementById('shipper-phone').focus(); return; }
+      const origin = document.getElementById('origin').value;
+      const dest = document.getElementById('destination').value;
+      const cat = document.getElementById('category').value;
+      const tons = document.getElementById('weight').value;
+      const km = document.getElementById('distance-km').textContent;
+      const mi = document.getElementById('distance-mi').textContent;
+      const rate = document.getElementById('quote-rate').textContent;
+      const text = '*Freight Quote Request — T.ROAD* 🚛\n\n' +
+        '• Shipper: ' + name + '\n' +
+        '• Phone: ' + phone + '\n' +
+        '• Lane: ' + origin + ' → ' + dest + '\n' +
+        '• Category: ' + cat + '\n' +
+        '• Weight: ' + tons + ' tons\n' +
+        '• Distance: ' + km + ' / ' + mi + '\n' +
+        '• Estimated rate: ' + rate + ' (GST extra)\n\n' +
+        'Hi dispatch, please confirm availability and lock this rate.';
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+      showToast('Opening WhatsApp with your freight quote — dispatch will confirm.');
+    };
+
+    /* Fleet tabs */
+    window.selectFleet = function(key){
+      document.querySelectorAll('.fleet-tab').forEach(function(tab){
+        const active = tab.id === 'tab-' + key;
+        tab.setAttribute('aria-selected', active ? 'true' : 'false');
       });
-      event.target.className = 'cat-btn px-4 py-2 rounded-full bg-amber-500 text-stone-950 font-bold shrink-0';
-
-      document.querySelectorAll('.menu-item').forEach(item => {
-        if (cat === 'all' || item.dataset.cat === cat) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
+      document.querySelectorAll('.fleet-panel').forEach(function(panel){
+        const active = panel.id === 'panel-' + key;
+        panel.classList.toggle('active', active);
+        if (active) panel.removeAttribute('hidden'); else panel.setAttribute('hidden','');
       });
-    }
+      if (window.soundEngine) { /* no-op: demo is standalone */ }
+    };
 
-    function addToCart(name, price) {
-      cart.push({ name, price });
-      updateCartUI();
-    }
+    /* Shipment tracker simulation */
+    const checkpoints = [
+      {pct:38, status:'In transit · NH48 corridor', eta:'06h 20m', truck:'▰'},
+      {pct:55, status:'In transit · Davanagere bypass', eta:'05h 05m', truck:'▰'},
+      {pct:70, status:'At hub · Tumakuru cross-dock', eta:'03h 40m', truck:'▣'},
+      {pct:86, status:'Out for delivery · Peenya', eta:'01h 15m', truck:'▰'},
+      {pct:100, status:'Delivered · signed by R. Mehta', eta:'Delivered', truck:'✓'}
+    ];
+    let cpIndex = 0;
+    window.advanceShipment = function(){
+      cpIndex = (cpIndex + 1) % checkpoints.length;
+      const cp = checkpoints[cpIndex];
+      document.getElementById('tracker-progress').style.width = cp.pct + '%';
+      document.getElementById('tracker-truck').style.left = cp.pct + '%';
+      document.getElementById('tracker-truck').textContent = cp.truck;
+      document.getElementById('tracker-status').textContent = cp.status;
+      document.getElementById('tracker-eta').textContent = cp.eta;
+      document.getElementById('tracker-progressbar').setAttribute('aria-valuenow', cp.pct);
+      if (cp.pct === 100){ showToast('Shipment delivered — proof of delivery generated.'); }
+      else { showToast('Checkpoint updated · ' + cp.status); }
+    };
 
-    function updateCartUI() {
-      const tray = document.getElementById('cart-tray');
-      if (cart.length > 0) {
-        tray.classList.remove('translate-y-full');
-      } else {
-        tray.classList.add('translate-y-full');
-      }
+    // Keep tracking id serialisable in tracker display
+    document.getElementById('tracking-input').addEventListener('input', function(e){
+      const value = e.target.value.trim() || 'TRD-4821-IN';
+      document.getElementById('tracking-input').setAttribute('aria-label', 'Tracking number ' + value);
+    });
 
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      document.getElementById('cart-count').textContent = `${cart.length} Item${cart.length > 1 ? 's' : ''} in Tray`;
-      document.getElementById('cart-total').textContent = `Total: ₹${total}`;
-    }
-
-    function checkoutWhatsApp() {
-      if (cart.length === 0) return;
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      const itemsList = cart.map((c, i) => `${i + 1}. ${c.name} - ₹${c.price}`).join('\n');
-      const text = encodeURIComponent(`*New Order from Urban Crust Artisan Cafe* 🍕\n\n${itemsList}\n\n*Total Amount:* ₹${total}\n\nHi! Please confirm my order for Dine-in / Takeaway.`);
-      window.open(`https://wa.me/917410123901?text=${text}`, '_blank');
-    }
-  </script>
+    updateQuote();
+  })();
+</script>
 </body>
 </html>
