@@ -1,5 +1,5 @@
-/* Convertix Studio — progressive enhancement
-   No third-party dependencies. Safe to load deferred. */
+/* Convertix Studio — Production Client Engine & Theme Architecture
+   Pure Vanilla JS. 60fps requestAnimationFrame tracking. Zero external dependencies. */
 (() => {
   'use strict';
 
@@ -9,421 +9,149 @@
   const PRICING = {
     INR: {
       corePrice: '₹1,000',
-      aiBundlePrice: '₹2,499',
-      headerText: 'Get Site for ₹1,000',
       btnText: '₹1,000',
+      headerText: 'Get Site for ₹1,000',
       avgTicket: 1500
     },
     USD: {
       corePrice: '$15',
-      aiBundlePrice: '$39',
-      headerText: 'Get Site for $15',
       btnText: '$15',
+      headerText: 'Get Site for $15',
       avgTicket: 75
     }
   };
 
-  const $ = (selector, scope = document) => scope.querySelector(selector);
-  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const $ = (sel, scope = document) => scope.querySelector(sel);
+  const $$ = (sel, scope = document) => Array.from(scope.querySelectorAll(sel));
 
   let currentCurrency = 'INR';
+  let currentTheme = 'obsidian';
 
-  /* ---------------- Currency ---------------- */
+  /* ---------------- 1. Theme Engine ---------------- */
 
-  const currencyButtons = $$('[data-currency]');
+  window.setTheme = function(themeName) {
+    currentTheme = themeName;
+    document.documentElement.setAttribute('data-theme', themeName);
 
-  function readStoredCurrency() {
+    $$('.theme-btn').forEach(btn => {
+      const isActive = btn.dataset.themeChoice === themeName;
+      btn.classList.toggle('bg-white/20', isActive);
+      btn.classList.toggle('text-white', isActive);
+      btn.classList.toggle('text-slate-400', !isActive);
+    });
+
     try {
-      const stored = window.localStorage.getItem('convertix-currency');
-      if (stored === 'USD' || stored === 'INR') return stored;
-    } catch (_) { /* storage can be blocked */ }
-    return 'INR';
+      localStorage.setItem('convertix-theme', themeName);
+    } catch (_) {}
+  };
+
+  function initTheme() {
+    let saved = 'obsidian';
+    try {
+      saved = localStorage.getItem('convertix-theme') || 'obsidian';
+    } catch (_) {}
+    window.setTheme(saved);
   }
 
-  function setCurrency(currency, persist = true) {
+  /* ---------------- 2. Currency Engine ---------------- */
+
+  window.setCurrency = function(currency) {
     if (!PRICING[currency]) return;
     currentCurrency = currency;
     const p = PRICING[currency];
 
-    // Bilingual price strings, e.g. <span data-inr="₹25,000" data-usd="$500">
-    $$('[data-inr]').forEach(el => {
-      const value = currency === 'INR' ? el.dataset.inr : el.dataset.usd;
-      if (value) el.textContent = value;
-    });
-
     $$('.price-tag').forEach(el => { el.textContent = p.corePrice; });
-    $$('.price-header-text').forEach(el => { el.textContent = p.headerText; });
     $$('.price-btn-text').forEach(el => { el.textContent = p.btnText; });
-    $$('.ai-bundle-price').forEach(el => { el.textContent = p.aiBundlePrice; });
+    $$('.price-header-text').forEach(el => { el.textContent = p.headerText; });
 
-    currencyButtons.forEach(btn => {
-      btn.setAttribute('aria-pressed', String(btn.dataset.currency === currency));
+    $$('[data-currency]').forEach(btn => {
+      const active = btn.dataset.currency === currency;
+      btn.setAttribute('aria-pressed', String(active));
+      btn.classList.toggle('bg-emerald-500', active);
+      btn.classList.toggle('text-slate-950', active);
+      btn.classList.toggle('font-bold', active);
+      btn.classList.toggle('text-slate-300', !active);
     });
 
-    $$('#package-choice option').forEach(option => {
-      const label = currency === 'INR' ? option.dataset.inrLabel : option.dataset.usdLabel;
-      if (label) option.textContent = label;
-    });
+    updateRoiCalculator();
 
-    document.documentElement.dataset.currency = currency;
-    updateCalculator();
-
-    if (persist) {
-      try { window.localStorage.setItem('convertix-currency', currency); } catch (_) { /* ignore */ }
-    }
-  }
-
-  currencyButtons.forEach(button => {
-    button.addEventListener('click', () => setCurrency(button.dataset.currency));
-  });
-
-  /* ---------------- ROI calculator ---------------- */
-
-  const leadsSlider = $('#leads-range');
-  const leadsSliderValue = $('#slider-leads-val');
-  const lostRevenue = $('#calc-lost-revenue');
-
-  function updateCalculator() {
-    if (!leadsSlider || !lostRevenue) return;
-    const leadsPerWeek = Number.parseInt(leadsSlider.value, 10) || 0;
-    const p = PRICING[currentCurrency];
-
-    // 60% of enquiries missed, 20% of those would have converted.
-    const monthlyLeads = leadsPerWeek * 4;
-    const lost = Math.round(monthlyLeads * 0.6 * 0.2 * p.avgTicket);
-
-    lostRevenue.textContent = currentCurrency === 'INR'
-      ? `₹${lost.toLocaleString('en-IN')} / mo`
-      : `$${lost.toLocaleString('en-US')} / mo`;
-  }
-
-  if (leadsSlider) {
-    leadsSlider.addEventListener('input', event => {
-      if (leadsSliderValue) leadsSliderValue.textContent = `${event.target.value} leads`;
-      updateCalculator();
-    });
-  }
-
-  /* ---------------- Mobile navigation ---------------- */
-
-  const menuToggle = $('#menu-toggle');
-  const mobileMenu = $('#mobile-menu');
-  const menuIconOpen = $('#menu-icon-open');
-  const menuIconClose = $('#menu-icon-close');
-
-  function setMenu(open) {
-    if (!menuToggle || !mobileMenu) return;
-    mobileMenu.classList.toggle('hidden', !open);
-    menuToggle.setAttribute('aria-expanded', String(open));
-    menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-    if (menuIconOpen) menuIconOpen.classList.toggle('hidden', open);
-    if (menuIconClose) menuIconClose.classList.toggle('hidden', !open);
-  }
-
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', () => {
-      setMenu(menuToggle.getAttribute('aria-expanded') !== 'true');
-    });
-
-    $$('a', mobileMenu).forEach(link => link.addEventListener('click', () => setMenu(false)));
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
-        setMenu(false);
-        menuToggle.focus();
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 1024) setMenu(false);
-    }, { passive: true });
-  }
-
-  /* ---------------- Scroll spy ---------------- */
-
-  const navLinks = $$('.nav-link');
-  const sections = $$('main section[id]');
-
-  if ('IntersectionObserver' in window && navLinks.length && sections.length) {
-    const linkFor = new Map();
-    navLinks.forEach(link => linkFor.set(link.getAttribute('href').slice(1), link));
-
-    const spy = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        navLinks.forEach(link => link.removeAttribute('aria-current'));
-        const active = linkFor.get(entry.target.id);
-        if (active) active.setAttribute('aria-current', 'true');
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-
-    sections.forEach(section => {
-      if (linkFor.has(section.id)) spy.observe(section);
-    });
-  }
-
-  /* ---------------- Cursor / magnetic tracking ---------------- */
-
-  function setupTracking() {
-    if (reduceMotion.matches) return;
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-    const root = document.documentElement;
-    const cards = $$('.track-card');
-    const magnetics = $$('.track-magnetic');
-    const subs = $$('.track-sub');
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let queued = false;
-
-    function render() {
-      root.style.setProperty('--gx', `${mouseX}px`);
-      root.style.setProperty('--gy', `${mouseY}px`);
-
-      cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        if (rect.bottom < -120 || rect.top > window.innerHeight + 120) return;
-
-        const x = mouseX - rect.left;
-        const y = mouseY - rect.top;
-        card.style.setProperty('--cx', `${x}px`);
-        card.style.setProperty('--cy', `${y}px`);
-
-        const inside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
-        if (inside) {
-          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -3.2;
-          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 3.2;
-          card.style.setProperty('--rx', `${rotateX.toFixed(2)}deg`);
-          card.style.setProperty('--ry', `${rotateY.toFixed(2)}deg`);
-        } else {
-          card.style.setProperty('--rx', '0deg');
-          card.style.setProperty('--ry', '0deg');
-        }
-      });
-
-      subs.forEach(sub => {
-        const rect = sub.getBoundingClientRect();
-        if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
-          sub.style.setProperty('--sx', `${mouseX - rect.left}px`);
-          sub.style.setProperty('--sy', `${mouseY - rect.top}px`);
-        }
-      });
-
-      queued = false;
-    }
-
-    window.addEventListener('pointermove', event => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
-      if (!queued) {
-        window.requestAnimationFrame(render);
-        queued = true;
-      }
-    }, { passive: true });
-
-    magnetics.forEach(button => {
-      button.addEventListener('pointermove', event => {
-        const rect = button.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        const pullX = ((x - rect.width / 2) / (rect.width / 2)) * 7;
-        const pullY = ((y - rect.height / 2) / (rect.height / 2)) * 5;
-
-        button.style.setProperty('--bx', `${x}px`);
-        button.style.setProperty('--by', `${y}px`);
-        button.style.setProperty('--mx', `${pullX.toFixed(1)}px`);
-        button.style.setProperty('--my', `${pullY.toFixed(1)}px`);
-      });
-
-      button.addEventListener('pointerleave', () => {
-        button.style.setProperty('--mx', '0px');
-        button.style.setProperty('--my', '0px');
-      });
-    });
-  }
-
-  /* ---------------- AI chat demo ---------------- */
-
-  const chatBox = $('#chat-box');
-
-  const AI_RESPONSES = {
-    'Book slot at 5:00 PM please': {
-      reply: 'Done! I have reserved 5:00 PM tomorrow for you. Could you please provide your full name and phone number to confirm the booking?',
-      followUp: 'I will also send an instant reminder to your WhatsApp 2 hours before your appointment!'
-    },
-    'What is your clinic address?': {
-      reply: 'We are located at 2nd Floor, Metro Plaza, MG Road (near City Centre Metro Station).',
-      followUp: 'Here is the direct Google Maps navigation link: https://maps.google.com'
-    },
-    'Can you send details on WhatsApp?': {
-      reply: `Absolutely! I can also forward our full service brochure directly to your WhatsApp or email (${AGENCY_EMAIL}).`
-    }
+    try {
+      localStorage.setItem('convertix-currency', currency);
+    } catch (_) {}
   };
 
-  function element(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text) node.textContent = text;
-    return node;
+  function initCurrency() {
+    let saved = 'INR';
+    try {
+      saved = localStorage.getItem('convertix-currency') || 'INR';
+    } catch (_) {}
+    window.setCurrency(saved);
   }
 
-  function appendBubble(message, fromUser) {
-    const row = element('div', `flex items-start gap-2 ${fromUser ? 'justify-end' : ''} animate-fadeIn`);
+  /* ---------------- 3. Interactive Demo Modal & Viewports ---------------- */
 
-    if (!fromUser) {
-      row.appendChild(element('div', 'w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-[10px] shrink-0 font-bold', 'AI'));
-    }
-
-    const bubble = element('div', fromUser
-      ? 'bg-emerald-600 text-white p-2.5 rounded-2xl rounded-tr-none max-w-[85%] text-xs shadow-sm'
-      : 'bg-[#172238] text-slate-200 p-2.5 rounded-2xl rounded-tl-none max-w-[85%] border border-white/5 space-y-1 text-xs',
-      message);
-
-    row.appendChild(bubble);
-    chatBox.appendChild(row);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function simulateMessage(userText) {
-    if (!chatBox) return;
-
-    appendBubble(userText, true);
-
-    const typing = element('div', 'flex items-center gap-2 text-slate-400 text-[11px]');
-    typing.innerHTML = `
-      <div class="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-[9px] font-bold">AI</div>
-      <div class="bg-[#172238] px-3 py-2 rounded-xl border border-white/5 flex gap-1 items-center">
-        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce"></span>
-        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-      </div>`;
-    chatBox.appendChild(typing);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    window.setTimeout(() => {
-      typing.remove();
-      const data = AI_RESPONSES[userText] || {
-        reply: 'Thank you for asking! Your request is captured instantly and routed to the team in real time.'
-      };
-      appendBubble(data.reply, false);
-
-      if (data.followUp) {
-        const follow = element('p', 'text-emerald-400 font-semibold', data.followUp);
-        chatBox.lastElementChild.lastElementChild.appendChild(follow);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-    }, reduceMotion.matches ? 0 : 600);
-  }
-
-  $$('[data-chat-prompt]').forEach(button => {
-    button.addEventListener('click', () => simulateMessage(button.dataset.chatPrompt));
-  });
-
-  /* ---------------- Lead form ---------------- */
-
-  const form = $('#lead-form');
-  const formStatus = $('#form-status');
-  const submitButton = $('#lead-submit');
-
-  function buildWhatsAppMessage() {
-    const p = PRICING[currentCurrency];
-    const businessName = $('#business-name')?.value.trim() || '';
-    const businessType = $('#business-type')?.value || '';
-    const city = $('#business-city')?.value.trim() || '';
-    const packageSelect = $('#package-choice');
-    const packageChoice = packageSelect?.selectedOptions[0]?.textContent.trim() || '';
-
-    return [
-      '*New Website Inquiry (Convertix Studio)*',
-      '',
-      `• *Business Name:* ${businessName}`,
-      `• *Category:* ${businessType}`,
-      `• *City/Location:* ${city}`,
-      `• *Package Desired:* ${packageChoice}`,
-      `• *Displayed Price:* ${p.corePrice} core / ${p.aiBundlePrice} with AI`,
-      '• *Terms:* Pay 100% after website completion',
-      '',
-      'Hi, please build my website preview!'
-    ].join('\n');
-  }
-
-  if (form) {
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
-
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
-      // Honeypot: silently stop obvious bots.
-      const formData = new FormData(form);
-      if (formData.get('bot-field')) return;
-
-      if (submitButton) submitButton.disabled = true;
-      if (formStatus) formStatus.textContent = 'Opening WhatsApp…';
-
-      const whatsappUrl = `https://wa.me/${AGENCY_PHONE}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
-
-      // Open synchronously so browsers count it as part of the user gesture.
-      window.open(whatsappUrl, '_blank', 'noopener');
-
-      // Keep a copy of the lead in Netlify Forms as a fallback.
-      try {
-        await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString()
-        });
-      } catch (_) { /* never block the WhatsApp hand-off */ }
-
-      if (formStatus) {
-        formStatus.textContent = 'WhatsApp should be open. If it did not open, tap the Email button instead.';
-      }
-      if (submitButton) submitButton.disabled = false;
-    });
-  }
-
-  /* ---------------- Interactive Demo Modal ---------------- */
-
-  const DEMO_CONFIG = {
+  const DEMO_MAP = {
     dental: {
-      title: 'Apex Dental & Implant Care (Multi-Speciality Clinic)',
+      title: 'Apex Dental & Implant Care (Healthcare Demo)',
       url: 'demos/dental.html',
-      whatsappText: 'Hi, I want a website like the Apex Dental clinic demo for ₹1,000.'
+      msg: 'Hi, I want a website like the Apex Dental clinic demo for ₹1,000.'
     },
     cafe: {
-      title: 'Urban Crust Artisan Cafe (Wood-Fired Pizza & Coffee)',
+      title: 'Urban Crust Artisan Cafe (Food & QR Menu Demo)',
       url: 'demos/cafe.html',
-      whatsappText: 'Hi, I want a website like the Urban Crust Cafe demo for ₹1,000.'
+      msg: 'Hi, I want a website like the Urban Crust Cafe demo for ₹1,000.'
     },
     interiors: {
-      title: 'Vesta Living Interiors (Turnkey Modular Home Design)',
+      title: 'Vesta Living Interiors (Architecture & Estimator Demo)',
       url: 'demos/interiors.html',
-      whatsappText: 'Hi, I want a website like the Vesta Living Interiors demo for ₹1,000.'
+      msg: 'Hi, I want a website like the Vesta Living Interiors demo for ₹1,000.'
+    },
+    // Open Source Modules
+    bookings: {
+      title: 'OpenBook — Open-Source Calendar Booking App',
+      url: 'modules/bookings.html',
+      msg: 'Hi, I want the Open-Source Bookings module integrated into my website.'
+    },
+    forms: {
+      title: 'OpenForms — Open-Source Multi-Step Intake Engine',
+      url: 'modules/forms.html',
+      msg: 'Hi, I want the Open-Source Multi-Step Forms module integrated into my website.'
+    },
+    store: {
+      title: 'OpenStore — Open-Source E-Commerce & WhatsApp Cart',
+      url: 'modules/store.html',
+      msg: 'Hi, I want the Open-Source E-Commerce Store module integrated into my website.'
+    },
+    blog: {
+      title: 'OpenBlog — Open-Source Markdown Publishing Engine',
+      url: 'modules/blog.html',
+      msg: 'Hi, I want the Open-Source Blog module integrated into my website.'
+    },
+    events: {
+      title: 'OpenEvents — Open-Source Ticketing & RSVP Engine',
+      url: 'modules/events.html',
+      msg: 'Hi, I want the Open-Source Event Ticketing module integrated into my website.'
     }
   };
 
   const demoModal = $('#demo-modal');
   const demoIframe = $('#demo-iframe');
-  const demoModalTitle = $('#demo-modal-title');
-  const demoExternalLink = $('#demo-external-link');
-  const demoOrderBtn = $('#demo-order-btn');
-  const demoFrameWrapper = $('#demo-frame-wrapper');
-  const viewMobileBtn = $('#view-mobile');
-  const viewDesktopBtn = $('#view-desktop');
+  const demoTitle = $('#demo-modal-title');
+  const demoLink = $('#demo-external-link');
+  const demoOrder = $('#demo-order-btn');
+  const frameWrapper = $('#demo-frame-wrapper');
+  const btnMob = $('#view-mobile');
+  const btnDesk = $('#view-desktop');
 
-  window.openDemoModal = function(demoKey) {
-    const config = DEMO_CONFIG[demoKey];
-    if (!config || !demoModal || !demoIframe) return;
+  window.openDemoModal = function(key) {
+    const item = DEMO_MAP[key];
+    if (!item || !demoModal || !demoIframe) return;
 
-    if (demoModalTitle) demoModalTitle.textContent = config.title;
-    demoIframe.src = config.url;
-    if (demoExternalLink) demoExternalLink.href = config.url;
-    if (demoOrderBtn) {
-      demoOrderBtn.href = `https://wa.me/${AGENCY_PHONE}?text=${encodeURIComponent(config.whatsappText)}`;
+    if (demoTitle) demoTitle.textContent = item.title;
+    demoIframe.src = item.url;
+    if (demoLink) demoLink.href = item.url;
+    if (demoOrder) {
+      demoOrder.href = `https://wa.me/${AGENCY_PHONE}?text=${encodeURIComponent(item.msg)}`;
     }
 
     demoModal.classList.remove('hidden');
@@ -439,61 +167,244 @@
     document.body.style.overflow = '';
   };
 
-  window.setDemoViewport = function(viewport) {
-    if (!demoFrameWrapper) return;
-
-    if (viewport === 'mobile') {
-      demoFrameWrapper.className = 'w-full max-w-[390px] h-[96%] rounded-[2.5rem] border-4 border-slate-700 shadow-2xl overflow-hidden bg-slate-900 transition-all duration-300';
-      if (viewMobileBtn) {
-        viewMobileBtn.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition-colors flex items-center gap-1 font-bold shadow-sm';
-      }
-      if (viewDesktopBtn) {
-        viewDesktopBtn.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition-colors flex items-center gap-1 font-medium';
-      }
+  window.setDemoViewport = function(mode) {
+    if (!frameWrapper) return;
+    if (mode === 'mobile') {
+      frameWrapper.className = 'w-full max-w-[390px] h-[95%] rounded-[2.5rem] border-4 border-slate-700 shadow-2xl overflow-hidden bg-slate-900 transition-all duration-300';
+      if (btnMob) btnMob.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold text-xs shadow-sm';
+      if (btnDesk) btnDesk.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white font-medium text-xs';
     } else {
-      demoFrameWrapper.className = 'w-full h-full max-w-full rounded-xl overflow-hidden border border-white/10 shadow-inner bg-slate-900 transition-all duration-300';
-      if (viewDesktopBtn) {
-        viewDesktopBtn.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white transition-colors flex items-center gap-1 font-bold shadow-sm';
-      }
-      if (viewMobileBtn) {
-        viewMobileBtn.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition-colors flex items-center gap-1 font-medium';
-      }
+      frameWrapper.className = 'w-full h-full max-w-full rounded-xl overflow-hidden border border-white/10 shadow-inner bg-slate-900 transition-all duration-300';
+      if (btnDesk) btnDesk.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold text-xs shadow-sm';
+      if (btnMob) btnMob.className = 'px-2.5 py-1 rounded-lg text-slate-300 hover:text-white font-medium text-xs';
     }
   };
 
-  // Wire up data-open-demo buttons
-  $$('[data-open-demo]').forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
+  // Bind click handlers
+  $$('[data-open-demo]').forEach(el => {
+    el.addEventListener('click', e => {
       e.preventDefault();
-      const demoKey = trigger.dataset.openDemo;
-      window.openDemoModal(demoKey);
+      window.openDemoModal(el.dataset.openDemo);
     });
   });
 
-  // Close modal when backdrop is clicked
   if (demoModal) {
-    demoModal.addEventListener('click', (e) => {
-      if (e.target === demoModal) {
-        window.closeDemoModal();
-      }
+    demoModal.addEventListener('click', e => {
+      if (e.target === demoModal) window.closeDemoModal();
     });
   }
 
-  // Close modal on Escape
-  window.addEventListener('keydown', (e) => {
+  window.addEventListener('keydown', e => {
     if (e.key === 'Escape' && demoModal && !demoModal.classList.contains('hidden')) {
       window.closeDemoModal();
     }
   });
 
-  /* ---------------- Misc ---------------- */
+  /* ---------------- 4. Lost Revenue ROI Calculator ---------------- */
 
-  const year = $('#footer-year');
-  if (year) year.textContent = String(new Date().getFullYear());
+  const leadsSlider = $('#leads-range');
+  const sliderVal = $('#slider-leads-val');
+  const lostRevDisplay = $('#calc-lost-revenue');
 
-  document.documentElement.classList.add('js');
+  function updateRoiCalculator() {
+    if (!leadsSlider || !lostRevDisplay) return;
+    const leads = Number.parseInt(leadsSlider.value, 10) || 20;
+    if (sliderVal) sliderVal.textContent = leads;
 
-  // Apply the saved/last-used currency once everything is wired up.
-  setCurrency(readStoredCurrency(), false);
-  setupTracking();
+    const p = PRICING[currentCurrency];
+    const monthlyLeads = leads * 4;
+    // 60% missed, 20% would have converted
+    const lost = Math.round(monthlyLeads * 0.6 * 0.2 * p.avgTicket);
+
+    lostRevDisplay.textContent = currentCurrency === 'INR'
+      ? `₹${lost.toLocaleString('en-IN')} / mo`
+      : `$${lost.toLocaleString('en-US')} / mo`;
+  }
+
+  if (leadsSlider) {
+    leadsSlider.addEventListener('input', updateRoiCalculator);
+  }
+
+  /* ---------------- 5. 24/7 AI Chat Simulator ---------------- */
+
+  const chatMessages = $('#chat-messages');
+  const chatInput = $('#chat-user-input');
+
+  const SIMULATED_RESPONSES = {
+    'emergency': 'We treat toothache emergencies immediately! Dr. Sharma has open slots today at 2:30 PM and 5:00 PM. Would you like me to book your name right now?',
+    'price': 'Our transparent fee starts at ₹200 for full consultation & digital X-ray. Teeth cleaning is ₹800. What treatment are you inquiring about?',
+    'hours': 'The clinic is open 7 days a week from 9:00 AM to 8:30 PM. Would you like to reserve a slot?',
+    'default': 'Hello! Thanks for reaching out to Apex Dental. Dr. Sharma is currently in surgery, but I can answer questions or confirm your appointment instantly. What is your name?'
+  };
+
+  window.simulateChatMessage = function(promptText) {
+    if (!chatMessages) return;
+
+    // Append User Message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'flex justify-end';
+    userMsg.innerHTML = `<div class="bg-indigo-600 text-white px-3.5 py-2 rounded-2xl rounded-tr-sm text-xs max-w-[80%]">${promptText}</div>`;
+    chatMessages.appendChild(userMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Show Typing Indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'flex justify-start items-center gap-1.5 p-2 text-slate-400 text-xs';
+    typingIndicator.innerHTML = `<span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce"></span><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style="animation-delay:0.15s"></span><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style="animation-delay:0.3s"></span>`;
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    setTimeout(() => {
+      typingIndicator.remove();
+      let reply = SIMULATED_RESPONSES.default;
+      const lower = promptText.toLowerCase();
+      if (lower.includes('emergency') || lower.includes('pain') || lower.includes('urgent')) reply = SIMULATED_RESPONSES.emergency;
+      else if (lower.includes('price') || lower.includes('cost') || lower.includes('fee')) reply = SIMULATED_RESPONSES.price;
+      else if (lower.includes('hour') || lower.includes('timing') || lower.includes('open')) reply = SIMULATED_RESPONSES.hours;
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'flex justify-start';
+      botMsg.innerHTML = `<div class="bg-slate-800 text-slate-200 border border-white/10 px-3.5 py-2 rounded-2xl rounded-tl-sm text-xs max-w-[85%] leading-relaxed">${reply}</div>`;
+      chatMessages.appendChild(botMsg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 900);
+  };
+
+  /* ---------------- 6. Advanced Project Intake Form ---------------- */
+
+  const leadForm = $('#lead-form');
+  const leadStatus = $('#lead-status');
+  const leadBtn = $('#lead-submit-btn');
+
+  if (leadForm) {
+    leadForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!leadForm.checkValidity()) {
+        leadForm.reportValidity();
+        return;
+      }
+
+      const p = PRICING[currentCurrency];
+      const bizName = $('#intake-biz-name')?.value.trim() || '';
+      const category = $('#intake-category')?.value || '';
+      const city = $('#intake-city')?.value.trim() || '';
+      const phone = $('#intake-phone')?.value.trim() || '';
+      const details = $('#intake-details')?.value.trim() || 'Standard 1-page high-converting website';
+
+      const whatsappMsg = [
+        '*New Website Project Request (Convertix Studio)* 🚀',
+        '',
+        `• *Business Name:* ${bizName}`,
+        `• *Category:* ${category}`,
+        `• *Location:* ${city}`,
+        `• *WhatsApp/Phone:* ${phone}`,
+        `• *Project Specifications:* ${details}`,
+        `• *Terms:* ${p.corePrice} (Pay 100% AFTER Delivery)`,
+        '',
+        'Hi, please review my project requirements and build my live preview!'
+      ].join('\n');
+
+      if (leadBtn) leadBtn.disabled = true;
+      if (leadStatus) leadStatus.textContent = 'Opening WhatsApp…';
+
+      const waUrl = `https://wa.me/${AGENCY_PHONE}?text=${encodeURIComponent(whatsappMsg)}`;
+      window.open(waUrl, '_blank', 'noopener');
+
+      // Netlify Form background capture
+      const formData = new FormData(leadForm);
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+      } catch (_) {}
+
+      if (leadStatus) {
+        leadStatus.textContent = 'WhatsApp opened! If not opened, contact zabir.ali.52@gmail.com directly.';
+      }
+      if (leadBtn) leadBtn.disabled = false;
+    });
+  }
+
+  /* ---------------- 7. Unified 60fps Cursor Tracking ---------------- */
+
+  function setupUnifiedTracking() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let rafId = null;
+
+    const cards = $$('.track-card');
+    const magneticElements = $$('.track-magnetic');
+
+    window.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      if (!rafId) {
+        rafId = requestAnimationFrame(updatePhysics);
+      }
+    }, { passive: true });
+
+    function updatePhysics() {
+      // 1. Ambient Background Position
+      document.documentElement.style.setProperty('--gx', `${mouseX}px`);
+      document.documentElement.style.setProperty('--gy', `${mouseY}px`);
+
+      // 2. Card 3D Tilt & Specular Coordinates
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const cardX = mouseX - rect.left;
+        const cardY = mouseY - rect.top;
+
+        card.style.setProperty('--mouse-x', `${cardX}px`);
+        card.style.setProperty('--mouse-y', `${cardY}px`);
+
+        // Check if cursor is over or near card
+        if (cardX >= -50 && cardX <= rect.width + 50 && cardY >= -50 && cardY <= rect.height + 50) {
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((cardY - centerY) / centerY) * -5;
+          const rotateY = ((cardX - centerX) / centerX) * 5;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+        } else {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        }
+      });
+
+      // 3. Magnetic Button Attraction
+      magneticElements.forEach(btn => {
+        const rect = btn.getBoundingClientRect();
+        const distThreshold = 90;
+        const btnCenterX = rect.left + rect.width / 2;
+        const btnCenterY = rect.top + rect.height / 2;
+        const deltaX = mouseX - btnCenterX;
+        const deltaY = mouseY - btnCenterY;
+        const distance = Math.hypot(deltaX, deltaY);
+
+        if (distance < distThreshold) {
+          const pullX = (deltaX / distThreshold) * 8;
+          const pullY = (deltaY / distThreshold) * 8;
+          btn.style.transform = `translate3d(${pullX}px, ${pullY}px, 0)`;
+          btn.style.setProperty('--mag-x', `${pullX * 2}px`);
+          btn.style.setProperty('--mag-y', `${pullY * 2}px`);
+        } else {
+          btn.style.transform = 'translate3d(0, 0, 0)';
+        }
+      });
+
+      rafId = null;
+    }
+  }
+
+  /* ---------------- Init ---------------- */
+  initTheme();
+  initCurrency();
+  setupUnifiedTracking();
+
+  const footerYear = $('#footer-year');
+  if (footerYear) footerYear.textContent = String(new Date().getFullYear());
+
 })();
