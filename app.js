@@ -263,6 +263,8 @@
 
   window.simulateChatMessage = function(promptText) {
     if (!chatMessages) return;
+    if (!promptText || !promptText.trim()) return;
+    promptText = promptText.trim();
 
     // Append User Message
     const userMsg = document.createElement('div');
@@ -292,6 +294,15 @@
       chatMessages.appendChild(botMsg);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 900);
+  };
+
+  window.submitChatMessage = function() {
+    const chatInput = document.getElementById('chat-user-input');
+    if (!chatInput) return;
+    const text = chatInput.value.trim();
+    if (!text) return;
+    window.simulateChatMessage(text);
+    chatInput.value = '';
   };
 
   /* ---------------- 6. Advanced Project Intake Form ---------------- */
@@ -355,10 +366,10 @@
 
   const THEME_AURORA_PALETTES = {
     obsidian: [
-      { r: 99, g: 102, b: 241, a: 0.35, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
-      { r: 139, g: 92, b: 246, a: 0.30, rx: 0.26, ry: 0.28, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
-      { r: 6, g: 182, b: 212, a: 0.25, rx: 0.30, ry: 0.22, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
-      { r: 16, g: 185, b: 129, a: 0.20, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
+      { r: 122, g: 100, b: 255, a: 0.38, rx: 0.30, ry: 0.26, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
+      { r: 255, g: 51, b: 122, a: 0.32, rx: 0.28, ry: 0.30, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
+      { r: 94, g: 151, b: 255, a: 0.28, rx: 0.32, ry: 0.24, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
+      { r: 16, g: 185, b: 129, a: 0.22, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
     ],
     midnight: [
       { r: 29, g: 78, b: 216, a: 0.40, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
