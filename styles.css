@@ -30,6 +30,10 @@
   --accent-primary: #6366f1;
   --accent-glow: rgba(99, 102, 241, 0.15);
   --accent-emerald: #10b981;
+  --aurora-1: rgba(99, 102, 241, 0.35);
+  --aurora-2: rgba(139, 92, 246, 0.30);
+  --aurora-3: rgba(6, 182, 212, 0.25);
+  --aurora-4: rgba(16, 185, 129, 0.20);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --gx: 50vw;
@@ -47,6 +51,10 @@
   --accent-primary: #3b82f6;
   --accent-glow: rgba(59, 130, 246, 0.2);
   --accent-emerald: #38bdf8;
+  --aurora-1: rgba(29, 78, 216, 0.40);
+  --aurora-2: rgba(56, 189, 248, 0.35);
+  --aurora-3: rgba(67, 56, 202, 0.30);
+  --aurora-4: rgba(147, 197, 253, 0.25);
 }
 
 /* Theme 3: Emerald Matrix */
@@ -60,6 +68,10 @@
   --accent-primary: #10b981;
   --accent-glow: rgba(16, 185, 129, 0.2);
   --accent-emerald: #34d399;
+  --aurora-1: rgba(52, 211, 153, 0.35);
+  --aurora-2: rgba(5, 150, 105, 0.35);
+  --aurora-3: rgba(16, 185, 129, 0.30);
+  --aurora-4: rgba(20, 184, 166, 0.25);
 }
 
 html {
@@ -96,7 +108,20 @@ h1, h2, h3, h4 {
   background: var(--accent-primary);
 }
 
-/* 1. ATMOSPHERIC AMBIENT AURA & CURSOR GRID */
+/* 1. ATMOSPHERIC AMBIENT CANVAS & CURSOR GRID */
+#ambient-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(50px) saturate(180%);
+  -webkit-filter: blur(50px) saturate(180%);
+  opacity: 0.85;
+  transition: opacity 0.5s ease;
+}
+
 .global-cursor-aura {
   position: fixed;
   inset: 0;
@@ -143,7 +168,7 @@ h1, h2, h3, h4 {
   -webkit-backdrop-filter: blur(20px);
   transform-style: preserve-3d;
   will-change: transform, border-color;
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
               border-color 0.25s ease, 
               box-shadow 0.25s ease;
 }
@@ -159,11 +184,13 @@ h1, h2, h3, h4 {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1px;
+  padding: 1.5px;
   background: radial-gradient(
-    380px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
-    rgba(255, 255, 255, 0.2),
-    transparent 65%
+    340px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    rgba(255, 255, 255, 0.85) 0%,
+    var(--border-highlight) 30%,
+    var(--accent-glow) 60%,
+    transparent 80%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -175,6 +202,25 @@ h1, h2, h3, h4 {
 
 .track-card:hover::before {
   opacity: 1;
+}
+
+.track-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    450px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    var(--accent-glow),
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.track-card:hover::after {
+  opacity: 0.65;
 }
 
 /* 3. MAGNETIC BUTTONS */
@@ -229,6 +275,57 @@ h1, h2, h3, h4 {
   animation: pulseGlow 3s ease-in-out infinite;
 }
 
+/* 5. HERO 3D FLOATING MOCKUP STAGE & LEVITATION */
+.hero-mockup-stage {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+@keyframes levitateDesktop {
+  0%, 100% {
+    transform: translateY(0px) rotateX(calc(3deg + var(--hero-tilt-x, 0deg))) rotateY(calc(-2deg + var(--hero-tilt-y, 0deg)));
+  }
+  50% {
+    transform: translateY(-12px) rotateX(calc(1deg + var(--hero-tilt-x, 0deg))) rotateY(calc(-1deg + var(--hero-tilt-y, 0deg)));
+  }
+}
+
+@keyframes levitateMobile {
+  0%, 100% {
+    transform: translateY(0px) rotateX(calc(6deg + var(--hero-tilt-x, 0deg))) rotateY(calc(10deg + var(--hero-tilt-y, 0deg))) rotateZ(-3deg);
+  }
+  50% {
+    transform: translateY(-16px) rotateX(calc(10deg + var(--hero-tilt-x, 0deg))) rotateY(calc(14deg + var(--hero-tilt-y, 0deg))) rotateZ(-5deg);
+  }
+}
+
+@keyframes levitateBadge {
+  0%, 100% {
+    transform: translateY(0px) rotateY(calc(-6deg + var(--hero-tilt-y, 0deg)));
+  }
+  50% {
+    transform: translateY(-10px) rotateY(calc(-3deg + var(--hero-tilt-y, 0deg)));
+  }
+}
+
+.mockup-desktop {
+  animation: levitateDesktop 6.5s ease-in-out infinite;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.mockup-mobile {
+  animation: levitateMobile 5.2s ease-in-out infinite 0.8s;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.mockup-badge {
+  animation: levitateBadge 4.4s ease-in-out infinite 1.4s;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
 /* Reduce motion accessibility */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -236,10 +333,11 @@ h1, h2, h3, h4 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .track-card, .track-magnetic, .track-sub {
+  .track-card, .track-magnetic, .track-sub, .mockup-desktop, .mockup-mobile, .mockup-badge {
     transform: none !important;
+    animation: none !important;
   }
-  .global-cursor-aura, .global-cursor-grid {
+  #ambient-canvas, .global-cursor-aura, .global-cursor-grid {
     display: none !important;
   }
 }
