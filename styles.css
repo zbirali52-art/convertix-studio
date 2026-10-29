@@ -1,6 +1,7 @@
-/* Convertix Studio - Multi-Layer Responsive Design System & Unified Tracking Engine */
+/* Convertix Studio - Luxury Awwwards-Tier Design System & Theme Engine
+   Zero external dependencies. High-performance 60fps requestAnimationFrame physics. */
 
-/* Self-hosted variable fonts (latin + latin-ext). No third-party font requests. */
+/* Self-hosted fonts */
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -10,14 +11,6 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('fonts/inter-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-@font-face {
   font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-weight: 700 800;
@@ -25,21 +18,17 @@
   src: url('fonts/jakarta-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-@font-face {
-  font-family: 'Plus Jakarta Sans';
-  font-style: normal;
-  font-weight: 700 800;
-  font-display: swap;
-  src: url('fonts/jakarta-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
 
 :root {
-  --bg-base: #06080f;
-  --bg-card: rgba(13, 18, 32, 0.72);
+  /* Default: Obsidian Luxury Theme */
+  --bg-base: #03050c;
+  --bg-surface: #070b16;
+  --bg-card: rgba(11, 16, 29, 0.75);
+  --bg-card-hover: rgba(16, 23, 41, 0.85);
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-highlight: rgba(99, 102, 241, 0.45);
   --accent-primary: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.15);
   --accent-emerald: #10b981;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
@@ -47,54 +36,78 @@
   --gy: 50vh;
 }
 
+/* Theme 2: Cyber Midnight */
+[data-theme="midnight"] {
+  --bg-base: #050814;
+  --bg-surface: #0a0f26;
+  --bg-card: rgba(13, 19, 44, 0.78);
+  --bg-card-hover: rgba(19, 28, 64, 0.9);
+  --border-subtle: rgba(147, 197, 253, 0.12);
+  --border-highlight: rgba(59, 130, 246, 0.6);
+  --accent-primary: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.2);
+  --accent-emerald: #38bdf8;
+}
+
+/* Theme 3: Emerald Matrix */
+[data-theme="emerald"] {
+  --bg-base: #020b08;
+  --bg-surface: #051812;
+  --bg-card: rgba(8, 28, 21, 0.78);
+  --bg-card-hover: rgba(12, 38, 29, 0.9);
+  --border-subtle: rgba(52, 211, 153, 0.12);
+  --border-highlight: rgba(16, 185, 129, 0.6);
+  --accent-primary: #10b981;
+  --accent-glow: rgba(16, 185, 129, 0.2);
+  --accent-emerald: #34d399;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 6.5rem;
   -webkit-text-size-adjust: 100%;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 body {
   background-color: var(--bg-base);
   color: var(--text-main);
   font-family: 'Inter', sans-serif;
-  background-image: 
-    radial-gradient(900px circle at 50% -10%, rgba(99, 102, 241, 0.16), transparent 65%),
-    radial-gradient(600px circle at 85% 25%, rgba(16, 185, 129, 0.08), transparent 60%);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4 {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #06080f;
+  background: var(--bg-base);
 }
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--accent-primary);
 }
 
-/* 1. WHOLE-WEBSITE GLOBAL AMBIENT & GRID TRACKER */
+/* 1. ATMOSPHERIC AMBIENT AURA & CURSOR GRID */
 .global-cursor-aura {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 1;
   background: radial-gradient(
-    650px circle at var(--gx) var(--gy),
-    rgba(99, 102, 241, 0.10),
-    rgba(16, 185, 129, 0.04) 40%,
-    transparent 70%
+    700px circle at var(--gx) var(--gy),
+    var(--accent-glow),
+    transparent 65%
   );
+  transition: opacity 0.3s ease;
 }
 
 .global-cursor-grid {
@@ -102,350 +115,131 @@ h1, h2, h3, h4 {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background-size: 36px 36px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  -webkit-mask-image: radial-gradient(320px circle at var(--gx) var(--gy), #000 15%, transparent 100%);
-  mask-image: radial-gradient(320px circle at var(--gx) var(--gy), #000 15%, transparent 100%);
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(550px circle at var(--gx) var(--gy), black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(550px circle at var(--gx) var(--gy), black 20%, transparent 80%);
 }
 
-/* 2. CARD TRACKING (PROXIMITY BORDER + SURFACE GLOW + 3D TILT) */
-.track-card {
-  --glow-rgb: 99, 102, 241; /* Default Indigo */
-  position: relative;
-  background: rgba(13, 18, 32, 0.72);
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
-  will-change: transform;
-  overflow: hidden;
-}
-
-/* Custom Section Glow Colors */
-.track-card[data-glow="rose"]    { --glow-rgb: 244, 63, 94; }   /* Problem / Revenue Loss Cards */
-.track-card[data-glow="emerald"] { --glow-rgb: 16, 185, 129; }  /* AI Bot & ₹1,000 Pricing */
-.track-card[data-glow="indigo"]  { --glow-rgb: 99, 102, 241; }  /* Portfolio & Bundle Pricing */
-.track-card[data-glow="amber"]   { --glow-rgb: 245, 158, 11; }  /* Revenue Calculator */
-
-/* Inner Surface Spotlight */
-.track-card::before {
-  content: "";
-  position: absolute;
+/* Noise overlay */
+.noise-overlay {
+  position: fixed;
   inset: 0;
-  background: radial-gradient(
-    420px circle at var(--cx, -500px) var(--cy, -500px),
-    rgba(var(--glow-rgb), 0.14),
-    transparent 55%
-  );
   pointer-events: none;
-  z-index: 0;
+  z-index: 2;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Sharp 1px Proximity Border Mask */
-.track-card::after {
-  content: "";
+/* 2. SPECULAR CARDS & 3D PERSPECTIVE TILT */
+.track-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.5rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transform-style: preserve-3d;
+  will-change: transform, border-color;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              border-color 0.25s ease, 
+              box-shadow 0.25s ease;
+}
+
+.track-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+.track-card::before {
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.2px;
+  padding: 1px;
   background: radial-gradient(
-    260px circle at var(--cx, -500px) var(--cy, -500px),
-    rgba(var(--glow-rgb), 0.85),
-    transparent 70%
+    380px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    rgba(255, 255, 255, 0.2),
+    transparent 65%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.track-card > * {
-  position: relative;
-  z-index: 1;
+.track-card:hover::before {
+  opacity: 1;
 }
 
-/* 3. MAGNETIC CTA BUTTON TRACKING */
-/* `:not(.hidden)` keeps Tailwind's responsive visibility classes working
-   (e.g. `hidden xl:inline-flex`) instead of forcing the button to display. */
-.track-magnetic:not(.hidden) {
-  display: inline-flex;
-}
-
+/* 3. MAGNETIC BUTTONS */
 .track-magnetic {
   position: relative;
-  align-items: center;
-  justify-content: center;
-  transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
-  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
-  overflow: hidden;
   will-change: transform;
-}
-
-/* Specular Glint inside Button */
-.track-magnetic::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    110px circle at var(--bx, 50%) var(--by, 50%),
-    rgba(255, 255, 255, 0.32),
-    transparent 65%
-  );
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
-}
-
-.track-magnetic:hover::before {
-  opacity: 1;
-}
-
-/* 4. SUB-ELEMENT MICRO-TRACKING (List Rows, Badges, Table Rows, FAQs) */
-.track-sub {
-  position: relative;
-  border-radius: 12px;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   overflow: hidden;
 }
 
-.track-sub::before {
-  content: "";
+.track-magnetic::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    160px circle at var(--sx, -200px) var(--sy, -200px),
-    rgba(255, 255, 255, 0.08),
-    transparent 70%
-  );
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 10%, transparent 60%);
   opacity: 0;
-  transition: opacity 0.2s ease;
   pointer-events: none;
+  transform: translate(var(--mag-x, 0), var(--mag-y, 0));
+  transition: opacity 0.25s ease;
 }
 
-.track-sub:hover {
-  transform: translateX(3px);
-}
-
-.track-sub:hover::before {
+.track-magnetic:hover::after {
   opacity: 1;
 }
 
-/* Miniature Browser Mockup Chrome */
-.browser-chrome {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: rgba(8, 11, 20, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+/* 4. SUB-ROW HOVER TRACKING */
+.track-sub {
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.track-sub:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
 }
 
-.browser-dots {
-  display: flex;
-  gap: 5px;
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 5s ease-in-out infinite;
 }
 
-.browser-dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.animate-pulseGlow {
+  animation: pulseGlow 3s ease-in-out infinite;
 }
 
-.browser-url {
-  flex: 1;
-  text-align: center;
-  font-size: 11px;
-  color: #64748b;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-family: monospace;
-}
-
-/* Interactive chat simulator styling */
-#chat-box {
-  scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
-}
-#chat-box::-webkit-scrollbar {
-  width: 4px;
-}
-#chat-box::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 2px;
-}
-
-/* Range input customization */
-input[type=range]::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #34d399;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
-  border: 2px solid #06080f;
-}
-
-input[type=range]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #34d399;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
-  border: 2px solid #06080f;
-}
-
-/* Mobile & Touch Safeguard: Disable heavy hover transforms on touch devices */
-@media (hover: none), (pointer: coarse) {
-  .global-cursor-aura,
-  .global-cursor-grid,
-  .track-card::before,
-  .track-card::after,
-  .track-sub::before {
-    display: none !important;
+/* Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
   .track-card, .track-magnetic, .track-sub {
     transform: none !important;
   }
-}
-
-/* ============================================================
-   Accessibility & interaction polish
-   ============================================================ */
-
-/* Keyboard-only focus ring, visible on every interactive element */
-:where(a, button, summary, input, select, textarea):focus-visible {
-  outline: 2px solid #34d399;
-  outline-offset: 3px;
-  border-radius: 8px;
-}
-
-/* Skip link for keyboard and screen-reader users */
-.skip-link {
-  position: fixed;
-  top: 0.75rem;
-  left: 0.75rem;
-  z-index: 100;
-  padding: 0.75rem 1.1rem;
-  border-radius: 0.75rem;
-  background: #34d399;
-  color: #04120c;
-  font-size: 0.875rem;
-  font-weight: 800;
-  text-decoration: none;
-  transform: translateY(-180%);
-  transition: transform 0.18s ease;
-}
-.skip-link:focus {
-  transform: translateY(0);
-}
-
-/* Anchored sections clear the sticky header */
-section[id],
-main[id] {
-  scroll-margin-top: 6.5rem;
-}
-
-/* Currency switcher states */
-.currency-btn {
-  color: #cbd5e1;
-}
-.currency-btn:hover {
-  color: #ffffff;
-}
-.currency-btn[aria-pressed="true"] {
-  background: #10b981;
-  color: #04120c;
-  font-weight: 700;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-}
-
-/* Active section in the desktop navigation */
-.nav-link[aria-current="true"] {
-  color: #34d399;
-}
-
-/* Mobile navigation panel */
-#mobile-menu {
-  max-height: calc(100dvh - 5rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-#mobile-menu:not(.hidden) {
-  animation: menu-in 0.18s ease-out both;
-}
-@keyframes menu-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Chat bubbles fade in */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.25s ease-out both;
-}
-
-/* Native disabled state for the lead button */
-#lead-submit:disabled {
-  cursor: wait;
-}
-
-/* Slightly stronger body text for readability on dark backgrounds */
-#form-status {
-  color: #6ee7b7;
-}
-
-/* Prevent long words/URLs from breaking the layout on small screens */
-h1, h2, h3, h4, p, li, td, a {
-  overflow-wrap: break-word;
-}
-
-@media (max-width: 379px) {
-  .currency-flag,
-  .currency-name {
-    display: none;
-  }
-  .currency-btn {
-    padding-left: 0.45rem;
-    padding-right: 0.45rem;
-  }
-}
-
-/* Respect users who ask for less motion */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  .animate-float,
-  .animate-ping {
-    animation: none !important;
-  }
-  .track-card,
-  .track-magnetic,
-  .track-sub {
-    transform: none !important;
-  }
-  .global-cursor-aura,
-  .global-cursor-grid {
+  .global-cursor-aura, .global-cursor-grid {
     display: none !important;
   }
 }
-
