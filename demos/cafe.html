@@ -8,10 +8,10 @@
 <style>
   @font-face{font-family:'InterLocal';src:url('../fonts/inter-latin.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
   :root{
-    --void:#010203;--asphalt:#0D0D11;--steel:#323232;--steel-2:#1A1D24;--steel-3:#24272F;
-    --steel-blue:#2B5672;--steel-blue-2:#1B3B50;
-    --amber:#F59E0B;--amber-bright:#FFB52E;--white:#FFFFFF;
-    --muted:#9AA0AA;--muted-2:#6F7682;--line:#2B2C31;--line-2:#3A3B42;
+    --void:#030406;--asphalt:#08090C;--steel:#1F232B;--steel-2:#15181F;--steel-3:#242833;
+    --steel-blue:#1E3E52;--steel-blue-2:#132836;
+    --amber:#F59E0B;--amber-bright:#FBBF24;--white:#FFFFFF;
+    --muted:#9AA0AA;--muted-2:#6F7682;--line:rgba(255,255,255,0.1);--line-2:rgba(255,255,255,0.16);
     --display:'Arial Narrow','Roboto Condensed','Haettenschweiler',Impact,'Franklin Gothic Condensed',sans-serif;
     --body:'InterLocal','Inter','Segoe UI',system-ui,sans-serif;
     --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
@@ -29,32 +29,33 @@
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   /* Agency banner */
-  .agency-bar{position:sticky;top:0;z-index:130;background:var(--void);border-bottom:1px solid #1E2025;font-size:11px}
+  .agency-bar{position:sticky;top:0;z-index:130;background:#020305;border-bottom:1px solid rgba(255,255,255,0.08);font-size:11px}
   .agency-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;padding-block:6px}
   .agency-left{display:flex;align-items:center;gap:8px;min-width:0}
-  .live-dot{width:7px;height:7px;background:#5EE6A8;box-shadow:0 0 0 4px rgba(94,230,168,.12);animation:pulse 1.8s infinite;flex:0 0 auto}
+  .live-dot{width:7px;height:7px;background:#5EE6A8;box-shadow:0 0 0 4px rgba(94,230,168,.15);animation:pulse 1.8s infinite;flex:0 0 auto}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
   .agency-left span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#A7ACB5}
   .agency-left strong{color:#fff}
-  .claim-link{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:var(--void);font-weight:800;padding:6px 11px;white-space:nowrap;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;transition:background .18s ease}
+  .claim-link{display:inline-flex;align-items:center;gap:4px;background:var(--amber);color:var(--void);font-weight:800;padding:6px 11px;white-space:nowrap;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;transition:background .18s ease;border-radius:4px}
   .claim-link:hover{background:var(--amber-bright)}
 
   /* Nav */
-  .site-nav{position:sticky;top:38px;z-index:110;background:rgba(13,13,17,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .site-nav{position:sticky;top:38px;z-index:110;background:rgba(8,9,12,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
   .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:70px}
   .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:27px;font-weight:800;letter-spacing:-.035em;text-transform:uppercase;line-height:1}
-  .brand-mark{width:36px;height:36px;background:var(--amber);display:grid;place-items:center;color:var(--void);font-family:var(--mono);font-size:16px;font-weight:800}
+  .brand-mark{width:36px;height:36px;background:var(--amber);display:grid;place-items:center;color:var(--void);font-family:var(--mono);font-size:16px;font-weight:800;box-shadow:0 0 18px rgba(245,158,11,.35)}
   .brand span i{color:var(--amber);font-style:normal}
   .nav-links{display:flex;align-items:center;gap:26px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#A7ACB5}
   .nav-links a{padding:7px 0;border-bottom:1px solid transparent;transition:color .18s ease,border-color .18s ease}
   .nav-links a:hover{color:var(--amber);border-color:var(--amber)}
-  .nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--steel);border:1px solid #575960;color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:11px 15px;transition:all .18s ease}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--steel);border:1px solid rgba(255,255,255,0.18);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:11px 15px;transition:all .18s ease}
   .nav-cta:hover{background:var(--amber);border-color:var(--amber);color:var(--void)}
 
-  /* Hero */
-  .hero{position:relative;background:var(--void);overflow:hidden;border-bottom:1px solid var(--line)}
-  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(180deg,#000,transparent 88%);pointer-events:none}
-  .hero-glow{position:absolute;width:720px;height:420px;right:-80px;top:80px;background:radial-gradient(ellipse,rgba(245,158,11,.13),transparent 68%);pointer-events:none;filter:blur(4px)}
+  /* Hero with Highway Perspective Atmosphere */
+  .hero{position:relative;background:radial-gradient(ellipse 90% 60% at 50% 10%, #151922 0%, #030406 100%), #030406;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,.08) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(circle at 50% 50%, #000 30%, transparent 85%);pointer-events:none}
+  .hero::after{content:"";position:absolute;left:50%;bottom:0;width:4px;height:140px;transform:translateX(-50%);background:repeating-linear-gradient(to top,#F59E0B 0,#F59E0B 20px,transparent 20px,transparent 40px);box-shadow:0 0 16px #F59E0B;opacity:.8;pointer-events:none}
+  .hero-glow{position:absolute;width:720px;height:420px;right:-80px;top:40px;background:radial-gradient(ellipse,rgba(245,158,11,.22),transparent 65%);pointer-events:none;filter:blur(30px)}
   .hero-inner{position:relative;z-index:1;padding:42px 0 0}
   .hero-kicker{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:26px}
   .hero-kicker .mono{color:var(--amber)}
