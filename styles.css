@@ -20,21 +20,22 @@
 }
 
 :root {
-  /* Default: Obsidian Luxury Theme (Enhanced with Datox AI Tech Palette) */
-  --bg-base: #07080d;
-  --bg-surface: #0c0e18;
-  --bg-card: rgba(13, 16, 28, 0.78);
-  --bg-card-hover: rgba(20, 25, 44, 0.88);
+  /* Default: Obsidian Luxury Theme (Exact Wix 3299 Datox Architecture) */
+  --bg-base: #000000;
+  --bg-surface: #08090d;
+  --bg-card: rgba(18, 20, 28, 0.85);
+  --bg-card-hover: rgba(30, 32, 46, 0.92);
   --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(122, 100, 255, 0.55);
+  --border-highlight: rgba(122, 100, 255, 0.65);
   --accent-primary: #7a64ff;
   --accent-rose: #ff337a;
-  --accent-glow: rgba(122, 100, 255, 0.20);
+  --accent-cyan: #00f2fe;
+  --accent-glow: rgba(122, 100, 255, 0.25);
   --accent-emerald: #10b981;
-  --aurora-1: rgba(122, 100, 255, 0.38);
-  --aurora-2: rgba(255, 51, 122, 0.30);
-  --aurora-3: rgba(94, 151, 255, 0.26);
-  --aurora-4: rgba(16, 185, 129, 0.22);
+  --aurora-1: rgba(122, 100, 255, 0.45);
+  --aurora-2: rgba(255, 51, 122, 0.38);
+  --aurora-3: rgba(0, 242, 254, 0.30);
+  --aurora-4: rgba(16, 185, 129, 0.20);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --gx: 50vw;
@@ -384,6 +385,108 @@ h1, h2, h3, h4 {
   transform: translateY(-4px);
 }
 
+/* Wix 3299 (Datox) Chromatic Ribbon Wave & Bokeh Flares */
+.datox-hero-ribbon-wrap {
+  position: absolute;
+  top: -6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  max-width: 1440px;
+  height: 720px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.datox-ribbon-wave {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 1280px;
+  height: 520px;
+  transform: translateX(-50%);
+  will-change: transform, opacity;
+  animation: datoxRibbonFloat 12s ease-in-out infinite alternate;
+}
+
+.datox-ribbon-blur {
+  position: absolute;
+  inset: -15px;
+  filter: blur(55px) saturate(220%);
+  opacity: 0.65;
+  mix-blend-mode: screen;
+}
+
+.datox-ribbon-sharp {
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+}
+
+@keyframes datoxRibbonFloat {
+  0% {
+    transform: translateX(-50%) translateY(0px) rotate(-1.5deg) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-18px) rotate(1deg) scale(1.03);
+  }
+  100% {
+    transform: translateX(-50%) translateY(8px) rotate(-0.5deg) scale(0.98);
+  }
+}
+
+/* Bokeh Lens Flare Halos */
+.datox-flare-ring-1 {
+  position: absolute;
+  right: 10%;
+  top: 6%;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(122, 100, 255, 0.25) 0%, rgba(255, 51, 122, 0.12) 45%, transparent 70%);
+  border: 1.5px solid rgba(122, 100, 255, 0.35);
+  box-shadow: 0 0 60px rgba(122, 100, 255, 0.25), inset 0 0 40px rgba(255, 51, 122, 0.2);
+  pointer-events: none;
+  animation: datoxFlarePulse 7s ease-in-out infinite alternate;
+}
+
+.datox-flare-ring-2 {
+  position: absolute;
+  left: 8%;
+  top: 34%;
+  width: 290px;
+  height: 290px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, rgba(122, 100, 255, 0.1) 50%, transparent 70%);
+  border: 1.5px solid rgba(0, 242, 254, 0.3);
+  box-shadow: 0 0 50px rgba(0, 242, 254, 0.2), inset 0 0 30px rgba(0, 242, 254, 0.15);
+  pointer-events: none;
+  animation: datoxFlarePulse 8.5s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes datoxFlarePulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1.04);
+  }
+}
+
+/* Portfolio Card Ambient Backdrops */
+.preview-backdrop-dental {
+  background: radial-gradient(circle at 50% 0%, rgba(45, 212, 191, 0.18) 0%, transparent 70%);
+}
+.preview-backdrop-trucking {
+  background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.18) 0%, transparent 70%);
+}
+.preview-backdrop-restaurant {
+  background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.2) 0%, transparent 70%);
+}
+
 /* 13. Inline Card Live Preview Shell & Toggles */
 .preview-shell {
   position: relative;
@@ -436,4 +539,51 @@ h1, h2, h3, h4 {
   color: #ffffff;
   background: rgba(16, 185, 129, 0.25);
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+/* ---------------- 13. Kinetic Infinite Marquee Strip ---------------- */
+.marquee-strip {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+  padding: 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(90deg, rgba(122,100,255,0.08) 0%, rgba(0,0,0,0.3) 50%, rgba(255,51,122,0.08) 100%);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+  will-change: transform;
+  padding: 14px 0;
+}
+
+.marquee-item {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+  white-space: nowrap;
+  padding: 0 28px;
+}
+
+.marquee-sep {
+  color: rgba(122,100,255,0.6);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
 }
