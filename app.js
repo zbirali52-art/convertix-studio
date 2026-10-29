@@ -880,6 +880,142 @@
   setupUnifiedTracking();
   setupSoundInteractions();
 
+  /* ---------------- 13. Interactive Business Apps Mini-Widgets ---------------- */
+  let currentBookingDay = 'Today · Oct 29';
+  let currentBookingSlot = '10:30 AM';
+
+  window.selectBookingDay = function(btn, day) {
+    currentBookingDay = day;
+    document.querySelectorAll('.booking-day-btn').forEach(b => {
+      b.className = 'booking-day-btn px-2 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5 text-[10px] font-medium text-center';
+    });
+    btn.className = 'booking-day-btn px-2 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold text-center';
+    const label = document.getElementById('booking-live-date-label');
+    if (label) label.textContent = day;
+    updateBookingWhatsAppCta();
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.selectBookingSlot = function(btn, slot) {
+    currentBookingSlot = slot;
+    document.querySelectorAll('.booking-slot-btn').forEach(b => {
+      b.className = 'booking-slot-btn px-2 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5 text-[10px] text-center font-medium';
+    });
+    btn.className = 'booking-slot-btn px-2 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-bold text-[10px] text-center';
+    updateBookingWhatsAppCta();
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  function updateBookingWhatsAppCta() {
+    const cta = document.getElementById('booking-live-cta');
+    if (!cta) return;
+    const msg = encodeURIComponent(`Hi, I want to book an appointment for ${currentBookingDay} at ${currentBookingSlot} through Convertix Studio.`);
+    cta.href = `https://wa.me/917410123901?text=${msg}`;
+  }
+
+  // Funnel
+  let funnelBizType = 'Clinic / Doctor';
+  let funnelTimeline = '24-48 Hours';
+  let funnelCurrentStep = 1;
+
+  window.selectFunnelType = function(btn, type) {
+    funnelBizType = type;
+    document.querySelectorAll('.funnel-type-btn').forEach(b => {
+      b.className = 'funnel-type-btn px-2 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5 text-[10px] font-medium text-left';
+    });
+    btn.className = 'funnel-type-btn px-2 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-200 border border-indigo-500/40 text-[10px] font-bold text-left';
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.selectFunnelTimeline = function(btn, time) {
+    funnelTimeline = time;
+    document.querySelectorAll('.funnel-time-btn').forEach(b => {
+      b.className = 'funnel-time-btn px-2 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5 text-[10px] font-medium text-left';
+    });
+    btn.className = 'funnel-time-btn px-2 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold text-left';
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.advanceFunnelStep = function() {
+    if (funnelCurrentStep === 1) {
+      funnelCurrentStep = 2;
+      const step1 = document.getElementById('funnel-step-1');
+      const step2 = document.getElementById('funnel-step-2');
+      const label = document.getElementById('funnel-step-label');
+      const prog = document.getElementById('funnel-progress-text');
+      const bar = document.getElementById('funnel-progress-bar');
+      const btn = document.getElementById('funnel-action-text');
+
+      if (step1) step1.classList.add('hidden');
+      if (step2) step2.classList.remove('hidden');
+      if (label) label.textContent = 'Step 2 of 2: Launch Timeline';
+      if (prog) prog.textContent = '100% Done';
+      if (bar) bar.className = 'bg-emerald-500 h-full w-full transition-all duration-300';
+      if (btn) btn.textContent = 'Get Instant Quote on WhatsApp →';
+    } else {
+      const msg = encodeURIComponent(`Hi, I completed the qualification funnel for my ${funnelBizType} business. Need launch timeline: ${funnelTimeline}.`);
+      window.open(`https://wa.me/917410123901?text=${msg}`, '_blank');
+    }
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  // Store Qty
+  let storeQty = 1;
+  const storeItemPrice = 499;
+  window.adjustStoreQty = function(delta) {
+    storeQty = Math.max(1, Math.min(10, storeQty + delta));
+    const disp = document.getElementById('store-qty-display');
+    const tot = document.getElementById('store-total-display');
+    const link = document.getElementById('store-checkout-link');
+    if (disp) disp.textContent = String(storeQty);
+    if (tot) tot.textContent = `₹${storeQty * storeItemPrice} (0% Platform Fee)`;
+    if (link) {
+      const msg = encodeURIComponent(`Hi, I want to order ${storeQty}x Crispy Classic Bucket (Total: ₹${storeQty * storeItemPrice}) with 0% platform fee.`);
+      link.href = `https://wa.me/917410123901?text=${msg}`;
+    }
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  // Blog Filter
+  const blogPosts = {
+    all: { tag: '⚡ Local SEO Case Study', title: 'How Local Clinics Rank #1 on Google Maps Without Ads' },
+    growth: { tag: '📈 Conversion Rate Optimization', title: 'Why WhatsApp Checkout Boosts Indian Orders by 240%' },
+    seo: { tag: '⚡ Google PageSpeed 100/100', title: 'Zero Database Architecture: Why Static Sites Outrank WordPress' }
+  };
+
+  window.filterBlogTopic = function(topic, btn) {
+    document.querySelectorAll('.blog-pill').forEach(b => {
+      b.className = 'blog-pill px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 text-[9px]';
+    });
+    btn.className = 'blog-pill px-2 py-1 rounded-md bg-purple-500 text-white font-bold text-[9px]';
+    const post = blogPosts[topic] || blogPosts.all;
+    const tagEl = document.getElementById('blog-post-tag');
+    const titleEl = document.getElementById('blog-post-title');
+    if (tagEl) tagEl.textContent = post.tag;
+    if (titleEl) titleEl.textContent = post.title;
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  // Event Pass
+  let ticketQty = 1;
+  window.adjustTicketQty = function(delta) {
+    ticketQty = Math.max(1, Math.min(5, ticketQty + delta));
+    const disp = document.getElementById('ticket-qty-display');
+    if (disp) disp.textContent = String(ticketQty);
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.generateDemoPass = function() {
+    const btn = document.getElementById('ticket-btn-text');
+    if (btn) btn.textContent = `✓ ${ticketQty} VIP Pass(es) Generated! Added to iCal/Google`;
+    if (window.soundEngine && typeof window.soundEngine.playSweep === 'function') {
+      window.soundEngine.playSweep(true);
+    }
+    setTimeout(() => {
+      if (btn) btn.textContent = 'Generate Instant Digital Pass 🎟️';
+    }, 3500);
+  };
+
   const footerYear = $('#footer-year');
   if (footerYear) footerYear.textContent = String(new Date().getFullYear());
 
