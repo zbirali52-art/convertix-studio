@@ -1,5 +1,39 @@
 /* Convertix Studio - Multi-Layer Responsive Design System & Unified Tracking Engine */
 
+/* Self-hosted variable fonts (latin + latin-ext). No third-party font requests. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url('fonts/jakarta-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url('fonts/jakarta-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
   --bg-base: #06080f;
   --bg-card: rgba(13, 18, 32, 0.72);
@@ -15,6 +49,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 6.5rem;
+  -webkit-text-size-adjust: 100%;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
@@ -134,9 +170,14 @@ h1, h2, h3, h4 {
 }
 
 /* 3. MAGNETIC CTA BUTTON TRACKING */
+/* `:not(.hidden)` keeps Tailwind's responsive visibility classes working
+   (e.g. `hidden xl:inline-flex`) instead of forcing the button to display. */
+.track-magnetic:not(.hidden) {
+  display: inline-flex;
+}
+
 .track-magnetic {
   position: relative;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
@@ -274,3 +315,137 @@ input[type=range]::-moz-range-thumb {
     transform: none !important;
   }
 }
+
+/* ============================================================
+   Accessibility & interaction polish
+   ============================================================ */
+
+/* Keyboard-only focus ring, visible on every interactive element */
+:where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 2px solid #34d399;
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Skip link for keyboard and screen-reader users */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1.1rem;
+  border-radius: 0.75rem;
+  background: #34d399;
+  color: #04120c;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-decoration: none;
+  transform: translateY(-180%);
+  transition: transform 0.18s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Anchored sections clear the sticky header */
+section[id],
+main[id] {
+  scroll-margin-top: 6.5rem;
+}
+
+/* Currency switcher states */
+.currency-btn {
+  color: #cbd5e1;
+}
+.currency-btn:hover {
+  color: #ffffff;
+}
+.currency-btn[aria-pressed="true"] {
+  background: #10b981;
+  color: #04120c;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* Active section in the desktop navigation */
+.nav-link[aria-current="true"] {
+  color: #34d399;
+}
+
+/* Mobile navigation panel */
+#mobile-menu {
+  max-height: calc(100dvh - 5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+#mobile-menu:not(.hidden) {
+  animation: menu-in 0.18s ease-out both;
+}
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Chat bubbles fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out both;
+}
+
+/* Native disabled state for the lead button */
+#lead-submit:disabled {
+  cursor: wait;
+}
+
+/* Slightly stronger body text for readability on dark backgrounds */
+#form-status {
+  color: #6ee7b7;
+}
+
+/* Prevent long words/URLs from breaking the layout on small screens */
+h1, h2, h3, h4, p, li, td, a {
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 379px) {
+  .currency-flag,
+  .currency-name {
+    display: none;
+  }
+  .currency-btn {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+}
+
+/* Respect users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-float,
+  .animate-ping {
+    animation: none !important;
+  }
+  .track-card,
+  .track-magnetic,
+  .track-sub {
+    transform: none !important;
+  }
+  .global-cursor-aura,
+  .global-cursor-grid {
+    display: none !important;
+  }
+}
+
