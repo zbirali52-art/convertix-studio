@@ -1,370 +1,680 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vesta Living Interiors | Turnkey Interior Design & Modular Architecture</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .gold-gradient {
-      background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chix Kitchen | Crispy Classic Fried Chicken</title>
+<meta name="description" content="Zero-CDN interactive fast-food demo with menu category tabs, slide-out cart, quantity controls, spice customiser and WhatsApp delivery checkout.">
+<style>
+  @font-face{font-family:'InterLocal';src:url('../fonts/inter-latin.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
+  @font-face{font-family:'JakartaLocal';src:url('../fonts/jakarta-latin.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+  :root{
+    --custard:#FFE39B;--custard-2:#FFF2CC;--chili:#762420;--pepper:#B13630;--burgundy:#3D1311;
+    --ink:#1B0E0C;--cream:#FFF8EA;--white:#FFFFFF;--line:rgba(118,36,32,.16);--line-strong:rgba(118,36,32,.27);
+    --muted:rgba(61,19,17,.67);--muted-2:rgba(61,19,17,.48);
+    --display:'Trebuchet MS','Arial Rounded MT Bold','Arial Black',sans-serif;
+    --body:'InterLocal','Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--cream);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body.cart-open{overflow:hidden}
+  a{color:inherit;text-decoration:none}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer;border:0;background:none}
+  svg{display:block}
+  ::selection{background:var(--chili);color:var(--custard)}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  /* Agency banner */
+  .agency-bar{position:sticky;top:0;z-index:130;background:var(--burgundy);color:var(--custard);font-size:11px}
+  .agency-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;padding-block:6px}
+  .agency-left{display:flex;align-items:center;gap:8px;min-width:0}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#7BE6A6;box-shadow:0 0 0 4px rgba(123,230,166,.14);animation:pulse 1.8s infinite;flex:0 0 auto}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .agency-left span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,227,155,.68)}
+  .agency-left strong{color:var(--custard)}
+  .claim-link{display:inline-flex;align-items:center;gap:4px;background:var(--custard);color:var(--chili);font-weight:800;padding:6px 12px;border-radius:999px;white-space:nowrap;font-size:10.5px;transition:transform .18s ease,background .18s ease}
+  .claim-link:hover{transform:translateY(-1px);background:#fff}
+
+  /* Nav */
+  .site-nav{position:sticky;top:38px;z-index:120;background:rgba(255,248,234,.91);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:70px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:24px;font-weight:900;letter-spacing:-.055em;color:var(--chili);line-height:1}
+  .brand-mark{width:37px;height:37px;border-radius:50%;background:var(--chili);color:var(--custard);display:grid;place-items:center;font-size:18px;transform:rotate(-6deg);box-shadow:0 6px 16px rgba(118,36,32,.18)}
+  .nav-links{display:flex;align-items:center;gap:25px;font-size:12px;font-weight:700;color:var(--muted)}
+  .nav-links a{padding:7px 0;position:relative}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:2px;width:0;height:2px;border-radius:2px;background:var(--pepper);transition:width .2s ease}
+  .nav-links a:hover{color:var(--chili)}
+  .nav-links a:hover::after{width:100%}
+  .nav-actions{display:flex;align-items:center;gap:8px}
+  .cart-pill{display:inline-flex;align-items:center;gap:7px;background:var(--chili);color:var(--custard);font-size:11px;font-weight:800;padding:10px 14px;border-radius:999px;transition:transform .18s ease,background .18s ease;box-shadow:0 7px 16px rgba(118,36,32,.15)}
+  .cart-pill:hover{transform:translateY(-1px);background:var(--burgundy)}
+  .cart-pill b{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--custard);color:var(--chili);font-size:9px}
+  .nav-order{display:inline-flex;align-items:center;gap:6px;background:var(--custard);color:var(--chili);border:1px solid var(--chili);font-size:11px;font-weight:800;padding:10px 14px;border-radius:999px;transition:all .18s ease}
+  .nav-order:hover{background:var(--chili);color:var(--custard)}
+
+  /* Marquee */
+  .marquee{position:relative;background:var(--chili);color:var(--custard);border-bottom:2px solid var(--custard);overflow:hidden;padding:11px 0}
+  .marquee-track{display:inline-flex;align-items:center;gap:26px;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.07em;text-transform:uppercase;animation:marquee 22s linear infinite;will-change:transform}
+  .marquee-track span{display:inline-flex;align-items:center;gap:26px}
+  .marquee-track span::after{content:"★";font-size:12px}
+  .marquee.paused .marquee-track{animation-play-state:paused}
+  .marquee-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;width:24px;height:24px;border-radius:50%;background:var(--custard);color:var(--chili);font-size:9px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* Hero */
+  .hero{position:relative;background:var(--custard);overflow:hidden;border-bottom:2px solid var(--chili)}
+  .hero::before{content:"";position:absolute;right:-50px;top:-60px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5),transparent 66%);pointer-events:none}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:160px;background-image:radial-gradient(var(--chili) 1.1px,transparent 1.1px);background-size:17px 17px;opacity:.12;pointer-events:none;mask-image:linear-gradient(180deg,transparent,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000)}
+  .hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:center;padding:50px 0 40px}
+  .kicker{display:inline-flex;align-items:center;gap:7px;background:var(--chili);color:var(--custard);font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border-radius:999px;transform:rotate(-2deg);margin-bottom:17px}
+  .hero h1{font-family:var(--display);font-size:clamp(48px,7.2vw,92px);font-weight:900;line-height:.9;letter-spacing:-.06em;text-transform:uppercase;color:var(--chili);max-width:760px}
+  .hero h1 span{display:inline-block;background:var(--pepper);color:var(--custard);padding:0 .1em .04em;border-radius:.18em;transform:rotate(-1deg)}
+  .hero-copy p{max-width:480px;font-size:13.5px;line-height:1.65;color:var(--muted);margin:20px 0 22px}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:25px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:999px;font-size:11.5px;font-weight:800;padding:12px 19px;transition:all .18s ease;white-space:nowrap}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-chili{background:var(--chili);color:var(--custard);box-shadow:0 8px 20px rgba(118,36,32,.2)}
+  .btn-chili:hover{background:var(--burgundy)}
+  .btn-outline{background:transparent;color:var(--chili);border:1.5px solid var(--chili)}
+  .btn-outline:hover{background:rgba(255,255,255,.36)}
+  .hero-trust{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:10.5px;color:var(--muted)}
+  .hero-trust b{font-family:var(--display);font-size:15px;color:var(--chili);letter-spacing:-.02em}
+  .hero-trust .sep{width:1px;height:19px;background:rgba(118,36,32,.2)}
+  .art-wrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:320px}
+  .art-disc{position:absolute;width:310px;height:310px;border-radius:50%;background:var(--pepper);box-shadow:0 26px 55px rgba(118,36,32,.2);transform:rotate(-4deg)}
+  .art-ring{position:absolute;width:330px;height:330px;border-radius:50%;border:1.5px dashed rgba(118,36,32,.45);animation:spin 38s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .bucket-svg{position:relative;z-index:1;width:min(360px,90%);height:auto;filter:drop-shadow(0 18px 22px rgba(61,19,17,.26))}
+  .float-badge{position:absolute;z-index:2;background:var(--cream);color:var(--chili);border:1.5px solid var(--chili);border-radius:999px;padding:6px 10px;font-size:9px;font-weight:800;box-shadow:0 5px 14px rgba(61,19,17,.12);white-space:nowrap}
+  .float-badge.one{top:34px;left:8px;transform:rotate(-7deg)}
+  .float-badge.two{bottom:50px;right:0;transform:rotate(5deg);background:var(--chili);color:var(--custard)}
+  .float-badge.three{bottom:14px;left:24px;transform:rotate(-3deg);background:var(--custard-2)}
+
+  /* Menu */
+  .menu-section{padding:66px 0 74px;background:var(--cream);position:relative}
+  .menu-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:25px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pepper);margin-bottom:8px}
+  .eyebrow::before{content:"";width:18px;height:2px;border-radius:2px;background:var(--pepper)}
+  .menu-head h2{font-family:var(--display);font-size:clamp(38px,6vw,68px);line-height:.9;letter-spacing:-.06em;text-transform:uppercase;color:var(--chili)}
+  .menu-head p{max-width:300px;font-size:11px;line-height:1.65;color:var(--muted);margin-bottom:3px}
+  .tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:12px;margin-bottom:22px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1px solid var(--line-strong);background:transparent;color:var(--muted);border-radius:999px;padding:9px 15px;font-size:10.5px;font-weight:800;transition:all .18s ease}
+  .tab:hover{border-color:var(--chili);color:var(--chili)}
+  .tab[aria-selected="true"]{background:var(--chili);color:var(--custard);border-color:var(--chili);box-shadow:0 5px 14px rgba(118,36,32,.14)}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .menu-card{position:relative;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line);border-radius:22px;padding:17px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+  .menu-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(61,19,17,.09);border-color:var(--line-strong)}
+  .menu-card-top{display:flex;align-items:flex-start;gap:11px;margin-bottom:10px}
+  .menu-icon{width:46px;height:46px;border-radius:15px;background:var(--custard);display:grid;place-items:center;font-size:22px;flex:0 0 auto;transform:rotate(-3deg)}
+  .menu-card:nth-child(3n+2) .menu-icon{background:#FFD8D1;transform:rotate(2deg)}
+  .menu-card:nth-child(3n+3) .menu-icon{background:#F4E6C8;transform:rotate(-2deg)}
+  .badges{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px}
+  .badge{font-size:7.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 6px;border-radius:999px;background:var(--custard-2);color:var(--chili);border:1px solid rgba(118,36,32,.1)}
+  .badge.hot{background:#FADAD5;color:#9E211B}
+  .badge.cool{background:#EAF4E6;color:#3A6A2E}
+  .badge.best{background:var(--chili);color:var(--custard)}
+  .menu-card h3{font-family:var(--display);font-size:15px;line-height:1.15;letter-spacing:-.035em;color:var(--chili)}
+  .menu-desc{font-size:9.5px;line-height:1.55;color:var(--muted);min-height:29px;margin-bottom:11px}
+  .menu-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:9px;border-top:1px dashed var(--line)}
+  .price{font-family:var(--display);font-size:19px;font-weight:900;letter-spacing:-.045em;color:var(--chili)}
+  .price small{font-family:var(--body);font-size:8px;font-weight:600;letter-spacing:0;color:var(--muted-2)}
+  .add-btn{width:32px;height:32px;border-radius:50%;background:var(--chili);color:var(--custard);font-size:17px;font-weight:500;display:grid;place-items:center;transition:all .18s ease;box-shadow:0 5px 12px rgba(118,36,32,.17)}
+  .add-btn:hover{background:var(--pepper);transform:scale(1.07) rotate(90deg)}
+  .menu-empty{grid-column:1/-1;text-align:center;padding:35px;font-size:12px;color:var(--muted)}
+
+  /* Delivery band */
+  .delivery-band{background:var(--chili);color:var(--custard);position:relative;overflow:hidden;padding:34px 0}
+  .delivery-band::after{content:"CHIX";position:absolute;right:-30px;bottom:-70px;font-family:var(--display);font-size:200px;font-weight:900;color:rgba(255,227,155,.06);letter-spacing:-.06em;line-height:.7;pointer-events:none}
+  .delivery-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap}
+  .delivery-copy h2{font-family:var(--display);font-size:clamp(30px,4.5vw,48px);line-height:.94;letter-spacing:-.055em;text-transform:uppercase;max-width:620px}
+  .delivery-copy p{font-size:11px;line-height:1.6;color:rgba(255,227,155,.72);margin-top:9px;max-width:520px}
+  .delivery-features{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+  .delivery-feature{border:1px solid rgba(255,227,155,.28);border-radius:999px;padding:5px 9px;font-size:8.5px;font-weight:700;color:rgba(255,227,155,.85)}
+  .delivery-band .btn-chili{background:var(--custard);color:var(--chili);box-shadow:none}
+  .delivery-band .btn-chili:hover{background:#fff}
+
+  /* Reviews */
+  .reviews{padding:64px 0}
+  .reviews-head{text-align:center;margin-bottom:28px}
+  .reviews-head h2{font-family:var(--display);font-size:clamp(34px,5.3vw,58px);line-height:.92;letter-spacing:-.06em;text-transform:uppercase;color:var(--chili)}
+  .reviews-head p{font-size:11px;color:var(--muted);margin-top:8px}
+  .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .review-card{background:var(--custard-2);border:1px solid var(--line);border-radius:22px;padding:21px;display:flex;flex-direction:column;justify-content:space-between}
+  .review-card:nth-child(2){background:#FFDCD5;transform:rotate(.6deg)}
+  .review-card:nth-child(3){background:#F6EBCF;transform:rotate(-.6deg)}
+  .review-card .stars{color:var(--pepper);font-size:12px;letter-spacing:2px;margin-bottom:9px}
+  .review-card p{font-size:11.5px;line-height:1.6;color:var(--muted)}
+  .review-who{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:11px;border-top:1px solid rgba(118,36,32,.13);font-size:9.5px;font-weight:800;color:var(--chili)}
+  .review-who span{width:26px;height:26px;border-radius:50%;background:var(--chili);color:var(--custard);display:grid;place-items:center;font-size:8px}
+
+  /* Footer */
+  .site-footer{background:var(--burgundy);color:var(--custard);padding:34px 0 26px}
+  .footer-top{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:28px;padding-bottom:24px;border-bottom:1px solid rgba(255,227,155,.16)}
+  .footer-brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-size:24px;font-weight:900;letter-spacing:-.05em;line-height:1}
+  .footer-brand .brand-mark{background:var(--custard);color:var(--chili)}
+  .footer-col h4{font-size:8.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,227,155,.48);margin-bottom:8px}
+  .footer-col p,.footer-col a{font-size:10px;line-height:1.7;color:rgba(255,227,155,.72);display:block}
+  .footer-col a:hover{color:var(--custard)}
+  .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:15px;font-size:8.5px;color:rgba(255,227,155,.42)}
+  .footer-links{display:flex;gap:14px}
+  .footer-links a:hover{color:var(--custard)}
+
+  /* Cart */
+  .cart-overlay{position:fixed;inset:0;z-index:180;background:rgba(26,10,8,.55);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s ease}
+  .cart-overlay.open{opacity:1;visibility:visible}
+  .cart-drawer{position:fixed;top:0;right:0;bottom:0;z-index:190;width:min(430px,100%);background:var(--cream);color:var(--ink);display:flex;flex-direction:column;transform:translateX(104%);transition:transform .34s cubic-bezier(.2,.8,.2,1);box-shadow:-22px 0 60px rgba(26,10,8,.25)}
+  .cart-drawer.open{transform:translateX(0)}
+  .cart-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px;background:var(--chili);color:var(--custard);flex:0 0 auto}
+  .cart-head h2{font-family:var(--display);font-size:21px;letter-spacing:-.04em;line-height:1;text-transform:uppercase}
+  .cart-head p{font-size:8.5px;color:rgba(255,227,155,.65);margin-top:3px}
+  .cart-close{width:31px;height:31px;border-radius:50%;background:rgba(255,227,155,.14);color:var(--custard);display:grid;place-items:center;font-size:14px;transition:background .18s ease}
+  .cart-close:hover{background:rgba(255,227,155,.28)}
+  .cart-body{flex:1;overflow-y:auto;padding:16px 18px;scrollbar-width:thin;scrollbar-color:rgba(118,36,32,.3) transparent}
+  .cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:220px;padding:20px}
+  .cart-empty .emoji{font-size:42px;margin-bottom:11px;opacity:.75}
+  .cart-empty h3{font-family:var(--display);font-size:18px;color:var(--chili);margin-bottom:4px}
+  .cart-empty p{font-size:10.5px;line-height:1.55;color:var(--muted);max-width:250px;margin-bottom:13px}
+  .cart-item{display:grid;grid-template-columns:38px 1fr auto;gap:9px;padding:11px 0;border-bottom:1px dashed var(--line)}
+  .cart-item-icon{width:38px;height:38px;border-radius:11px;background:var(--custard);display:grid;place-items:center;font-size:18px}
+  .cart-item h3{font-family:var(--display);font-size:12px;line-height:1.2;color:var(--chili);letter-spacing:-.02em}
+  .cart-item .unit{font-size:8.5px;color:var(--muted-2);margin:2px 0 5px}
+  .cart-item-controls{display:flex;align-items:center;gap:5px}
+  .qty-btn{width:20px;height:20px;border-radius:6px;border:1px solid var(--line-strong);display:grid;place-items:center;font-size:11px;color:var(--chili);background:#fff;transition:all .16s ease}
+  .qty-btn:hover{background:var(--chili);color:var(--custard);border-color:var(--chili)}
+  .qty-num{min-width:17px;text-align:center;font-size:10px;font-weight:800}
+  .spice-select{border:1px solid var(--line);background:var(--white);border-radius:7px;padding:4px 5px;font-size:8px;color:var(--muted);max-width:112px;outline:none}
+  .spice-select:focus{border-color:var(--pepper)}
+  .line-price{font-family:var(--display);font-size:13px;font-weight:900;color:var(--chili);white-space:nowrap;text-align:right}
+  .line-remove{font-size:8px;color:var(--muted-2);text-decoration:underline;text-underline-offset:2px;margin-top:4px;display:block;width:100%;text-align:right}
+  .line-remove:hover{color:var(--pepper)}
+  .cart-summary{margin-top:13px;border:1px solid var(--line);border-radius:14px;padding:11px 12px;background:var(--custard-2)}
+  .sum-row{display:flex;justify-content:space-between;gap:10px;font-size:9.5px;color:var(--muted);padding:2px 0}
+  .sum-row.total{border-top:1px solid var(--line);margin-top:6px;padding-top:7px;font-size:12px;color:var(--chili);font-weight:800}
+  .sum-row.total b{font-family:var(--display);font-size:17px;letter-spacing:-.03em}
+  .checkout{margin-top:13px}
+  .checkout h3{font-family:var(--display);font-size:13px;text-transform:uppercase;letter-spacing:-.01em;color:var(--chili);margin-bottom:7px}
+  .checkout .field{margin-bottom:7px}
+  .checkout label{display:block;font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);margin-bottom:3px}
+  .checkout input,.checkout textarea,.checkout select{width:100%;border:1px solid var(--line);border-radius:9px;background:#fff;padding:8px 9px;font-size:10.5px;outline:none;transition:border .16s ease}
+  .checkout input:focus,.checkout textarea:focus,.checkout select:focus{border-color:var(--pepper)}
+  .checkout textarea{resize:vertical;min-height:44px}
+  .checkout .two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .cart-foot{flex:0 0 auto;border-top:1px solid var(--line);padding:12px 18px 15px;background:var(--cream)}
+  .checkout-btn{width:100%;background:var(--chili);color:var(--custard);border-radius:999px;padding:12px;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .18s ease;box-shadow:0 8px 18px rgba(118,36,32,.16)}
+  .checkout-btn:hover{background:var(--burgundy);transform:translateY(-1px)}
+  .cart-note{text-align:center;font-size:8px;color:var(--muted-2);margin-top:6px}
+
+  /* Floating cart */
+  .floating-cart{position:fixed;right:14px;bottom:14px;z-index:150;display:flex;align-items:center;gap:8px;background:var(--chili);color:var(--custard);border-radius:999px;padding:9px 14px 9px 9px;box-shadow:0 12px 28px rgba(61,19,17,.28);transition:transform .2s ease,opacity .2s ease}
+  .floating-cart:hover{transform:translateY(-2px)}
+  .floating-cart .count{width:25px;height:25px;border-radius:50%;background:var(--custard);color:var(--chili);display:grid;place-items:center;font-size:10px;font-weight:900}
+  .floating-cart .label{font-size:9.5px;font-weight:800;line-height:1.1}
+  .floating-cart .label small{display:block;font-size:7.5px;font-weight:600;color:rgba(255,227,155,.65)}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,20px);z-index:220;background:var(--chili);color:var(--custard);font-size:10.5px;line-height:1.45;padding:10px 16px;border-radius:999px;box-shadow:0 18px 38px rgba(26,10,8,.28);opacity:0;pointer-events:none;transition:all .25s ease;max-width:min(88vw,430px);text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.error{background:#9E211B;color:#fff}
+
+  @media(max-width:980px){
+    .hero-inner{grid-template-columns:1fr;gap:16px;padding-top:38px}
+    .art-wrap{min-height:290px;order:-1}
+    .art-disc,.art-ring{width:250px;height:250px}
+    .bucket-svg{width:285px}
+    .menu-grid{grid-template-columns:repeat(2,1fr)}
+    .review-grid{grid-template-columns:1fr}
+    .footer-top{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:760px){
+    .wrap{width:min(100% - 28px,1180px)}
+    .nav-links{display:none}
+    .nav-inner{min-height:60px}
+    .brand{font-size:20px}
+    .brand-mark{width:32px;height:32px;font-size:15px}
+    .nav-order{display:none}
+    .cart-pill{font-size:10px;padding:8px 11px}
+    .hero h1{font-size:clamp(44px,13vw,64px)}
+    .hero-copy p{font-size:12px}
+    .float-badge{font-size:8px;padding:5px 8px}
+    .menu-section{padding:46px 0 54px}
+    .menu-head{display:block}
+    .menu-head p{margin-top:10px}
+    .menu-grid{grid-template-columns:1fr}
+    .delivery-inner{display:block}
+    .delivery-inner .btn{margin-top:18px}
+    .reviews{padding:46px 0}
+    .footer-top{grid-template-columns:1fr;gap:18px}
+    .agency-left span{font-size:10px}
+    .claim-link{font-size:9px;padding:5px 8px}
+    .marquee-track{font-size:13px}
+    .cart-drawer{width:100%}
+  }
+  @media(max-width:430px){
+    .agency-left span{max-width:145px}
+    .checkout .two{grid-template-columns:1fr}
+    .hero-trust{gap:8px}
+    .hero-trust .sep{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+  }
+</style>
 </head>
-<body class="bg-[#0f1115] text-stone-200 antialiased selection:bg-amber-500/20 selection:text-amber-300 pb-20">
+<body>
 
-  <!-- Agency Preview Banner -->
-  <aside class="sticky top-0 z-50 bg-[#161920] text-white text-xs py-2 px-4 flex items-center justify-between border-b border-amber-900/30 shadow-sm">
-    <div class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      <span class="text-stone-300">Live Sample Site • Built by <strong class="text-amber-400">Convertix Studio</strong></span>
-    </div>
-    <a href="../#pricing" class="px-2.5 py-1 rounded bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition-colors">
-      Get a Site Like This (₹1,000) →
-    </a>
-  </aside>
+<!-- Sticky agency banner -->
+<aside class="agency-bar" aria-label="Agency preview banner">
+  <div class="wrap">
+    <div class="agency-left"><span class="live-dot" aria-hidden="true"></span><span>Live Sample Site • Built by <strong>Convertix Studio</strong></span></div>
+    <a class="claim-link" href="../#pricing">Claim Site (₹1,000 / $15) →</a>
+  </div>
+</aside>
 
-  <!-- Studio Header -->
-  <header class="bg-[#13161c]/90 backdrop-blur-md border-b border-white/5 sticky top-8 z-40">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-amber-800 text-white flex items-center justify-center font-bold text-lg shadow-inner">
-          🏛️
-        </div>
-        <div>
-          <h1 class="text-base font-extrabold text-white leading-none tracking-tight">Vesta Living Interiors</h1>
-          <p class="text-[11px] text-stone-400">Turnkey Homes & Modular Architecture</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="hidden sm:inline-block text-xs font-semibold text-amber-400 bg-amber-950/40 px-3 py-1 rounded-full border border-amber-800/40">
-          ● 45-Day Guaranteed Handover
-        </span>
-        <a href="https://wa.me/917410123901?text=Hi%20Vesta%20Living%2C%20I%20want%20a%20free%20design%20consultation%20for%20my%20home." target="_blank" class="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold shadow-sm transition-all flex items-center gap-1.5">
-          <span>Book Free Consult</span>
-          <span>→</span>
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="relative py-14 px-4 sm:px-6 max-w-5xl mx-auto text-center space-y-4">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/60 text-amber-300 border border-amber-800/40 text-xs font-bold">
-      <span>⭐ 4.95 Rating</span>
-      <span>•</span>
-      <span>180+ Delivered Homes</span>
-      <span>•</span>
-      <span>10-Year Warranty</span>
-    </div>
-    <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-3xl mx-auto">
-      Bespoke Interiors Crafted For <span class="text-amber-400">Modern Living</span>
-    </h2>
-    <p class="text-stone-400 text-sm sm:text-base max-w-2xl mx-auto">
-      From 3D photorealistic architectural renders to 45-day guaranteed on-site handover. Estimate your exact turnkey project cost in 30 seconds below.
-    </p>
-  </section>
-
-  <!-- Interactive BHK Cost Estimator -->
-  <section class="max-w-4xl mx-auto px-4 mb-16">
-    <div class="bg-[#161a22] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-      <!-- Glow Accent -->
-      <div class="absolute -top-24 -right-24 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-        <div>
-          <span class="text-xs uppercase font-bold tracking-wider text-amber-400">Instant Calculator</span>
-          <h3 class="text-xl font-extrabold text-white">Smart Home Interior Cost Estimator</h3>
-        </div>
-        <div class="hidden sm:block text-right">
-          <span class="text-[11px] text-stone-400 block">Current Factory Rates</span>
-          <span class="text-xs text-emerald-400 font-semibold">● Updated Today</span>
-        </div>
-      </div>
-
-      <!-- Step 1: BHK Size -->
-      <div class="mb-6">
-        <label class="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">1. Select Apartment Layout</label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="bhk-selector">
-          <button type="button" onclick="selectBhk('1bhk', 280000, 30)" class="bhk-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all">
-            <span class="block text-sm font-bold text-white">1 BHK</span>
-            <span class="block text-[11px] text-stone-400 mt-0.5">450–600 sq.ft</span>
-          </button>
-          <button type="button" onclick="selectBhk('2bhk', 420000, 35)" class="bhk-btn p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/10 text-left transition-all">
-            <span class="block text-sm font-bold text-white">2 BHK</span>
-            <span class="block text-[11px] text-stone-300 mt-0.5">800–1050 sq.ft</span>
-          </button>
-          <button type="button" onclick="selectBhk('3bhk', 650000, 45)" class="bhk-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all">
-            <span class="block text-sm font-bold text-white">3 BHK</span>
-            <span class="block text-[11px] text-stone-400 mt-0.5">1200–1600 sq.ft</span>
-          </button>
-          <button type="button" onclick="selectBhk('4bhk', 920000, 60)" class="bhk-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all">
-            <span class="block text-sm font-bold text-white">4 BHK / Villa</span>
-            <span class="block text-[11px] text-stone-400 mt-0.5">2000+ sq.ft</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Step 2: Quality Finish Package -->
-      <div class="mb-6">
-        <label class="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">2. Choose Finish Package</label>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="package-selector">
-          <button type="button" onclick="selectPackage('Essential', 1.0)" class="pkg-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all">
-            <div class="font-bold text-white text-sm">Essential Standard</div>
-            <div class="text-[11px] text-stone-400 mt-1">High-grade Prelam boards, sleek stainless steel handles & hydraulic hinges.</div>
-          </button>
-          <button type="button" onclick="selectPackage('Premium Acrylic', 1.3)" class="pkg-btn p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/10 text-left transition-all">
-            <div class="font-bold text-white text-sm flex items-center justify-between">
-              <span>Premium Acrylic</span>
-              <span class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold">Popular</span>
-            </div>
-            <div class="text-[11px] text-stone-300 mt-1">Anti-scratch acrylic finish, soft-close German Hettich fittings & profiled handles.</div>
-          </button>
-          <button type="button" onclick="selectPackage('Ultra Luxury PU', 1.7)" class="pkg-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all">
-            <div class="font-bold text-white text-sm">Ultra Luxury Veneer</div>
-            <div class="text-[11px] text-stone-400 mt-1">Natural teak veneers, Italian PU matte polish, Blum motion hardware & LED profiles.</div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Step 3: Add-on Enhancements -->
-      <div class="mb-8">
-        <label class="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">3. Optional Space Enhancements</label>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <label class="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-[#1c212c] cursor-pointer hover:border-white/20">
-            <input type="checkbox" id="addon-ceiling" onchange="calculateEstimate()" class="w-4 h-4 rounded text-amber-500 accent-amber-500">
-            <div>
-              <span class="font-bold text-white block">False Ceiling + COB LED</span>
-              <span class="text-stone-400 text-[11px]">+₹45,000</span>
-            </div>
-          </label>
-          <label class="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-[#1c212c] cursor-pointer hover:border-white/20">
-            <input type="checkbox" id="addon-kitchen" onchange="calculateEstimate()" class="w-4 h-4 rounded text-amber-500 accent-amber-500">
-            <div>
-              <span class="font-bold text-white block">Quartz Island Kitchen</span>
-              <span class="text-stone-400 text-[11px]">+₹75,000</span>
-            </div>
-          </label>
-          <label class="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-[#1c212c] cursor-pointer hover:border-white/20">
-            <input type="checkbox" id="addon-smart" onchange="calculateEstimate()" class="w-4 h-4 rounded text-amber-500 accent-amber-500">
-            <div>
-              <span class="font-bold text-white block">Smart Home Automation</span>
-              <span class="text-stone-400 text-[11px]">+₹55,000</span>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <!-- Dynamic Output Box -->
-      <div class="bg-gradient-to-r from-amber-950/40 via-[#1c212c] to-amber-950/30 p-5 rounded-2xl border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block">Estimated Turnkey Budget</span>
-          <div class="text-3xl sm:text-4xl font-extrabold text-white mt-1" id="estimate-display">
-            ₹5,46,000 <span class="text-sm font-normal text-stone-400">approx</span>
-          </div>
-          <p class="text-xs text-stone-400 mt-1" id="estimate-details">
-            Includes modular woodwork, hardware, installation & 35-day handover
-          </p>
-        </div>
-        <button onclick="requestBhkQuoteWhatsApp()" class="px-5 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-extrabold text-xs shadow-lg transition-all flex items-center justify-center gap-2 shrink-0">
-          <span>Get Free 3D Render & Exact BOM</span>
-          <span>💬</span>
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Project Gallery -->
-  <section class="max-w-5xl mx-auto px-4 mb-16">
-    <div class="text-center mb-10">
-      <span class="text-xs uppercase font-bold tracking-wider text-amber-400">Design Portfolio</span>
-      <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Recently Completed Residences</h3>
-      <p class="text-stone-400 text-xs sm:text-sm mt-1">Real sites delivered on-time across gated communities</p>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <!-- Project 1 -->
-      <div class="bg-[#161a22] rounded-2xl overflow-hidden border border-white/10 group hover:border-amber-500/50 transition-all">
-        <div class="h-44 bg-gradient-to-tr from-amber-950 to-stone-800 flex items-center justify-center text-4xl group-hover:scale-105 transition-transform duration-300">
-          🛋️
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between text-xs text-amber-400 font-bold mb-1">
-            <span>The Skyline Penthouse</span>
-            <span>3 BHK • 1,450 sq.ft</span>
-          </div>
-          <h4 class="font-bold text-white text-base">Minimalist Japandi Living</h4>
-          <p class="text-xs text-stone-400 mt-2">Cane accent fluting, concealed atmospheric lighting, and stone textured TV unit.</p>
-          <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-            <span class="text-stone-400">Handover: 38 Days</span>
-            <a href="https://wa.me/917410123901?text=Hi%20Vesta%20Living%2C%20I%20love%20The%20Skyline%20Penthouse%20style.%20Can%20we%20discuss%3F" target="_blank" class="text-amber-400 hover:underline font-semibold">Inquire Look →</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="bg-[#161a22] rounded-2xl overflow-hidden border border-white/10 group hover:border-amber-500/50 transition-all">
-        <div class="h-44 bg-gradient-to-tr from-stone-900 to-amber-900 flex items-center justify-center text-4xl group-hover:scale-105 transition-transform duration-300">
-          🍳
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between text-xs text-amber-400 font-bold mb-1">
-            <span>Oberoi Splendor</span>
-            <span>Island Kitchen • Acrylic</span>
-          </div>
-          <h4 class="font-bold text-white text-base">Matte Charcoal Parallel Kitchen</h4>
-          <p class="text-xs text-stone-400 mt-2">Kalinga stone countertop, tandem Blum pull-outs, built-in microwave and cutlery organizers.</p>
-          <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-            <span class="text-stone-400">Handover: 28 Days</span>
-            <a href="https://wa.me/917410123901?text=Hi%20Vesta%20Living%2C%20I%20want%20to%20know%20more%20about%20the%20Matte%20Charcoal%20Kitchen." target="_blank" class="text-amber-400 hover:underline font-semibold">Inquire Look →</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 3 -->
-      <div class="bg-[#161a22] rounded-2xl overflow-hidden border border-white/10 group hover:border-amber-500/50 transition-all">
-        <div class="h-44 bg-gradient-to-tr from-amber-900 to-stone-950 flex items-center justify-center text-4xl group-hover:scale-105 transition-transform duration-300">
-          🛏️
-        </div>
-        <div class="p-5">
-          <div class="flex items-center justify-between text-xs text-amber-400 font-bold mb-1">
-            <span>Prestige Lakeside</span>
-            <span>Master Suite</span>
-          </div>
-          <h4 class="font-bold text-white text-base">Warm Oak & Velvet Bedroom</h4>
-          <p class="text-xs text-stone-400 mt-2">Floor-to-ceiling glass wardrobe with sensor illumination, king hydraulic bed, and vanity unit.</p>
-          <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-            <span class="text-stone-400">Handover: 32 Days</span>
-            <a href="https://wa.me/917410123901?text=Hi%20Vesta%20Living%2C%20I%20am%20interested%20in%20the%20Master%20Suite%20bedroom%20design." target="_blank" class="text-amber-400 hover:underline font-semibold">Inquire Look →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Value Guarantees -->
-  <section class="max-w-4xl mx-auto px-4 mb-16">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-      <div class="p-4 rounded-xl bg-[#161a22] border border-white/5">
-        <div class="text-2xl mb-1">⏱️</div>
-        <div class="font-bold text-white text-sm">45-Day Handover</div>
-        <div class="text-[11px] text-stone-400 mt-0.5">Or ₹1,000/day cashback</div>
-      </div>
-      <div class="p-4 rounded-xl bg-[#161a22] border border-white/5">
-        <div class="text-2xl mb-1">🛡️</div>
-        <div class="font-bold text-white text-sm">10-Year Warranty</div>
-        <div class="text-[11px] text-stone-400 mt-0.5">On all modular hardware</div>
-      </div>
-      <div class="p-4 rounded-xl bg-[#161a22] border border-white/5">
-        <div class="text-2xl mb-1">📐</div>
-        <div class="font-bold text-white text-sm">Free 3D Renders</div>
-        <div class="text-[11px] text-stone-400 mt-0.5">Walk through before paying</div>
-      </div>
-      <div class="p-4 rounded-xl bg-[#161a22] border border-white/5">
-        <div class="text-2xl mb-1">💳</div>
-        <div class="font-bold text-white text-sm">No-Cost EMI</div>
-        <div class="text-[11px] text-stone-400 mt-0.5">Flexible 0% payment plans</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sticky Mobile Bottom Bar -->
-  <div class="fixed bottom-0 left-0 right-0 z-40 bg-[#161a22]/95 backdrop-blur-md border-t border-white/10 p-3 sm:hidden">
-    <div class="flex items-center justify-between gap-3">
-      <div>
-        <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Free Site Visit</div>
-        <div class="text-xs font-bold text-white">Get 3D Design & BOM</div>
-      </div>
-      <a href="https://wa.me/917410123901?text=Hi%20Vesta%20Living%2C%20I%20would%20like%20to%20schedule%20a%20free%20site%20measurement%20visit." target="_blank" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs flex items-center gap-1.5 shadow-md">
-        <span>Book on WhatsApp</span>
-        <span>💬</span>
-      </a>
+<!-- Nav -->
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Chix Kitchen home"><span class="brand-mark" aria-hidden="true">🍗</span><span>Chix Kitchen</span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#menu">Menu</a>
+      <a href="#story">Our story</a>
+      <a href="#delivery">Delivery</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="cart-pill" onclick="openCart()" aria-label="Open cart">
+        <span aria-hidden="true">🛍️</span> Cart <b id="nav-cart-count">0</b>
+      </button>
+      <a class="nav-order" href="#menu">Order online <span aria-hidden="true">→</span></a>
     </div>
   </div>
+</header>
 
-  <script>
-    let currentBhk = '2bhk';
-    let currentBhkLabel = '2 BHK (800–1050 sq.ft)';
-    let basePrice = 420000;
-    let daysHandover = 35;
-    let currentPackage = 'Premium Acrylic';
-    let packageMultiplier = 1.3;
+<!-- Marquee -->
+<div class="marquee" id="marquee-bar" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Get the Chix fix!</span><span>Crispy classic fried chicken</span><span>Nashville hot garlic wings</span><span>Order online today</span>
+    <span>Get the Chix fix!</span><span>Crispy classic fried chicken</span><span>Nashville hot garlic wings</span><span>Order online today</span>
+  </div>
+  <button class="marquee-toggle" type="button" onclick="toggleMarquee()" aria-label="Pause marquee">❚❚</button>
+</div>
 
-    function selectBhk(bhk, price, days) {
-      currentBhk = bhk;
-      basePrice = price;
-      daysHandover = days;
+<main id="top">
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title" style="padding:0">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <div class="kicker">★ The crispy classic is back</div>
+        <h1 id="hero-title">The crispy classic fried chicken is <span>back!</span></h1>
+        <p>Golden, craggy, eleven-spice crust. Buttermilk-brined overnight and fried to order. Pick your heat, build your bag and get it delivered hot — straight to your door.</p>
+        <div class="hero-actions">
+          <a class="btn btn-chili" href="#menu">Order online <span aria-hidden="true">→</span></a>
+          <a class="btn btn-outline" href="#story">Our story</a>
+        </div>
+        <div class="hero-trust">
+          <div><b>4.9</b> · 2,100+ reviews</div>
+          <span class="sep" aria-hidden="true"></span>
+          <div><b>30 min</b> average delivery</div>
+          <span class="sep" aria-hidden="true"></span>
+          <div><b>11</b> secret spices</div>
+        </div>
+      </div>
+      <div class="art-wrap" aria-hidden="true">
+        <div class="art-disc"></div>
+        <div class="art-ring"></div>
+        <span class="float-badge one">Extra crispy</span>
+        <span class="float-badge two">Secret 11 spices</span>
+        <span class="float-badge three">Fried to order</span>
+        <svg class="bucket-svg" viewBox="0 0 320 330" role="img" aria-label="Bucket of crispy fried chicken">
+          <defs>
+            <linearGradient id="bucketGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F9E6B3"/><stop offset=".5" stop-color="#FFF8E4"/><stop offset="1" stop-color="#EBCB86"/></linearGradient>
+            <linearGradient id="crust" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7A64A"/><stop offset="1" stop-color="#B86A20"/></linearGradient>
+          </defs>
+          <g transform="translate(0,-2)">
+            <path d="M78 110 L242 110 L218 300 Q214 320 194 320 L126 320 Q106 320 102 300 Z" fill="url(#bucketGrad)" stroke="#762420" stroke-width="4"/>
+            <path d="M78 110 L242 110 L238 140 L82 140 Z" fill="#762420"/>
+            <path d="M92 140 L228 140" stroke="#FFE39B" stroke-width="3" stroke-dasharray="10 8"/>
+            <text x="160" y="228" text-anchor="middle" font-family="Trebuchet MS, sans-serif" font-size="28" font-weight="900" fill="#762420" letter-spacing="-1">CHIX</text>
+            <text x="160" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#B13630" letter-spacing="3">KITCHEN</text>
+            <g>
+              <path d="M103 76 q-13-34 15-45 q18-8 31 9 q10-21 31-16 q22 5 22 28 q0 22-28 27 q-10 26-38 21 q-27-5-33-24z" fill="url(#crust)" stroke="#762420" stroke-width="3"/>
+              <path d="M184 60 q-4-23 17-28 q22-5 29 15 q16-3 23 12 q8 19-10 28 q-19 10-37-2 q-17-11-22-25z" fill="url(#crust)" stroke="#762420" stroke-width="3"/>
+              <path d="M124 98 q-8-20 9-28 q16-7 27 7 q12-11 25-2 q11 9 3 23 q-10 18-33 14 q-21-3-31-14z" fill="url(#crust)" stroke="#762420" stroke-width="3"/>
+            </g>
+            <path d="M78 110 q-15 0-16 13 q0 14 17 14" fill="#EBCB86" stroke="#762420" stroke-width="4"/>
+            <path d="M242 110 q15 0 16 13 q0 14-17 14" fill="#EBCB86" stroke="#762420" stroke-width="4"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
 
-      const labels = {
-        '1bhk': '1 BHK (450–600 sq.ft)',
-        '2bhk': '2 BHK (800–1050 sq.ft)',
-        '3bhk': '3 BHK (1200–1600 sq.ft)',
-        '4bhk': '4 BHK / Villa (2000+ sq.ft)'
-      };
-      currentBhkLabel = labels[bhk];
+  <!-- Menu -->
+  <section class="menu-section" id="menu" aria-labelledby="menu-title">
+    <div class="wrap">
+      <div class="menu-head">
+        <div><div class="eyebrow">01 / The menu</div><h2 id="menu-title">Pick your chix.</h2></div>
+        <p>Crispy buckets, stacked burgers, saucy tenders and the sides that make it a feast. Prices include GST.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Menu categories">
+        <button class="tab" role="tab" aria-selected="true" data-cat="all" onclick="selectCategory('all')">All Chix</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="buckets" onclick="selectCategory('buckets')">Crispy Buckets</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="burgers" onclick="selectCategory('burgers')">Signature Burgers</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="tenders" onclick="selectCategory('tenders')">Tenders</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="sides" onclick="selectCategory('sides')">Sides</button>
+        <button class="tab" role="tab" aria-selected="false" data-cat="drinks" onclick="selectCategory('drinks')">Drinks</button>
+      </div>
+      <div class="menu-grid" id="menu-grid" aria-live="polite"></div>
+    </div>
+  </section>
 
-      const buttons = document.querySelectorAll('#bhk-selector .bhk-btn');
-      buttons.forEach(btn => {
-        btn.className = 'bhk-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all';
+  <!-- Delivery band -->
+  <section class="delivery-band" id="delivery" aria-labelledby="delivery-title" style="padding:34px 0">
+    <div class="wrap delivery-inner">
+      <div class="delivery-copy">
+        <h2 id="delivery-title">Hot and tender, right at your door.</h2>
+        <p>Order direct on WhatsApp and skip the commission apps. We cook after you order, pack it hot and send live updates from the fryer to your gate.</p>
+        <div class="delivery-features"><span class="delivery-feature">30-min average</span><span class="delivery-feature">Free delivery over ₹499</span><span class="delivery-feature">Sealed hot packaging</span></div>
+      </div>
+      <a class="btn btn-chili" href="#menu" onclick="openCart();return false;">Build my order <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="reviews" id="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <div class="reviews-head"><div class="eyebrow" style="justify-content:center">02 / Our story</div><h2 id="story-title">Crispy dream. Zero shortcuts.</h2><p>Buttermilk-brined for 24 hours. Hand-dredged in our 11-spice flour. Fried in small batches, never held under a lamp.</p></div>
+      <div class="review-grid">
+        <article class="review-card"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“The Nashville Hot bucket is the best fried chicken I've had outside of Tennessee. Crunchy, juicy, and the heat builds without wiping out the flavor.”</p><div class="review-who"><span>BM</span> Bonnie M. · verified order</div></article>
+        <article class="review-card"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Ordered for a family movie night. Everything arrived hot, the loaded fries were still crispy, and the WhatsApp updates were weirdly delightful.”</p><div class="review-who"><span>AK</span> Arjun K. · verified order</div></article>
+        <article class="review-card"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“The classic sandwich has the perfect pickles-to-sauce ratio. I've already ordered it three times this week. No regrets, only crumbs.”</p><div class="review-who"><span>SR</span> Simran R. · verified order</div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews / confessions -->
+  <section class="reviews" id="reviews" aria-labelledby="reviews-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="reviews-head"><div class="eyebrow" style="justify-content:center">03 / Yummy confessions</div><h2 id="reviews-title">The people have spoken.</h2><p>4.9 stars from 2,100+ crispy obsessives.</p></div>
+      <div class="review-grid">
+        <article class="review-card" style="background:var(--custard-2)"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“I came for the chicken, stayed for the mac and cheese. This is my new Friday ritual.”</p><div class="review-who"><span>ND</span> Naya D. · verified order</div></article>
+        <article class="review-card"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Finally, a chicken sandwich that doesn't fall apart halfway through. The spiced honey dip is unreal.”</p><div class="review-who"><span>LY</span> Lenny Y. · verified order</div></article>
+        <article class="review-card"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>“Delivery was 26 minutes. Still crackling. The cart checkout on WhatsApp took about 20 seconds.”</p><div class="review-who"><span>ER</span> Eden R. · verified order</div></article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand"><span class="brand-mark" aria-hidden="true">🍗</span> Chix Kitchen</div>
+        <p style="font-size:10px;line-height:1.65;color:rgba(255,227,155,.62);margin-top:10px;max-width:270px">Crispy chicken, cold drinks and very good fries. Fried to order, seven days a week. 500 Terry Francine Street, San Francisco.</p>
+      </div>
+      <div class="footer-col"><h4>Hours</h4><p>Mon – Sun<br>11:00 AM – 12:00 AM</p><p style="margin-top:6px"><a href="tel:+917410123901">+91 74101 23901</a></p></div>
+      <div class="footer-col"><h4>Order &amp; follow</h4><a href="#menu">Order online</a><a href="https://wa.me/917410123901?text=Hi%20Chix%20Kitchen%2C%20I%27d%20like%20to%20order." target="_blank" rel="noopener">WhatsApp delivery</a><a href="../#portfolio">More live demos</a></div>
+    </div>
+    <div class="footer-bottom"><span>Chix Kitchen · Fast-food demo · <span id="footer-year"></span> Convertix Studio</span><div class="footer-links"><a href="../#portfolio">All demos</a><a href="../#pricing">Claim this site</a><a href="#top">Back to top ↑</a></div></div>
+  </div>
+</footer>
+
+<!-- Cart drawer -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()" aria-hidden="true"></div>
+<aside class="cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+  <div class="cart-head">
+    <div><h2 id="cart-title">Your Chix bag</h2><p id="cart-head-sub">0 items · ready when you are</p></div>
+    <button class="cart-close" type="button" onclick="closeCart()" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body">
+    <div class="cart-empty" id="cart-empty">
+      <div class="emoji" aria-hidden="true">🍗</div>
+      <h3>Your bag is empty</h3>
+      <p>Add a bucket, burger or tenders and we'll get the fryer going.</p>
+      <button class="btn btn-chili" type="button" onclick="closeCart()">Browse the menu</button>
+    </div>
+    <div id="cart-lines" hidden></div>
+    <div id="cart-summary" hidden></div>
+    <form class="checkout" id="checkout-form" hidden onsubmit="return false;">
+      <h3>Delivery details</h3>
+      <div class="two">
+        <div class="field"><label for="customer-name">Name</label><input id="customer-name" type="text" autocomplete="name" placeholder="Your name"></div>
+        <div class="field"><label for="customer-phone">Phone</label><input id="customer-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+91 ..."></div>
+      </div>
+      <div class="field"><label for="customer-address">Delivery address</label><textarea id="customer-address" placeholder="Flat / street / landmark / pincode" autocomplete="street-address"></textarea></div>
+      <div class="field"><label for="payment-method">Payment</label><select id="payment-method"><option>Cash on delivery</option><option>UPI on delivery</option><option>Card on delivery</option></select></div>
+    </form>
+  </div>
+  <div class="cart-foot">
+    <button class="checkout-btn" type="button" onclick="checkoutWhatsApp()"><span>Send delivery order on WhatsApp</span><span aria-hidden="true">💬</span></button>
+    <p class="cart-note">No online payment · We confirm your order on WhatsApp</p>
+  </div>
+</aside>
+
+<!-- Floating cart -->
+<button class="floating-cart" type="button" onclick="openCart()" aria-label="Open cart">
+  <span class="count" id="float-cart-count">0</span>
+  <span class="label">View bag<small id="float-cart-total">₹0 · 0 items</small></span>
+</button>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  (function(){
+    'use strict';
+    const PHONE = '917410123901';
+    const TAX_RATE = 0.05;
+    const DELIVERY_FEE = 40;
+    const FREE_DELIVERY_OVER = 499;
+
+    const MENU = [
+      {id:'classic-bucket', cat:'buckets', name:'The Chix Classic Bucket', desc:'8 pieces of buttermilk-brined chicken, 11-spice crust, pickles and house dip.', price:799, icon:'🍗', badges:['Bestseller'], badgeClass:'best'},
+      {id:'nashville-bucket', cat:'buckets', name:'Nashville Hot Bucket', desc:'8 pieces tossed in cayenne-honey oil with pickles and ranch for dipping.', price:899, icon:'🔥', badges:['Hot'], badgeClass:'hot'},
+      {id:'honey-butter-bucket', cat:'buckets', name:'Honey Butter Bucket', desc:'8 pieces brushed with spiced honey butter, crispy shallots and flaky salt.', price:849, icon:'🍯', badges:['New'], badgeClass:''},
+      {id:'classic-sandwich', cat:'burgers', name:'Crispy Classic Sandwich', desc:'Buttermilk chicken, dill pickles, shredded lettuce and Chix sauce on a brioche bun.', price:249, icon:'🥪', badges:['Bestseller'], badgeClass:'best'},
+      {id:'nashville-burger', cat:'burgers', name:'Nashville Hot Chicken Burger', desc:'Cayenne-glazed fillet, slaw, pickles and cooling ranch on a toasted potato bun.', price:299, icon:'🌶️', badges:['Hot'], badgeClass:'hot'},
+      {id:'honey-bbq-burger', cat:'burgers', name:'Honey BBQ Chicken Burger', desc:'Crispy fillet, smoky honey BBQ, cheddar, onion rings and garlic aioli.', price:289, icon:'🍔', badges:['Smoky'], badgeClass:''},
+      {id:'honey-bbq-tenders', cat:'tenders', name:'Honey BBQ Tenders', desc:'6 hand-breaded tenders glazed in honey BBQ with a ranch dip.', price:349, icon:'🍗', badges:['6 pc'], badgeClass:''},
+      {id:'buffalo-mix', cat:'tenders', name:'Buffalo Crispy Mix', desc:'9 pieces of wings and tenders in buffalo sauce with blue cheese dip.', price:449, icon:'🍗', badges:['Dairy free'], badgeClass:'cool'},
+      {id:'nashville-wings', cat:'tenders', name:'Nashville Hot Garlic Wings', desc:'3 whole wings in Nashville hot garlic butter with pickled chilli.', price:329, icon:'🌶️', badges:['Mild 🌶️'], badgeClass:'hot'},
+      {id:'fries', cat:'sides', name:'Crinkle-Cut Fries', desc:'Double-fried, sea-salted and impossibly crispy. The essential side.', price:149, icon:'🍟', badges:['Dairy free'], badgeClass:'cool'},
+      {id:'loaded-fries', cat:'sides', name:'Cheesy Loaded Fries', desc:'Crinkle fries under a landslide of cheddar sauce, jalapeños and crispy onion.', price:199, icon:'🧀', badges:['Vegetarian'], badgeClass:'cool'},
+      {id:'mac-cheese', cat:'sides', name:'4-Cheese Mac & Cheese', desc:'Elbow macaroni baked with cheddar, mozzarella, parmesan and a crunchy top.', price:189, icon:'🧀', badges:['Vegetarian'], badgeClass:'cool'},
+      {id:'slaw', cat:'sides', name:'Cole Slaw', desc:'Crunchy cabbage and carrot in a tangy buttermilk dressing.', price:129, icon:'🥗', badges:['Dairy free'], badgeClass:'cool'},
+      {id:'lime-cooler', cat:'drinks', name:'Fresh Lime Cooler', desc:'Hand-squeezed lime, soda and a little cane sugar over crushed ice.', price:99, icon:'🍋', badges:['Vegan'], badgeClass:'cool'},
+      {id:'sweet-tea', cat:'drinks', name:'Southern Sweet Tea', desc:'Slow-brewed black tea, lightly sweetened and served ice cold.', price:119, icon:'🧊', badges:['Vegan'], badgeClass:'cool'},
+      {id:'milkshake', cat:'drinks', name:'Vanilla Bean Milkshake', desc:'Real vanilla bean ice cream blended thick with a whipped cream cap.', price:179, icon:'🥤', badges:['Vegetarian'], badgeClass:'cool'}
+    ];
+
+    const state = { cart: [], category: 'all' };
+    const menuGrid = document.getElementById('menu-grid');
+    const toast = document.getElementById('toast');
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    function money(n){ return '₹' + Number(n).toLocaleString('en-IN'); }
+    function showToast(msg, isError){
+      toast.textContent = msg;
+      toast.className = 'toast show' + (isError ? ' error' : '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(function(){ toast.className = 'toast'; }, 3500);
+    }
+    function escapeHtml(value){
+      return String(value).replace(/[&<>"']/g, function(ch){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch]; });
+    }
+
+    /* Menu rendering */
+    window.selectCategory = function(cat){
+      state.category = cat;
+      document.querySelectorAll('.tab').forEach(function(tab){ tab.setAttribute('aria-selected', tab.dataset.cat === cat ? 'true' : 'false'); });
+      renderMenu();
+    };
+
+    function renderMenu(){
+      const items = state.category === 'all' ? MENU : MENU.filter(function(i){ return i.cat === state.category; });
+      menuGrid.innerHTML = items.map(function(item){
+        const badges = item.badges.map(function(b){ return '<span class="badge ' + (item.badgeClass || '') + '">' + escapeHtml(b) + '</span>'; }).join('');
+        return '<article class="menu-card">' +
+          '<div class="menu-card-top"><div class="menu-icon" aria-hidden="true">' + item.icon + '</div><div><div class="badges">' + badges + '</div><h3>' + escapeHtml(item.name) + '</h3></div></div>' +
+          '<p class="menu-desc">' + escapeHtml(item.desc) + '</p>' +
+          '<div class="menu-bottom"><div class="price">' + money(item.price) + ' <small>incl. GST</small></div>' +
+          '<button class="add-btn" type="button" onclick="addToCart(\'' + item.id + '\')" aria-label="Add ' + escapeHtml(item.name) + ' to cart">+</button></div>' +
+          '</article>';
+      }).join('');
+      if (!items.length) menuGrid.innerHTML = '<p class="menu-empty">No items in this category yet — try another.</p>';
+    }
+
+    function findItem(id){ return MENU.filter(function(i){ return i.id === id; })[0]; }
+    function findLine(id){ return state.cart.filter(function(l){ return l.id === id; })[0]; }
+
+    window.addToCart = function(id){
+      const item = findItem(id);
+      if (!item) return;
+      const line = findLine(id);
+      if (line) line.qty += 1;
+      else state.cart.push({ id: id, qty: 1, spice: 'Mild' });
+      renderCart();
+      const float = document.getElementById('float-cart-count');
+      float.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}], {duration:350, easing:'ease-out'});
+      showToast(item.name + ' added to your bag.');
+    };
+
+    window.changeQty = function(id, delta){
+      const line = findLine(id);
+      if (!line) return;
+      line.qty += delta;
+      if (line.qty <= 0) state.cart = state.cart.filter(function(l){ return l.id !== id; });
+      renderCart();
+    };
+
+    window.removeLine = function(id){
+      state.cart = state.cart.filter(function(l){ return l.id !== id; });
+      renderCart();
+      showToast('Item removed from your bag.');
+    };
+
+    window.setSpice = function(id, spice){
+      const line = findLine(id);
+      if (!line) return;
+      line.spice = spice;
+      renderCart();
+      showToast('Spice level set to ' + spice + '.');
+    };
+
+    function cartTotals(){
+      let subtotal = 0, count = 0;
+      state.cart.forEach(function(line){
+        const item = findItem(line.id);
+        if (item){ subtotal += item.price * line.qty; count += line.qty; }
       });
-      event.currentTarget.className = 'bhk-btn p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/10 text-left transition-all';
-
-      calculateEstimate();
+      const tax = Math.round(subtotal * TAX_RATE);
+      const delivery = subtotal === 0 ? 0 : (subtotal >= FREE_DELIVERY_OVER ? 0 : DELIVERY_FEE);
+      return { subtotal: subtotal, tax: tax, delivery: delivery, total: subtotal + tax + delivery, count: count };
     }
 
-    function selectPackage(pkgName, mult) {
-      currentPackage = pkgName;
-      packageMultiplier = mult;
+    function renderCart(){
+      const totals = cartTotals();
+      document.getElementById('nav-cart-count').textContent = totals.count;
+      document.getElementById('float-cart-count').textContent = totals.count;
+      document.getElementById('float-cart-total').textContent = money(totals.total) + ' · ' + totals.count + (totals.count === 1 ? ' item' : ' items');
+      document.getElementById('cart-head-sub').textContent = totals.count + (totals.count === 1 ? ' item' : ' items') + ' · ready when you are';
 
-      const buttons = document.querySelectorAll('#package-selector .pkg-btn');
-      buttons.forEach(btn => {
-        btn.className = 'pkg-btn p-3.5 rounded-xl border border-white/10 bg-[#1c212c] hover:border-amber-500 text-left transition-all';
-      });
-      event.currentTarget.className = 'pkg-btn p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/10 text-left transition-all';
+      const empty = document.getElementById('cart-empty');
+      const lines = document.getElementById('cart-lines');
+      const summary = document.getElementById('cart-summary');
+      const checkout = document.getElementById('checkout-form');
 
-      calculateEstimate();
+      if (!state.cart.length){
+        empty.hidden = false; lines.hidden = true; summary.hidden = true; checkout.hidden = true;
+        lines.innerHTML = ''; summary.innerHTML = '';
+        return;
+      }
+      empty.hidden = true; lines.hidden = false; summary.hidden = false; checkout.hidden = false;
+
+      lines.innerHTML = state.cart.map(function(line){
+        const item = findItem(line.id);
+        if (!item) return '';
+        return '<div class="cart-item">' +
+          '<div class="cart-item-icon" aria-hidden="true">' + item.icon + '</div>' +
+          '<div><h3>' + escapeHtml(item.name) + '</h3><div class="unit">' + money(item.price) + ' each</div>' +
+          '<div class="cart-item-controls"><button class="qty-btn" type="button" onclick="changeQty(\'' + line.id + '\',-1)" aria-label="Decrease quantity">−</button><span class="qty-num">' + line.qty + '</span><button class="qty-btn" type="button" onclick="changeQty(\'' + line.id + '\',1)" aria-label="Increase quantity">+</button>' +
+          '<select class="spice-select" aria-label="Spice level for ' + escapeHtml(item.name) + '" onchange="setSpice(\'' + line.id + '\', this.value)">' +
+          ['Mild','Nashville Hot','Extra Crispy','Nuclear Fire'].map(function(s){ return '<option' + (line.spice === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') +
+          '</select></div></div>' +
+          '<div><div class="line-price">' + money(item.price * line.qty) + '</div><button class="line-remove" type="button" onclick="removeLine(\'' + line.id + '\')">remove</button></div>' +
+          '</div>';
+      }).join('');
+
+      summary.innerHTML = '<div class="sum-row"><span>Subtotal</span><span>' + money(totals.subtotal) + '</span></div>' +
+        '<div class="sum-row"><span>GST (5%)</span><span>' + money(totals.tax) + '</span></div>' +
+        '<div class="sum-row"><span>Delivery</span><span>' + (totals.delivery === 0 ? 'FREE' : money(totals.delivery)) + '</span></div>' +
+        '<div class="sum-row total"><span>Total</span><b>' + money(totals.total) + '</b></div>';
     }
 
-    function calculateEstimate() {
-      let total = Math.round(basePrice * packageMultiplier);
+    /* Cart drawer */
+    window.openCart = function(){
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-overlay');
+      drawer.classList.add('open'); overlay.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false'); overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cart-open');
+      const close = drawer.querySelector('.cart-close');
+      if (close) close.focus();
+    };
+    window.closeCart = function(){
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-overlay');
+      drawer.classList.remove('open'); overlay.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true'); overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('cart-open');
+    };
+    window.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeCart(); });
 
-      const addCeiling = document.getElementById('addon-ceiling').checked;
-      const addKitchen = document.getElementById('addon-kitchen').checked;
-      const addSmart = document.getElementById('addon-smart').checked;
+    /* Marquee */
+    window.toggleMarquee = function(){
+      const bar = document.getElementById('marquee-bar');
+      const btn = bar.querySelector('.marquee-toggle');
+      bar.classList.toggle('paused');
+      const paused = bar.classList.contains('paused');
+      btn.textContent = paused ? '▶' : '❚❚';
+      btn.setAttribute('aria-label', paused ? 'Play marquee' : 'Pause marquee');
+    };
 
-      if (addCeiling) total += 45000;
-      if (addKitchen) total += 75000;
-      if (addSmart) total += 55000;
+    /* WhatsApp checkout */
+    window.checkoutWhatsApp = function(){
+      if (!state.cart.length){ showToast('Your bag is empty — add some chix first.', true); return; }
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
+      const address = document.getElementById('customer-address').value.trim();
+      const payment = document.getElementById('payment-method').value;
+      if (!name || name.length < 2){ showToast('Please enter your name for the delivery order.', true); document.getElementById('customer-name').focus(); return; }
+      if (phone.replace(/\D/g,'').length < 10){ showToast('Please enter a valid phone number (10+ digits).', true); document.getElementById('customer-phone').focus(); return; }
+      if (address.length < 8){ showToast('Please add a delivery address with street and pincode.', true); document.getElementById('customer-address').focus(); return; }
 
-      const formatted = '₹' + total.toLocaleString('en-IN');
-      document.getElementById('estimate-display').innerHTML = `${formatted} <span class="text-sm font-normal text-stone-400">approx</span>`;
-      document.getElementById('estimate-details').textContent = `Includes ${currentPackage} woodwork, hardware, installation & ${daysHandover}-day handover`;
-    }
+      const totals = cartTotals();
+      const itemLines = state.cart.map(function(line, index){
+        const item = findItem(line.id);
+        return (index + 1) + '. ' + item.name + ' × ' + line.qty + ' · ' + line.spice + ' — ' + money(item.price * line.qty);
+      }).join('\n');
+      const text = '*New Delivery Order — Chix Kitchen* 🍗\n\n' +
+        '• Name: ' + name + '\n' +
+        '• Phone: ' + phone + '\n' +
+        '• Address: ' + address + '\n' +
+        '• Payment: ' + payment + '\n\n' +
+        '*Order:*\n' + itemLines + '\n\n' +
+        'Subtotal: ' + money(totals.subtotal) + '\n' +
+        'GST (5%): ' + money(totals.tax) + '\n' +
+        'Delivery: ' + (totals.delivery === 0 ? 'FREE' : money(totals.delivery)) + '\n' +
+        '*Total: ' + money(totals.total) + '*\n\n' +
+        'Hi Chix Kitchen, please confirm my delivery order. Thank you!';
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+      showToast('Opening WhatsApp — your full order is ready to send.');
+    };
 
-    function requestBhkQuoteWhatsApp() {
-      const addCeiling = document.getElementById('addon-ceiling').checked ? 'Yes (+₹45k)' : 'No';
-      const addKitchen = document.getElementById('addon-kitchen').checked ? 'Yes (+₹75k)' : 'No';
-      const addSmart = document.getElementById('addon-smart').checked ? 'Yes (+₹55k)' : 'No';
-
-      const totalDisplay = document.getElementById('estimate-display').textContent.replace('approx', '').trim();
-
-      const text = encodeURIComponent(`*Home Interior Inquiry - Vesta Living* 🏛️\n\n` +
-        `• *Layout:* ${currentBhkLabel}\n` +
-        `• *Finish Package:* ${currentPackage}\n` +
-        `• *False Ceiling:* ${addCeiling}\n` +
-        `• *Modular Kitchen Upgrade:* ${addKitchen}\n` +
-        `• *Smart Automation:* ${addSmart}\n` +
-        `• *Estimated Budget:* ${totalDisplay}\n\n` +
-        `Hi! I would like to discuss this layout and schedule a free 3D design consultation.`);
-
-      window.open(`https://wa.me/917410123901?text=${text}`, '_blank');
-    }
-  </script>
+    renderMenu();
+    renderCart();
+  })();
+</script>
 </body>
 </html>
