@@ -29,7 +29,13 @@
 
   /* ---------------- 1. Theme Engine ---------------- */
 
-  window.setTheme = function(themeName) {
+  const THEME_CHORDS = {
+    obsidian: [440, 660],
+    midnight: [523.25, 783.99],
+    emerald: [587.33, 880]
+  };
+
+  window.setTheme = function(themeName, silent = false) {
     currentTheme = themeName;
     document.documentElement.setAttribute('data-theme', themeName);
 
@@ -39,6 +45,16 @@
       btn.classList.toggle('text-white', isActive);
       btn.classList.toggle('text-slate-400', !isActive);
     });
+
+    if (window.ambientCanvas) {
+      window.ambientCanvas.setTheme(themeName);
+    }
+
+    if (!silent && window.soundEngine) {
+      window.soundEngine.playChord(THEME_CHORDS[themeName] || [440, 660], 0.08);
+    }
+
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: themeName } }));
 
     try {
       localStorage.setItem('convertix-theme', themeName);
@@ -50,7 +66,7 @@
     try {
       saved = localStorage.getItem('convertix-theme') || 'obsidian';
     } catch (_) {}
-    window.setTheme(saved);
+    window.setTheme(saved, true);
   }
 
   /* ---------------- 2. Currency Engine ---------------- */
@@ -157,6 +173,10 @@
     demoModal.classList.remove('hidden');
     demoModal.classList.add('flex');
     document.body.style.overflow = 'hidden';
+
+    if (window.soundEngine) {
+      window.soundEngine.playSweep(true);
+    }
   };
 
   window.closeDemoModal = function() {
@@ -165,6 +185,10 @@
     demoModal.classList.remove('flex');
     if (demoIframe) demoIframe.src = 'about:blank';
     document.body.style.overflow = '';
+
+    if (window.soundEngine) {
+      window.soundEngine.playSweep(false);
+    }
   };
 
   window.setDemoViewport = function(mode) {
@@ -327,7 +351,346 @@
     });
   }
 
-  /* ---------------- 7. Unified 60fps Cursor Tracking ---------------- */
+  /* ---------------- 7. Fluid Aurora Ambient Canvas Engine ---------------- */
+
+  const THEME_AURORA_PALETTES = {
+    obsidian: [
+      { r: 99, g: 102, b: 241, a: 0.35, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
+      { r: 139, g: 92, b: 246, a: 0.30, rx: 0.26, ry: 0.28, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
+      { r: 6, g: 182, b: 212, a: 0.25, rx: 0.30, ry: 0.22, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
+      { r: 16, g: 185, b: 129, a: 0.20, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
+    ],
+    midnight: [
+      { r: 29, g: 78, b: 216, a: 0.40, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
+      { r: 56, g: 189, b: 248, a: 0.35, rx: 0.26, ry: 0.28, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
+      { r: 67, g: 56, b: 202, a: 0.30, rx: 0.30, ry: 0.22, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
+      { r: 147, g: 197, b: 253, a: 0.25, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
+    ],
+    emerald: [
+      { r: 52, g: 211, b: 153, a: 0.35, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
+      { r: 5, g: 150, b: 105, a: 0.35, rx: 0.26, ry: 0.28, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
+      { r: 16, g: 185, b: 129, a: 0.30, rx: 0.30, ry: 0.22, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
+      { r: 20, g: 184, b: 166, a: 0.25, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
+    ]
+  };
+
+  class AmbientCanvas {
+    constructor(canvasId = 'ambient-canvas') {
+      this.canvas = document.getElementById(canvasId);
+      if (!this.canvas) return;
+      this.ctx = this.canvas.getContext('2d');
+      if (!this.ctx) return;
+
+      this.theme = currentTheme || 'obsidian';
+      this.running = false;
+      this.rafId = null;
+      this.width = 0;
+      this.height = 0;
+
+      // Cursor tracking with spring-damped lerp
+      this.mouseX = 0.5;
+      this.mouseY = 0.5;
+      this.targetMouseX = 0.5;
+      this.targetMouseY = 0.5;
+
+      this.initEvents();
+      this.resize();
+      this.start();
+    }
+
+    setTheme(themeName) {
+      if (THEME_AURORA_PALETTES[themeName]) {
+        this.theme = themeName;
+      }
+    }
+
+    resize() {
+      if (!this.canvas) return;
+      const maxW = Math.min(window.innerWidth, 1920);
+      const maxH = Math.min(window.innerHeight, 1080);
+      this.width = Math.max(320, Math.floor(maxW / 2));
+      this.height = Math.max(240, Math.floor(maxH / 2));
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+    }
+
+    initEvents() {
+      window.addEventListener('resize', () => this.resize(), { passive: true });
+
+      window.addEventListener('pointermove', e => {
+        if (window.innerWidth > 0 && window.innerHeight > 0) {
+          this.targetMouseX = e.clientX / window.innerWidth;
+          this.targetMouseY = e.clientY / window.innerHeight;
+        }
+      }, { passive: true });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.stop();
+        } else if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          this.start();
+        }
+      });
+
+      const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      motionQuery.addEventListener('change', e => {
+        if (e.matches) {
+          this.stop();
+          this.renderFrame(0);
+        } else {
+          this.start();
+        }
+      });
+
+      window.addEventListener('themechange', e => {
+        if (e.detail?.theme) this.setTheme(e.detail.theme);
+      });
+    }
+
+    start() {
+      if (this.running) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.renderFrame(0);
+        return;
+      }
+      this.running = true;
+      const loop = (timestamp) => {
+        if (!this.running) return;
+        this.renderFrame(timestamp);
+        this.rafId = requestAnimationFrame(loop);
+      };
+      this.rafId = requestAnimationFrame(loop);
+    }
+
+    stop() {
+      this.running = false;
+      if (this.rafId) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+      }
+    }
+
+    renderFrame(time) {
+      const { ctx, width: w, height: h } = this;
+      if (!ctx || w === 0 || h === 0) return;
+
+      this.mouseX += (this.targetMouseX - this.mouseX) * 0.04;
+      this.mouseY += (this.targetMouseY - this.mouseY) * 0.04;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const palette = THEME_AURORA_PALETTES[this.theme] || THEME_AURORA_PALETTES.obsidian;
+      const attract = 0.22;
+
+      // 1. Base Aurora Mesh Pass
+      ctx.globalCompositeOperation = 'source-over';
+      palette.forEach(node => {
+        const thetaX = time * node.speedX + node.phaseX;
+        const thetaY = time * node.speedY + node.phaseY;
+        const orbitX = Math.sin(thetaX) * node.rx * w;
+        const orbitY = Math.cos(thetaY) * node.ry * h;
+        const pullX = (this.mouseX * w - node.baseX * w) * attract;
+        const pullY = (this.mouseY * h - node.baseY * h) * attract;
+
+        const cx = node.baseX * w + orbitX + pullX;
+        const cy = node.baseY * h + orbitY + pullY;
+        const radius = Math.max(w, h) * 0.45;
+
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+        grad.addColorStop(0, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a})`);
+        grad.addColorStop(0.5, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a * 0.4})`);
+        grad.addColorStop(1, `rgba(${node.r}, ${node.g}, ${node.b}, 0)`);
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+      });
+
+      // 2. Additive Chromatic Refraction Pass (Screen blend mode with alternating spatial dispersion)
+      ctx.globalCompositeOperation = 'screen';
+      palette.forEach((node, i) => {
+        const thetaX = time * node.speedX + node.phaseX;
+        const thetaY = time * node.speedY + node.phaseY;
+        const shiftX = (i % 2 === 0 ? 4 : -4);
+        const shiftY = (i % 2 === 0 ? -3 : 3);
+
+        const cx = node.baseX * w + Math.sin(thetaX) * node.rx * w + (this.mouseX * w - node.baseX * w) * attract + shiftX;
+        const cy = node.baseY * h + Math.cos(thetaY) * node.ry * h + (this.mouseY * h - node.baseY * h) * attract + shiftY;
+        const radius = Math.max(w, h) * 0.35;
+
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+        grad.addColorStop(0, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a * 0.35})`);
+        grad.addColorStop(0.7, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a * 0.08})`);
+        grad.addColorStop(1, `rgba(${node.r}, ${node.g}, ${node.b}, 0)`);
+
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+      });
+
+      ctx.globalCompositeOperation = 'source-over';
+    }
+  }
+
+  /* ---------------- 8. Pure Oscillator Sound Engine ---------------- */
+
+  class SoundEngine {
+    constructor() {
+      this.ctx = null;
+      this.enabled = false;
+      this.masterGain = null;
+      this.lastHoverTime = 0;
+      this.initFromStorage();
+    }
+
+    initFromStorage() {
+      try {
+        this.enabled = localStorage.getItem('convertix-sound') === 'true';
+      } catch (_) {
+        this.enabled = false;
+      }
+      this.updateUI();
+    }
+
+    ensureContext() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        this.ctx = new AudioCtx();
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.value = this.enabled ? 0.15 : 0;
+        this.masterGain.connect(this.ctx.destination);
+      }
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume();
+      }
+      return this.ctx;
+    }
+
+    toggle() {
+      this.enabled = !this.enabled;
+      try {
+        localStorage.setItem('convertix-sound', String(this.enabled));
+      } catch (_) {}
+
+      const ctx = this.ensureContext();
+      if (this.masterGain && ctx) {
+        this.masterGain.gain.setValueAtTime(this.enabled ? 0.15 : 0, ctx.currentTime);
+      }
+      this.updateUI();
+      if (this.enabled) {
+        this.playChord([523.25, 659.25, 783.99], 0.08); // C-Major chime on enable
+      }
+    }
+
+    updateUI() {
+      const btn = document.getElementById('sound-toggle-btn');
+      const icon = document.getElementById('sound-icon');
+      if (icon) icon.textContent = this.enabled ? '🔊' : '🔇';
+      if (btn) {
+        btn.setAttribute('aria-pressed', String(this.enabled));
+        btn.classList.toggle('border-emerald-500/40', this.enabled);
+        btn.classList.toggle('text-emerald-400', this.enabled);
+      }
+    }
+
+    playClick() {
+      if (!this.enabled) return;
+      const ctx = this.ensureContext();
+      if (!ctx || !this.masterGain) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t = ctx.currentTime;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(820, t);
+      osc.frequency.exponentialRampToValueAtTime(140, t + 0.022);
+
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(t);
+      osc.stop(t + 0.025);
+    }
+
+    playHover() {
+      if (!this.enabled) return;
+      const now = performance.now();
+      if (now - this.lastHoverTime < 55) return;
+      this.lastHoverTime = now;
+
+      const ctx = this.ensureContext();
+      if (!ctx || !this.masterGain) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t = ctx.currentTime;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1250, t);
+
+      gain.gain.setValueAtTime(0.04, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.014);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(t);
+      osc.stop(t + 0.015);
+    }
+
+    playChord(freqs, duration = 0.07) {
+      if (!this.enabled) return;
+      const ctx = this.ensureContext();
+      if (!ctx || !this.masterGain) return;
+
+      const t = ctx.currentTime;
+      freqs.forEach(freq => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.12 / freqs.length, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(t);
+        osc.stop(t + duration);
+      });
+    }
+
+    playSweep(open = true) {
+      if (!this.enabled) return;
+      const ctx = this.ensureContext();
+      if (!ctx || !this.masterGain) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t = ctx.currentTime;
+
+      osc.type = 'triangle';
+      if (open) {
+        osc.frequency.setValueAtTime(260, t);
+        osc.frequency.exponentialRampToValueAtTime(560, t + 0.05);
+      } else {
+        osc.frequency.setValueAtTime(560, t);
+        osc.frequency.exponentialRampToValueAtTime(260, t + 0.05);
+      }
+
+      gain.gain.setValueAtTime(0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc.start(t);
+      osc.stop(t + 0.055);
+    }
+  }
+
+  /* ---------------- 9. Scoped Pointer Tracking & Parallax ---------------- */
 
   function setupUnifiedTracking() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -338,8 +701,60 @@
 
     const cards = $$('.track-card');
     const magneticElements = $$('.track-magnetic');
+    const heroStage = $('.hero-mockup-stage');
 
-    window.addEventListener('mousemove', e => {
+    let heroRect = null;
+    const updateHeroRect = () => {
+      if (heroStage) heroRect = heroStage.getBoundingClientRect();
+    };
+    window.addEventListener('resize', updateHeroRect, { passive: true });
+    window.addEventListener('scroll', updateHeroRect, { passive: true });
+    updateHeroRect();
+
+    // Scoped per-card pointer tracking (eliminates 19-card layout thrashing)
+    cards.forEach(card => {
+      let cardRect = null;
+      const getRect = () => {
+        if (!cardRect) cardRect = card.getBoundingClientRect();
+        return cardRect;
+      };
+
+      card.addEventListener('pointerenter', () => {
+        cardRect = card.getBoundingClientRect();
+        if (window.soundEngine) window.soundEngine.playHover();
+      }, { passive: true });
+
+      card.addEventListener('pointermove', e => {
+        const rect = getRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const dx = x - cx;
+        const dy = y - cy;
+        const angle = (Math.atan2(dy, dx) * (180 / Math.PI) + 180).toFixed(1);
+
+        card.style.setProperty('--mouse-x', `${x.toFixed(1)}px`);
+        card.style.setProperty('--mouse-y', `${y.toFixed(1)}px`);
+        card.style.setProperty('--specular-angle', `${angle}deg`);
+
+        const rotX = ((dy / cy) * -5).toFixed(2);
+        const rotY = ((dx / cx) * 5).toFixed(2);
+        card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.015, 1.015, 1.015)`;
+      }, { passive: true });
+
+      card.addEventListener('pointerleave', () => {
+        cardRect = null;
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      }, { passive: true });
+    });
+
+    window.addEventListener('scroll', () => {
+      cards.forEach(c => { c._rect = null; });
+    }, { passive: true });
+
+    // Global pointer tracking for background aura, hero gyroscopic tilt, and magnetic buttons
+    window.addEventListener('pointermove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
@@ -353,26 +768,15 @@
       document.documentElement.style.setProperty('--gx', `${mouseX}px`);
       document.documentElement.style.setProperty('--gy', `${mouseY}px`);
 
-      // 2. Card 3D Tilt & Specular Coordinates
-      cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const cardX = mouseX - rect.left;
-        const cardY = mouseY - rect.top;
-
-        card.style.setProperty('--mouse-x', `${cardX}px`);
-        card.style.setProperty('--mouse-y', `${cardY}px`);
-
-        // Check if cursor is over or near card
-        if (cardX >= -50 && cardX <= rect.width + 50 && cardY >= -50 && cardY <= rect.height + 50) {
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((cardY - centerY) / centerY) * -5;
-          const rotateY = ((cardX - centerX) / centerX) * 5;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
-        } else {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        }
-      });
+      // 2. Hero Section 3D Gyroscopic Parallax
+      if (heroStage && heroRect) {
+        const heroCx = heroRect.left + heroRect.width / 2;
+        const heroCy = heroRect.top + heroRect.height / 2;
+        const tiltY = ((mouseX - heroCx) / (window.innerWidth / 2)) * 5;
+        const tiltX = ((mouseY - heroCy) / (window.innerHeight / 2)) * -5;
+        heroStage.style.setProperty('--hero-tilt-x', `${tiltX.toFixed(2)}deg`);
+        heroStage.style.setProperty('--hero-tilt-y', `${tiltY.toFixed(2)}deg`);
+      }
 
       // 3. Magnetic Button Attraction
       magneticElements.forEach(btn => {
@@ -399,10 +803,32 @@
     }
   }
 
+  function setupSoundInteractions() {
+    // Click feedback for interactive elements
+    $$('.track-magnetic, button, .theme-btn, [data-currency], [data-open-demo], a[href^="#"], a[href^="http"]').forEach(el => {
+      el.addEventListener('click', () => {
+        if (window.soundEngine) window.soundEngine.playClick();
+      }, { passive: true });
+    });
+
+    // Hover feedback for nav links and buttons
+    $$('header a, .theme-btn, [data-currency], #sound-toggle-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        if (window.soundEngine) window.soundEngine.playHover();
+      }, { passive: true });
+    });
+  }
+
   /* ---------------- Init ---------------- */
+  window.soundEngine = new SoundEngine();
+  window.toggleSound = () => window.soundEngine.toggle();
+
+  window.ambientCanvas = new AmbientCanvas('ambient-canvas');
+
   initTheme();
   initCurrency();
   setupUnifiedTracking();
+  setupSoundInteractions();
 
   const footerYear = $('#footer-year');
   if (footerYear) footerYear.textContent = String(new Date().getFullYear());
