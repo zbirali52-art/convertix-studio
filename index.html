@@ -26,7 +26,7 @@
           colors: {
             brand: {
               base: '#06080f',
-              card: 'rgba(15, 20, 35, 0.65)',
+              card: 'rgba(13, 18, 32, 0.72)',
               50: '#ecfdf5',
               400: '#34d399',
               500: '#10b981',
@@ -59,7 +59,11 @@
 
 <body class="bg-[#06080f] text-slate-200 font-sans antialiased selection:bg-emerald-500/30 selection:text-emerald-300 relative overflow-x-hidden">
 
-  <!-- Ambient Background Glows -->
+  <!-- Layer 1: Whole-Website Global Ambient Aura & Cursor-Revealed Grid -->
+  <div class="global-cursor-aura" aria-hidden="true"></div>
+  <div class="global-cursor-grid" aria-hidden="true"></div>
+
+  <!-- Ambient Static Background Glows -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
     <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-gradient-to-tr from-indigo-600/15 via-emerald-600/15 to-transparent blur-[140px] rounded-full"></div>
     <div class="absolute top-[45%] -left-32 w-[500px] h-[500px] bg-emerald-500/10 blur-[150px] rounded-full"></div>
@@ -124,8 +128,8 @@
           </svg>
         </a>
 
-        <!-- Header WhatsApp CTA -->
-        <a href="https://wa.me/917410123901?text=Hi%2C%20I%20saw%20your%20website%20offer%20and%20want%20to%20get%20a%20website%20built%20for%20my%20business." target="_blank" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 shadow-md shadow-emerald-500/25 transition-all hover:scale-[1.02] active:scale-[0.98]">
+        <!-- Header Magnetic WhatsApp CTA -->
+        <a href="https://wa.me/917410123901?text=Hi%2C%20I%20saw%20your%20website%20offer%20and%20want%20to%20get%20a%20website%20built%20for%20my%20business." target="_blank" class="track-magnetic hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 shadow-md shadow-emerald-500/25 transition-all">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.086.275.072.376-.044.102-.115.434-.506.549-.68.116-.173.232-.145.39-.086.159.058 1.002.472 1.175.559.173.086.289.13.332.202.043.073.043.419-.101.824z"/>
           </svg>
@@ -161,18 +165,18 @@
       <strong class="text-white">Pay only after you see your site live and 100% approve it.</strong>
     </p>
 
-    <!-- Clean 2-Button Hero Hierarchy -->
+    <!-- Clean 2-Button Hero Hierarchy with Magnetic Tracking -->
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-      <!-- Primary Glowing WhatsApp Button -->
-      <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20get%20a%20website%20built%20for%20my%20business%20(Pay%20After%20Delivery)." target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-base font-bold text-black bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/25 hover:shadow-emerald-500/35 transition-all hover:-translate-y-0.5 active:translate-y-0">
+      <!-- Primary Magnetic Glowing WhatsApp Button -->
+      <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20get%20a%20website%20built%20for%20my%20business%20(Pay%20After%20Delivery)." target="_blank" class="track-magnetic w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-base font-bold text-black bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/25 hover:shadow-emerald-500/35 transition-all">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.086.275.072.376-.044.102-.115.434-.506.549-.68.116-.173.232-.145.39-.086.159.058 1.002.472 1.175.559.173.086.289.13.332.202.043.073.043.419-.101.824z"/>
         </svg>
         <span>Claim My Website (<span class="price-btn-text">₹1,000</span>) →</span>
       </a>
 
-      <!-- Secondary Glassmorphic Demo Anchor -->
-      <a href="#portfolio" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-semibold text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 backdrop-blur-md transition-all">
+      <!-- Secondary Glassmorphic Demo Anchor with Magnetic Tracking -->
+      <a href="#portfolio" class="track-magnetic w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-semibold text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 backdrop-blur-md transition-all">
         <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -181,11 +185,11 @@
       </a>
     </div>
 
-    <!-- Trust Badges with Crisp Vector SVGs -->
+    <!-- Trust Badges with Sub-Element Tracking (.track-sub) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-white/5 text-left">
       
       <!-- Trust 1 -->
-      <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+      <div class="track-sub flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -198,7 +202,7 @@
       </div>
 
       <!-- Trust 2 -->
-      <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+      <div class="track-sub flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
         <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -211,7 +215,7 @@
       </div>
 
       <!-- Trust 3 -->
-      <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+      <div class="track-sub flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
         <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center shrink-0">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" />
@@ -224,7 +228,7 @@
       </div>
 
       <!-- Trust 4 (Custom Domain Clarification) -->
-      <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
+      <div class="track-sub flex items-center gap-3 p-3.5 rounded-2xl bg-white/[0.02] border border-white/5">
         <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
@@ -254,11 +258,11 @@
         </p>
       </div>
 
-      <!-- Problem Cards with Crisp Inline SVGs -->
+      <!-- Problem Cards with data-glow="rose" Proximity & Tilt -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Card 1 -->
-        <div class="spotlight-card p-8 border-red-500/20 hover:border-red-500/40">
+        <!-- Card 1 (Rose Glow) -->
+        <div class="track-card p-8" data-glow="rose">
           <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 flex items-center justify-center mb-6">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
@@ -274,8 +278,8 @@
           </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="spotlight-card p-8 border-amber-500/20 hover:border-amber-500/40">
+        <!-- Card 2 (Rose Glow) -->
+        <div class="track-card p-8" data-glow="rose">
           <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center mb-6">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -292,8 +296,8 @@
           </div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="spotlight-card p-8 border-indigo-500/20 hover:border-indigo-500/40">
+        <!-- Card 3 (Rose Glow) -->
+        <div class="track-card p-8" data-glow="rose">
           <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 flex items-center justify-center mb-6">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -311,11 +315,11 @@
 
       </div>
 
-      <!-- Live ROI Calculator Box -->
-      <div class="mt-12 p-8 rounded-3xl bg-gradient-to-r from-emerald-950/40 via-[#101728] to-indigo-950/40 border border-emerald-500/30 max-w-4xl mx-auto">
+      <!-- Live ROI Calculator Box with data-glow="amber" -->
+      <div class="track-card mt-12 p-8 max-w-4xl mx-auto" data-glow="amber">
         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
           <div class="space-y-2 text-left">
-            <span class="text-xs uppercase tracking-wider text-emerald-400 font-bold">Interactive Calculator</span>
+            <span class="text-xs uppercase tracking-wider text-amber-400 font-bold">Interactive Calculator</span>
             <h3 class="text-2xl font-heading font-bold text-white">How Much Money Are You Leaking?</h3>
             <p class="text-sm text-slate-400">Move the slider to see your monthly lost revenue from missed leads:</p>
             
@@ -358,24 +362,24 @@
         </p>
 
         <ul class="space-y-3.5 text-sm text-slate-300">
-          <li class="flex items-start gap-3">
+          <li class="track-sub flex items-start gap-3 p-2 rounded-xl">
             <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
             <span><strong>Instant Inbound Capture:</strong> Answers questions about your prices, location, and services at 2 AM.</span>
           </li>
-          <li class="flex items-start gap-3">
+          <li class="track-sub flex items-start gap-3 p-2 rounded-xl">
             <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
             <span><strong>Automated Qualification:</strong> Asks prospects for their name, phone number, and service required.</span>
           </li>
-          <li class="flex items-start gap-3">
+          <li class="track-sub flex items-start gap-3 p-2 rounded-xl">
             <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
             <span><strong>Direct WhatsApp Alert:</strong> Sends hot, qualified lead details directly to your personal WhatsApp inbox.</span>
           </li>
         </ul>
       </div>
 
-      <!-- Right Interactive Phone Mockup -->
+      <!-- Right Interactive Phone Mockup with data-glow="emerald" -->
       <div class="lg:col-span-6 flex justify-center">
-        <div class="w-full max-w-sm rounded-[40px] bg-[#0c121e] border-4 border-slate-700/80 shadow-2xl shadow-indigo-500/10 overflow-hidden relative">
+        <div class="track-card w-full max-w-sm rounded-[40px] border-4 border-slate-700/80 shadow-2xl overflow-hidden relative" data-glow="emerald">
           
           <div class="h-6 bg-slate-900 flex items-center justify-center">
             <div class="w-16 h-3 bg-slate-800 rounded-full"></div>
@@ -440,7 +444,7 @@
     </div>
   </section>
 
-  <!-- Section 4: Upgraded Browser Mockup Portfolio Cards -->
+  <!-- Section 4: Upgraded Browser Mockup Portfolio Cards with data-glow="indigo" -->
   <section id="portfolio" class="py-20 bg-[#090d18] border-y border-white/5 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       
@@ -455,7 +459,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
         
         <!-- Showcase 1: Dental Clinic Browser Mockup -->
-        <div class="spotlight-card flex flex-col justify-between">
+        <div class="track-card flex flex-col justify-between" data-glow="indigo">
           <div>
             <!-- Browser Chrome -->
             <div class="browser-chrome">
@@ -490,19 +494,19 @@
             </div>
           </div>
 
-          <!-- Card Footer with Direct Niche CTA -->
+          <!-- Card Footer with Magnetic Niche CTA -->
           <div class="px-5 pb-5 pt-3 flex items-center justify-between border-t border-white/5">
             <span class="text-xs font-semibold text-emerald-400">⚡ 99/100 Mobile Speed</span>
             <a href="https://wa.me/917410123901?text=Hi%2C%20I%20liked%20the%20Apex%20Dental%20Clinic%20demo%20on%20Convertix%20Studio%20and%20want%20a%20similar%20website%20for%20my%20business."
                target="_blank"
-               class="text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-3.5 py-2 rounded-lg transition-all shadow-sm">
+               class="track-magnetic text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-3.5 py-2 rounded-lg transition-all shadow-sm">
               Want This Style →
             </a>
           </div>
         </div>
 
         <!-- Showcase 2: Restaurant & Cafe Browser Mockup -->
-        <div class="spotlight-card flex flex-col justify-between">
+        <div class="track-card flex flex-col justify-between" data-glow="indigo">
           <div>
             <!-- Browser Chrome -->
             <div class="browser-chrome">
@@ -537,19 +541,19 @@
             </div>
           </div>
 
-          <!-- Card Footer with Direct Niche CTA -->
+          <!-- Card Footer with Magnetic Niche CTA -->
           <div class="px-5 pb-5 pt-3 flex items-center justify-between border-t border-white/5">
             <span class="text-xs font-semibold text-emerald-400">⚡ 100/100 Mobile Speed</span>
             <a href="https://wa.me/917410123901?text=Hi%2C%20I%20liked%20the%20Urban%20Crust%20Cafe%20demo%20on%20Convertix%20Studio%20and%20want%20a%20similar%20website%20for%20my%20business."
                target="_blank"
-               class="text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-3.5 py-2 rounded-lg transition-all shadow-sm">
+               class="track-magnetic text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-3.5 py-2 rounded-lg transition-all shadow-sm">
               Want This Style →
             </a>
           </div>
         </div>
 
         <!-- Showcase 3: Interior Design Browser Mockup -->
-        <div class="spotlight-card flex flex-col justify-between">
+        <div class="track-card flex flex-col justify-between" data-glow="indigo">
           <div>
             <!-- Browser Chrome -->
             <div class="browser-chrome">
@@ -584,12 +588,12 @@
             </div>
           </div>
 
-          <!-- Card Footer with Direct Niche CTA -->
+          <!-- Card Footer with Magnetic Niche CTA -->
           <div class="px-5 pb-5 pt-3 flex items-center justify-between border-t border-white/5">
             <span class="text-xs font-semibold text-emerald-400">⚡ 98/100 Mobile Speed</span>
             <a href="https://wa.me/917410123901?text=Hi%2C%20I%20liked%20the%20Vesta%20Living%20Interiors%20demo%20on%20Convertix%20Studio%20and%20want%20a%20similar%20website%20for%20my%20business."
                target="_blank"
-               class="text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-3.5 py-2 rounded-lg transition-all shadow-sm">
+               class="track-magnetic text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 px-3.5 py-2 rounded-lg transition-all shadow-sm">
               Want This Style →
             </a>
           </div>
@@ -599,7 +603,7 @@
     </div>
   </section>
 
-  <!-- Section 5: Comparison Table -->
+  <!-- Section 5: Comparison Table with Row Micro-Tracking -->
   <section class="py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
     <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Fair Business Policy</span>
     <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-white mt-2 mb-12 tracking-tight">
@@ -616,32 +620,32 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-white/5">
-          <tr>
+          <tr class="track-sub">
             <td class="p-4 sm:p-5 font-semibold text-white">Starting Price</td>
             <td class="p-4 sm:p-5 text-slate-400">₹25,000 – ₹50,000 ($500+)</td>
             <td class="p-4 sm:p-5 font-bold text-emerald-300 bg-emerald-500/10 border-l border-r border-emerald-500/20 price-tag">₹1,000 Flat</td>
           </tr>
-          <tr>
+          <tr class="track-sub">
             <td class="p-4 sm:p-5 font-semibold text-white">Payment Terms</td>
             <td class="p-4 sm:p-5 text-slate-400">50% Advance Required upfront</td>
             <td class="p-4 sm:p-5 font-bold text-emerald-300 bg-emerald-500/10 border-l border-r border-emerald-500/20">Pay 100% AFTER Delivery</td>
           </tr>
-          <tr>
+          <tr class="track-sub">
             <td class="p-4 sm:p-5 font-semibold text-white">Turnaround Time</td>
             <td class="p-4 sm:p-5 text-slate-400">3 to 6 Weeks</td>
             <td class="p-4 sm:p-5 font-bold text-emerald-300 bg-emerald-500/10 border-l border-r border-emerald-500/20">Under 24 Hours</td>
           </tr>
-          <tr>
+          <tr class="track-sub">
             <td class="p-4 sm:p-5 font-semibold text-white">Cloud Hosting</td>
             <td class="p-4 sm:p-5 text-slate-400">₹3,000 – ₹6,000 / year extra</td>
             <td class="p-4 sm:p-5 font-bold text-emerald-300 bg-emerald-500/10 border-l border-r border-emerald-500/20">Free Fast Cloud CDN Included</td>
           </tr>
-          <tr>
+          <tr class="track-sub">
             <td class="p-4 sm:p-5 font-semibold text-white">Custom Domain</td>
             <td class="p-4 sm:p-5 text-slate-400">Overcharged (₹2,000+)</td>
             <td class="p-4 sm:p-5 font-bold text-emerald-300 bg-emerald-500/10 border-l border-r border-emerald-500/20">Free Subdomain Included (Custom domain available at standard fee)</td>
           </tr>
-          <tr>
+          <tr class="track-sub">
             <td class="p-4 sm:p-5 font-semibold text-white">24/7 AI Bot Add-on</td>
             <td class="p-4 sm:p-5 text-slate-400">Not offered or ₹15,000+ extra</td>
             <td class="p-4 sm:p-5 font-bold text-emerald-300 bg-emerald-500/10 border-l border-r border-emerald-500/20">Available on request</td>
@@ -651,7 +655,7 @@
     </div>
   </section>
 
-  <!-- Section 6: Transparent Pricing -->
+  <!-- Section 6: Transparent Pricing with Card & Sub-Tracking -->
   <section id="pricing" class="py-24 bg-[#080c16] border-t border-white/5 relative z-10">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Transparent Packages</span>
@@ -662,8 +666,8 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
         
-        <!-- Plan 1 -->
-        <div class="spotlight-card p-8 sm:p-10 border-emerald-500/40 relative shadow-2xl shadow-emerald-500/10 flex flex-col justify-between">
+        <!-- Plan 1 (Emerald Glow) -->
+        <div class="track-card p-8 sm:p-10 border-emerald-500/40 relative shadow-2xl shadow-emerald-500/10 flex flex-col justify-between" data-glow="emerald">
           <div class="absolute -top-3.5 right-8 bg-gradient-to-r from-emerald-400 to-teal-400 text-black text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
             Most Popular
           </div>
@@ -676,45 +680,45 @@
               <span class="text-xs text-slate-400 uppercase font-semibold">One-time flat</span>
             </div>
 
-            <ul class="space-y-3.5 text-xs text-slate-300 mb-8">
-              <li class="flex items-center gap-2.5">
+            <ul class="space-y-2.5 text-xs text-slate-300 mb-8">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-emerald-400 font-bold">✓</span>
                 <span><strong>Modern 1-Page Responsive Design</strong> (Mobile + Desktop)</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-emerald-400 font-bold">✓</span>
                 <span><strong>Instant WhatsApp & Direct Phone Call</strong> Buttons</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-emerald-400 font-bold">✓</span>
                 <span><strong>Google Maps Location</strong> & Directions Embed</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-emerald-400 font-bold">✓</span>
                 <span><strong>Free Fast Cloud Hosting</strong> (Netlify CDN free subdomain)</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-emerald-400 font-bold">✓</span>
                 <span><strong>UPI QR Code</strong> / Payment Integration</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-emerald-400 font-bold">✓</span>
                 <span><strong>Custom Domain Support</strong> (Connect your own, or inquire for domain pricing)</span>
               </li>
-              <li class="flex items-center gap-2.5 text-emerald-300 font-semibold">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl text-emerald-300 font-semibold">
                 <span class="text-emerald-400 font-bold">★</span>
                 <span><strong>Pay 100% AFTER the website is built</strong></span>
               </li>
             </ul>
           </div>
 
-          <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20build%20the%20Core%20Website%20for%20my%20business%20(Pay%20After%20Delivery)." target="_blank" class="w-full py-4 rounded-xl text-center font-bold text-sm text-black bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+          <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20build%20the%20Core%20Website%20for%20my%20business%20(Pay%20After%20Delivery)." target="_blank" class="track-magnetic w-full py-4 rounded-xl text-center font-bold text-sm text-black bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
             <span>Build My Website (<span class="price-btn-text">₹1,000</span>)</span>
           </a>
         </div>
 
-        <!-- Plan 2 -->
-        <div class="spotlight-card p-8 sm:p-10 border-indigo-500/30 relative flex flex-col justify-between">
+        <!-- Plan 2 (Indigo Glow) -->
+        <div class="track-card p-8 sm:p-10 border-indigo-500/30 relative flex flex-col justify-between" data-glow="indigo">
           <div class="absolute -top-3.5 right-8 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
             Maximum Revenue
           </div>
@@ -727,31 +731,31 @@
               <span class="text-xs text-slate-400 uppercase font-semibold">One-time setup</span>
             </div>
 
-            <ul class="space-y-3.5 text-xs text-slate-300 mb-8">
-              <li class="flex items-center gap-2.5">
+            <ul class="space-y-2.5 text-xs text-slate-300 mb-8">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-indigo-400 font-bold">✓</span>
                 <span><strong>Everything in the Core Website package</strong></span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-indigo-400 font-bold">✓</span>
                 <span><strong>24/7 AI Chat Assistant</strong> on your website & WhatsApp</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-indigo-400 font-bold">✓</span>
                 <span><strong>Answers Inquiries in 2 Seconds</strong> (Never miss calls)</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-indigo-400 font-bold">✓</span>
                 <span><strong>Lead Qualification:</strong> Captures client name, phone & needs</span>
               </li>
-              <li class="flex items-center gap-2.5">
+              <li class="track-sub flex items-center gap-2.5 p-2 rounded-xl">
                 <span class="text-indigo-400 font-bold">✓</span>
                 <span><strong>Custom Domain Support:</strong> Connect your domain or inquire for registration</span>
               </li>
             </ul>
           </div>
 
-          <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20the%20Website%20plus%2024%2F7%20AI%20Assistant%20bundle." target="_blank" class="w-full py-4 rounded-xl text-center font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
+          <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20the%20Website%20plus%2024%2F7%20AI%20Assistant%20bundle." target="_blank" class="track-magnetic w-full py-4 rounded-xl text-center font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
             <span>Get Website + AI Assistant</span>
           </a>
         </div>
@@ -760,7 +764,7 @@
     </div>
   </section>
 
-  <!-- Section 7: How It Works -->
+  <!-- Section 7: How It Works with Proximity Cards -->
   <section id="how-it-works" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
     <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Zero Hassle Process</span>
     <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-white mt-2 mb-14 tracking-tight">
@@ -768,25 +772,25 @@
     </h2>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-left">
-      <div class="spotlight-card p-6 space-y-3">
+      <div class="track-card p-6 space-y-3" data-glow="indigo">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center">1</div>
         <h4 class="text-base font-bold text-white">Send Business Info</h4>
         <p class="text-xs text-slate-400">Share your business name, photos, and services via WhatsApp or email.</p>
       </div>
 
-      <div class="spotlight-card p-6 space-y-3">
+      <div class="track-card p-6 space-y-3" data-glow="indigo">
         <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 font-bold flex items-center justify-center">2</div>
         <h4 class="text-base font-bold text-white">We Build in 24h</h4>
         <p class="text-xs text-slate-400">Our streamlined cloud pipeline crafts a stunning, responsive site for you.</p>
       </div>
 
-      <div class="spotlight-card p-6 space-y-3">
+      <div class="track-card p-6 space-y-3" data-glow="indigo">
         <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 font-bold flex items-center justify-center">3</div>
         <h4 class="text-base font-bold text-white">Test Your Live Link</h4>
         <p class="text-xs text-slate-400">We send you a live preview link. Test the buttons, forms, and look.</p>
       </div>
 
-      <div class="spotlight-card p-6 space-y-3">
+      <div class="track-card p-6 space-y-3" data-glow="indigo">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center">4</div>
         <h4 class="text-base font-bold text-white">Pay & Launch</h4>
         <p class="text-xs text-slate-400">Only when you are 100% satisfied, pay <span class="price-tag font-bold">₹1,000</span> and go live.</p>
@@ -794,7 +798,7 @@
     </div>
   </section>
 
-  <!-- Section 8: FAQ (Updated copy) -->
+  <!-- Section 8: FAQ with Sub-Tracking -->
   <section id="faq" class="py-20 bg-[#090d18] border-t border-white/5 relative z-10">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -806,8 +810,7 @@
       </div>
 
       <div class="space-y-4">
-        <!-- Upgraded FAQ 1 (No guru name) -->
-        <details class="spotlight-card p-5 group">
+        <details class="track-sub p-5 rounded-2xl bg-[#0c1220] border border-white/10 group">
           <summary class="font-bold text-white text-sm cursor-pointer list-none flex justify-between items-center">
             <span>Why is it so affordable (<span class="price-tag">₹1,000</span>) compared to other agencies?</span>
             <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
@@ -817,7 +820,7 @@
           </p>
         </details>
 
-        <details class="spotlight-card p-5 group">
+        <details class="track-sub p-5 rounded-2xl bg-[#0c1220] border border-white/10 group">
           <summary class="font-bold text-white text-sm cursor-pointer list-none flex justify-between items-center">
             <span>Do I really not have to pay anything upfront?</span>
             <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
@@ -827,8 +830,7 @@
           </p>
         </details>
 
-        <!-- Upgraded Domain FAQ -->
-        <details class="spotlight-card p-5 group">
+        <details class="track-sub p-5 rounded-2xl bg-[#0c1220] border border-white/10 group">
           <summary class="font-bold text-white text-sm cursor-pointer list-none flex justify-between items-center">
             <span>Can I get a custom domain (like .com or .in)?</span>
             <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
@@ -838,7 +840,7 @@
           </p>
         </details>
 
-        <details class="spotlight-card p-5 group">
+        <details class="track-sub p-5 rounded-2xl bg-[#0c1220] border border-white/10 group">
           <summary class="font-bold text-white text-sm cursor-pointer list-none flex justify-between items-center">
             <span>How does the 24/7 AI Assistant work?</span>
             <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
@@ -852,9 +854,9 @@
     </div>
   </section>
 
-  <!-- Section 9: Lead Form -->
+  <!-- Section 9: Lead Form with Proximity Glow -->
   <section id="get-started" class="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-    <div class="p-8 sm:p-12 rounded-3xl bg-gradient-to-b from-[#131d31] to-[#0c1322] border-2 border-emerald-500/40 shadow-2xl shadow-emerald-500/10">
+    <div class="track-card p-8 sm:p-12 border-2 border-emerald-500/40 shadow-2xl shadow-emerald-500/10" data-glow="emerald">
       
       <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Get Started in 60 Seconds</span>
       <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-white mt-2 mb-3 tracking-tight">
@@ -898,14 +900,14 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3 pt-2">
-          <button type="submit" class="flex-1 py-4 rounded-xl text-center font-bold text-sm text-black bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2">
+          <button type="submit" class="track-magnetic flex-1 py-4 rounded-xl text-center font-bold text-sm text-black bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-xl shadow-emerald-500/25 transition-all flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.086.275.072.376-.044.102-.115.434-.506.549-.68.116-.173.232-.145.39-.086.159.058 1.002.472 1.175.559.173.086.289.13.332.202.043.073.043.419-.101.824z"/>
             </svg>
             <span>WhatsApp Details (+91 7410123901)</span>
           </button>
 
-          <a href="mailto:zabir.ali.52@gmail.com?subject=Website%20Order%20-%20Convertix%20Studio" class="px-5 py-4 rounded-xl text-center font-bold text-sm text-white bg-[#1a253b] hover:bg-[#22304d] border border-white/10 transition-all flex items-center justify-center gap-2">
+          <a href="mailto:zabir.ali.52@gmail.com?subject=Website%20Order%20-%20Convertix%20Studio" class="track-magnetic px-5 py-4 rounded-xl text-center font-bold text-sm text-white bg-[#1a253b] hover:bg-[#22304d] border border-white/10 transition-all flex items-center justify-center gap-2">
             <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
