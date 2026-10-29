@@ -1,182 +1,704 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apex Dental & Implant Care | Multi-Speciality Clinic</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>me.aid Dental Clinic | Gentle, Same-Day Dental Care</title>
+<meta name="description" content="Zero-CDN interactive dentist clinic demo with live appointment slot booking, transparent treatment fees, specialist credentials and WhatsApp routing.">
+<style>
+  @font-face{font-family:'JakartaLocal';src:url('../fonts/jakarta-latin.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+  @font-face{font-family:'InterLocal';src:url('../fonts/inter-latin.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
+  :root{
+    --mint:#DDFFDA;--mint-soft:#F1FFF0;--mint-deep:#BFEFC1;
+    --slate:#2E3434;--slate-70:rgba(46,52,52,.72);--slate-55:rgba(46,52,52,.55);
+    --line:rgba(46,52,52,.14);--white:#FFFFFF;
+    --blue:#2F6FED;--blue-soft:#EAF1FF;--blue-deep:#1D4FB8;
+    --success:#147A57;--danger:#B33A3A;--amber:#B57912;
+    --radius-pill:500px;--radius-lg:28px;--radius-md:18px;
+    --shadow-sm:0 8px 24px rgba(32,55,48,.06);
+    --shadow-lg:0 26px 70px rgba(32,55,48,.13);
+    --display:'JakartaLocal','Plus Jakarta Sans','Trebuchet MS',system-ui,sans-serif;
+    --body:'InterLocal','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--mint);color:var(--slate);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer;border:0;background:none}
+  img,svg{display:block}
+  ::selection{background:rgba(47,111,237,.18)}
+  .wrap{width:min(1180px,calc(100% - 40px));margin-inline:auto}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  /* Agency banner */
+  .agency-bar{position:sticky;top:0;z-index:120;background:var(--slate);color:#fff;font-size:11px}
+  .agency-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;padding-block:6px}
+  .agency-left{display:flex;align-items:center;gap:8px;min-width:0}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:#5EE6A8;box-shadow:0 0 0 4px rgba(94,230,168,.12);flex:0 0 auto}
+  .agency-left span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.78)}
+  .agency-left strong{color:#fff}
+  .claim-link{display:inline-flex;align-items:center;gap:4px;background:var(--mint);color:var(--slate);font-weight:800;padding:6px 11px;border-radius:var(--radius-pill);white-space:nowrap;font-size:10.5px;transition:transform .2s ease,background .2s ease}
+  .claim-link:hover{transform:translateY(-1px);background:#fff}
+
+  /* Nav */
+  .site-nav{position:sticky;top:38px;z-index:100;background:rgba(221,255,218,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(46,52,52,.08)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.045em}
+  .brand-mark{width:38px;height:38px;border-radius:50%;background:var(--slate);color:var(--mint);display:grid;place-items:center;font-size:18px;box-shadow:0 6px 18px rgba(46,52,52,.16)}
+  .brand i{color:var(--blue);font-style:normal}
+  .nav-links{display:flex;align-items:center;gap:26px;font-size:12.5px;font-weight:600;color:var(--slate-70)}
+  .nav-links a{position:relative;padding:6px 0}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1.5px;background:var(--blue);transition:width .22s ease}
+  .nav-links a:hover{color:var(--slate)}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{display:inline-flex;align-items:center;gap:7px;background:var(--slate);color:var(--mint);font-size:12px;font-weight:700;padding:11px 18px;border-radius:var(--radius-pill);transition:transform .2s ease,box-shadow .2s ease}
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(46,52,52,.2)}
+
+  /* Hero */
+  .hero{position:relative;overflow:hidden;padding:54px 0 66px}
+  .watermark{position:absolute;right:-70px;top:12px;font-family:var(--display);font-size:clamp(160px,25vw,370px);font-weight:800;letter-spacing:-.09em;line-height:.8;color:rgba(46,52,52,.055);pointer-events:none;user-select:none;white-space:nowrap}
+  .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:52px;align-items:center}
+  .kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(46,52,52,.07);border:1px solid rgba(46,52,52,.08);color:var(--slate);font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;padding:7px 13px;border-radius:var(--radius-pill);margin-bottom:20px}
+  .kicker span{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+  .hero h1{font-family:var(--display);font-size:clamp(46px,6.3vw,82px);font-weight:700;line-height:1.02;letter-spacing:-.055em;max-width:640px;margin-bottom:20px}
+  .hero h1 em{font-style:normal;color:var(--blue)}
+  .hero-lead{max-width:520px;font-size:16px;line-height:1.65;color:var(--slate-70);margin-bottom:28px}
+  .hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:11px;margin-bottom:34px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-pill);font-weight:750;font-size:12.5px;padding:13px 22px;transition:transform .2s ease,box-shadow .2s ease,background .2s ease;white-space:nowrap}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--slate);color:var(--mint);box-shadow:0 10px 26px rgba(46,52,52,.15)}
+  .btn-primary:hover{box-shadow:0 14px 30px rgba(46,52,52,.24)}
+  .btn-outline{background:transparent;color:var(--slate);border:1px solid rgba(46,52,52,.35)}
+  .btn-outline:hover{background:rgba(255,255,255,.46)}
+  .trust-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px;font-size:11px;color:var(--slate-70)}
+  .trust-item{display:flex;align-items:center;gap:7px}
+  .trust-item b{font-family:var(--display);font-size:16px;color:var(--slate);letter-spacing:-.02em}
+  .stars{color:#C68612;letter-spacing:.5px}
+  .divider{width:1px;height:22px;background:var(--line)}
+
+  /* Booking widget */
+  .booking-card{background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:24px;backdrop-filter:blur(14px)}
+  .booking-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .booking-head h2{font-family:var(--display);font-size:19px;letter-spacing:-.035em;line-height:1.15}
+  .booking-head p{font-size:10.5px;color:var(--slate-55);margin-top:3px}
+  .slot-pill{background:var(--blue-soft);color:var(--blue-deep);font-size:9.5px;font-weight:800;padding:6px 9px;border-radius:999px;white-space:nowrap;border:1px solid rgba(47,111,237,.15)}
+  .field-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-55);margin-bottom:7px}
+  .field-label span{font-weight:600;letter-spacing:0;text-transform:none;color:var(--slate-55);font-size:9.5px}
+  .date-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:15px}
+  .date-btn{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.5);font-size:9px;color:var(--slate-70);transition:all .16s ease}
+  .date-btn b{font-family:var(--display);font-size:13px;color:var(--slate);letter-spacing:-.02em}
+  .date-btn small{font-size:8px;text-transform:uppercase;letter-spacing:.04em}
+  .date-btn:hover{border-color:rgba(47,111,237,.45);background:#fff}
+  .date-btn[aria-pressed="true"]{background:var(--slate);border-color:var(--slate);color:rgba(255,255,255,.68)}
+  .date-btn[aria-pressed="true"] b{color:var(--mint)}
+  .date-btn:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+  .time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:13px}
+  .time-btn{border:1px solid var(--line);background:rgba(255,255,255,.5);border-radius:9px;padding:8px 4px;font-size:10.5px;font-weight:650;color:var(--slate-70);transition:all .16s ease}
+  .time-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue-deep);background:#fff}
+  .time-btn[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 14px rgba(47,111,237,.22)}
+  .time-btn:disabled{opacity:.34;cursor:not-allowed;text-decoration:line-through}
+  .field{margin-bottom:11px}
+  .field input,.field select{width:100%;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.66);padding:10px 12px;font-size:11.5px;outline:none;transition:border .16s ease,box-shadow .16s ease}
+  .field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,237,.1)}
+  .field input::placeholder{color:rgba(46,52,52,.36)}
+  .dual{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .estimate-box{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--mint-soft);border:1px solid rgba(46,52,52,.1);border-radius:12px;padding:10px 12px;margin:2px 0 12px}
+  .estimate-box span{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--slate-55);font-weight:750}
+  .estimate-box strong{font-family:var(--display);font-size:19px;letter-spacing:-.03em;color:var(--slate)}
+  .estimate-box small{display:block;font-size:9px;color:var(--slate-55);text-align:right}
+  .booking-submit{width:100%;background:var(--slate);color:var(--mint);border-radius:11px;padding:12px;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .2s ease,transform .2s ease}
+  .booking-submit:hover{background:#1F2424;transform:translateY(-1px)}
+  .booking-note{display:flex;align-items:center;justify-content:center;gap:5px;font-size:9px;color:var(--slate-55);margin-top:9px;text-align:center}
+  .booking-summary{font-size:9.5px;color:var(--slate-55);text-align:center;margin-top:5px;min-height:14px}
+
+  /* Sections */
+  section{padding:74px 0}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--blue-deep);margin-bottom:12px}
+  .eyebrow::before{content:"";width:18px;height:1.5px;background:var(--blue)}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:34px}
+  .section-head h2{font-family:var(--display);font-size:clamp(30px,4.5vw,48px);font-weight:700;line-height:1.06;letter-spacing:-.05em;max-width:620px}
+  .section-head p{font-size:12.5px;line-height:1.65;color:var(--slate-70);max-width:330px;margin-bottom:5px}
+  .white-section{background:var(--white);border-block:1px solid rgba(46,52,52,.08)}
+  .editorial{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+  .editorial-label{font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-deep);padding-top:8px}
+  .editorial-copy p{font-size:17px;line-height:1.65;color:var(--slate-70);margin-bottom:18px}
+  .editorial-copy p strong{color:var(--slate)}
+  .value-row{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:30px}
+  .value{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--mint-soft)}
+  .value b{display:block;font-family:var(--display);font-size:13px;letter-spacing:-.02em;margin-bottom:4px}
+  .value span{font-size:10.5px;line-height:1.5;color:var(--slate-55)}
+
+  /* Fee cards */
+  .fee-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .fee-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;scroll-margin-top:120px}
+  .fee-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-sm);border-color:rgba(47,111,237,.3)}
+  .fee-card.is-selected{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,111,237,.1);background:linear-gradient(180deg,#fff, #F7FAFF)}
+  .fee-card.popular{background:linear-gradient(180deg,var(--blue-soft),#fff 55%)}
+  .fee-badge{position:absolute;right:14px;top:14px;background:var(--slate);color:#fff;font-size:8px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:4px 7px;border-radius:999px}
+  .fee-icon{width:38px;height:38px;border-radius:12px;background:var(--mint);display:grid;place-items:center;font-size:18px;margin-bottom:14px}
+  .fee-card h3{font-family:var(--display);font-size:15px;line-height:1.2;letter-spacing:-.025em;margin-bottom:5px;padding-right:30px}
+  .fee-card p{font-size:10.5px;line-height:1.55;color:var(--slate-55);min-height:48px}
+  .fee-price{font-family:var(--display);font-size:24px;font-weight:800;letter-spacing:-.04em;margin-top:12px}
+  .fee-price small{font-family:var(--body);font-size:9px;font-weight:500;letter-spacing:0;color:var(--slate-55)}
+  .fee-meta{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--success);font-weight:700;margin-top:3px}
+  .fee-select{margin-top:14px;width:100%;border:1px solid var(--line);border-radius:999px;padding:8px;font-size:10px;font-weight:750;color:var(--slate);background:var(--mint-soft);transition:all .18s ease}
+  .fee-select:hover{background:var(--slate);color:var(--mint);border-color:var(--slate)}
+  .fee-card.is-selected .fee-select{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .fee-footnote{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--mint);border-radius:16px;padding:14px 18px;margin-top:18px;font-size:11px;color:var(--slate-70)}
+  .fee-footnote strong{color:var(--slate)}
+  .fee-footnote a{font-weight:800;color:var(--blue-deep);text-decoration:underline;text-underline-offset:3px}
+
+  /* Doctors */
+  .doctor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .doctor{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;transition:transform .2s ease,box-shadow .2s ease}
+  .doctor:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+  .doctor-top{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+  .avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:16px;color:var(--slate);background:linear-gradient(135deg,var(--mint),var(--mint-deep));border:1px solid rgba(46,52,52,.1);flex:0 0 auto}
+  .doctor h3{font-family:var(--display);font-size:14px;letter-spacing:-.02em}
+  .doctor-role{font-size:10px;color:var(--blue-deep);font-weight:700;margin-top:2px}
+  .doctor p{font-size:10.5px;line-height:1.55;color:var(--slate-55);margin-bottom:12px}
+  .doctor-tags{display:flex;flex-wrap:wrap;gap:5px}
+  .tag{font-size:8.5px;font-weight:700;color:var(--slate-70);background:var(--mint-soft);border:1px solid var(--line);border-radius:999px;padding:3px 7px}
+  .doctor-cred{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--slate-55);margin-top:11px;padding-top:11px;border-top:1px solid rgba(46,52,52,.08)}
+
+  /* Reviews */
+  .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .review{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+  .review .stars{font-size:12px;margin-bottom:10px}
+  .review p{font-size:11.5px;line-height:1.6;color:var(--slate-70)}
+  .reviewer{display:flex;align-items:center;gap:9px;margin-top:16px;padding-top:13px;border-top:1px solid rgba(46,52,52,.08)}
+  .reviewer .avatar{width:30px;height:30px;font-size:10px;background:var(--mint)}
+  .reviewer b{font-size:10.5px;display:block}
+  .reviewer span{font-size:9px;color:var(--slate-55)}
+  .review-stat{display:flex;align-items:center;gap:12px;background:var(--slate);color:#fff;padding:16px 20px;border-radius:16px;margin-top:18px}
+  .review-stat strong{font-family:var(--display);font-size:26px;letter-spacing:-.04em}
+  .review-stat span{font-size:10px;color:rgba(255,255,255,.65);line-height:1.4}
+  .review-stat .grow{flex:1}
+  .review-stat a{color:var(--mint);font-size:10px;font-weight:800;border-bottom:1px solid rgba(221,255,218,.4)}
+
+  /* Contact */
+  .contact{background:var(--slate);color:#fff;border-radius:30px;padding:40px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;overflow:hidden;position:relative}
+  .contact::after{content:"me.aid";position:absolute;right:-30px;bottom:-70px;font-family:var(--display);font-size:180px;font-weight:800;color:rgba(221,255,218,.05);letter-spacing:-.08em;pointer-events:none}
+  .contact .eyebrow{color:var(--mint)}
+  .contact .eyebrow::before{background:var(--mint)}
+  .contact h2{font-family:var(--display);font-size:clamp(30px,4vw,44px);line-height:1.05;letter-spacing:-.05em;margin-bottom:12px}
+  .contact p{font-size:12px;line-height:1.65;color:rgba(255,255,255,.62);max-width:460px}
+  .contact-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+  .contact .btn-primary{background:var(--mint);color:var(--slate)}
+  .contact .btn-outline{border-color:rgba(255,255,255,.32);color:#fff}
+  .contact .btn-outline:hover{background:rgba(255,255,255,.08)}
+  .contact-info{position:relative;z-index:1;border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:20px;background:rgba(255,255,255,.04);display:grid;gap:13px}
+  .contact-row{display:flex;gap:11px;font-size:10.5px;line-height:1.5;color:rgba(255,255,255,.68)}
+  .contact-row b{display:block;color:#fff;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+  .contact-row span:first-child{width:26px;height:26px;border-radius:8px;background:rgba(221,255,218,.1);display:grid;place-items:center;flex:0 0 auto}
+
+  footer{padding:24px 0 30px}
+  .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:10px;color:var(--slate-55)}
+  .footer-inner strong{color:var(--slate)}
+  .footer-links{display:flex;gap:16px}
+  .footer-links a:hover{color:var(--blue-deep)}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);z-index:200;background:var(--slate);color:#fff;font-size:11px;line-height:1.45;padding:11px 16px;border-radius:999px;box-shadow:0 18px 38px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:all .25s ease;max-width:min(90vw,440px);text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.error{background:var(--danger)}
+
+  @media(max-width:1000px){
+    .hero-grid{grid-template-columns:1fr;gap:38px}
+    .watermark{top:auto;bottom:0;font-size:210px;opacity:.5}
+    .fee-grid{grid-template-columns:repeat(2,1fr)}
+    .hero h1{max-width:none}
+  }
+  @media(max-width:760px){
+    .wrap{width:min(100% - 28px,1180px)}
+    .nav-links{display:none}
+    .nav-inner{min-height:62px}
+    .brand{font-size:19px}
+    .brand-mark{width:34px;height:34px}
+    .nav-cta{padding:9px 13px;font-size:10.5px}
+    .hero{padding:36px 0 44px}
+    .hero h1{font-size:clamp(40px,12vw,58px)}
+    .booking-card{padding:19px}
+    section{padding:52px 0}
+    .section-head{display:block}
+    .section-head p{margin-top:12px}
+    .editorial{grid-template-columns:1fr;gap:18px}
+    .value-row{grid-template-columns:1fr}
+    .doctor-grid,.review-grid{grid-template-columns:1fr}
+    .contact{grid-template-columns:1fr;padding:28px;border-radius:24px}
+    .fee-footnote{align-items:flex-start}
+    .agency-bar .wrap{min-height:40px}
+    .agency-left span{font-size:10px}
+    .claim-link{font-size:9px;padding:5px 8px}
+    .divider{display:none}
+  }
+  @media(max-width:460px){
+    .date-strip{grid-template-columns:repeat(4,1fr)}
+    .date-btn:nth-child(n+5){display:none}
+    .dual{grid-template-columns:1fr}
+    .fee-grid{grid-template-columns:1fr}
+    .trust-row{gap:12px}
+    .agency-left span{max-width:150px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+  }
+</style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-cyan-500/20 selection:text-cyan-700">
+<body>
 
-  <!-- Agency Preview Banner -->
-  <aside class="sticky top-0 z-50 bg-slate-900 text-white text-xs py-2 px-4 flex items-center justify-between border-b border-white/10 shadow-sm">
-    <div class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      <span class="text-slate-300">Live Sample Site • Built by <strong class="text-emerald-400">Convertix Studio</strong></span>
+<!-- Sticky agency banner -->
+<aside class="agency-bar" aria-label="Agency preview banner">
+  <div class="wrap">
+    <div class="agency-left">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>Live Sample Site • Built by <strong>Convertix Studio</strong></span>
     </div>
-    <a href="../#pricing" class="px-2.5 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-colors">
-      Get a Site Like This (₹1,000) →
+    <a class="claim-link" href="../#pricing">Claim Site (₹1,000 / $15) →</a>
+  </div>
+</aside>
+
+<!-- Floating pill nav -->
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="me.aid home">
+      <span class="brand-mark" aria-hidden="true">✚</span>
+      <span>me<i>.</i>aid</span>
     </a>
-  </aside>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#treatments">Treatments</a>
+      <a href="#dentists">Dentists</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="#booking">Get in touch <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
 
-  <!-- Clinic Header -->
-  <header class="bg-white border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-          🦷
+<main id="top">
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="watermark" aria-hidden="true">me.aid</div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="kicker"><span aria-hidden="true"></span> Same-day dental appointments</div>
+        <h1 id="hero-title">Caring for you is our <em>priority</em>.</h1>
+        <p class="hero-lead">Gentle, evidence-led dentistry in a calm mint-and-slate studio. Book a live slot in seconds, see every fee before you sit down, and reach your dentist directly on WhatsApp.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#booking">Book an appointment <span aria-hidden="true">→</span></a>
+          <a class="btn btn-outline" href="#treatments">See treatment fees</a>
         </div>
-        <div>
-          <h1 class="text-base font-extrabold text-slate-900 leading-none">Apex Dental & Implant Care</h1>
-          <p class="text-[11px] text-slate-500">Dr. Amit Sharma (BDS, MDS • 12+ Yrs Exp)</p>
+        <div class="trust-row">
+          <div class="trust-item"><span class="stars" aria-hidden="true">★★★★★</span><span><b>4.9</b> · 320+ reviews</span></div>
+          <span class="divider" aria-hidden="true"></span>
+          <div class="trust-item"><span aria-hidden="true">🛡️</span><span><b>12+</b> years of care</span></div>
+          <span class="divider" aria-hidden="true"></span>
+          <div class="trust-item"><span aria-hidden="true">🦷</span><span><b>100%</b> sterilised</span></div>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="hidden sm:inline-block text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-          ● Open Today (9 AM – 8:30 PM)
-        </span>
-        <a href="https://wa.me/917410123901?text=Hi%20Dr.%20Amit%2C%20I%20want%20to%20book%20a%20dental%20appointment." target="_blank" class="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5">
-          <span>Book Slot</span>
-          <span>→</span>
-        </a>
-      </div>
-    </div>
-  </header>
 
-  <!-- Hero Section -->
-  <section class="relative bg-gradient-to-b from-cyan-50/60 to-white py-12 px-4 sm:px-6 border-b border-slate-200">
-    <div class="max-w-4xl mx-auto text-center space-y-4">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100 text-cyan-800 text-xs font-bold">
-        <span>⭐ 4.9 Rating</span>
-        <span>•</span>
-        <span>320+ Verified Google Reviews</span>
-      </div>
-      <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        Gentle, Painless Dental Care For Your Entire Family
-      </h2>
-      <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">
-        State-of-the-art clinic offering painless root canals, laser teeth whitening, and permanent implants. 100% sterilized instruments & transparent pricing.
-      </p>
+      <!-- Live booking widget -->
+      <div class="booking-card" id="booking" aria-labelledby="booking-title">
+        <div class="booking-head">
+          <div>
+            <h2 id="booking-title">Reserve your chair</h2>
+            <p>Live availability · <span id="booking-month"></span></p>
+          </div>
+          <span class="slot-pill">● 3 slots left</span>
+        </div>
 
-      <!-- Quick Slot Booking Widget -->
-      <div class="mt-8 bg-white p-5 rounded-2xl shadow-lg border border-slate-200/80 max-w-xl mx-auto text-left">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Quick Appointment Request</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-          <input type="text" id="patient-name" placeholder="Your Name" class="px-3.5 py-2.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:border-cyan-500">
-          <select id="dental-service" class="px-3.5 py-2.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:border-cyan-500">
-            <option value="Consultation & Checkup (₹200)">Consultation & Checkup (₹200)</option>
-            <option value="Teeth Cleaning / Scaling (₹800)">Teeth Cleaning / Scaling (₹800)</option>
-            <option value="Root Canal Treatment (₹2,500)">Root Canal Treatment (₹2,500)</option>
-            <option value="Teeth Whitening (₹3,000)">Teeth Whitening (₹3,000)</option>
-            <option value="Dental Implants (₹18,000)">Dental Implants (₹18,000)</option>
+        <label class="field-label">Choose a date <span>Next 7 days</span></label>
+        <div class="date-strip" id="date-strip" role="group" aria-label="Choose appointment date"></div>
+
+        <label class="field-label">Choose a time <span>30 min visit</span></label>
+        <div class="time-grid" id="time-grid" role="group" aria-label="Choose appointment time"></div>
+
+        <div class="dual">
+          <div class="field">
+            <label class="field-label" for="patient-name">Your name</label>
+            <input id="patient-name" type="text" autocomplete="name" placeholder="e.g. Ananya Rao">
+          </div>
+          <div class="field">
+            <label class="field-label" for="patient-phone">Phone</label>
+            <input id="patient-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="treatment-select">Treatment <span>Fees include consultation</span></label>
+          <select id="treatment-select" aria-describedby="estimate-note">
+            <option value="Consultation & Checkup" data-price="0">Consultation &amp; Checkup — ₹200</option>
+            <option value="Ultrasonic Teeth Cleaning" data-price="800">Ultrasonic Teeth Cleaning — ₹800</option>
+            <option value="Single-Sitting Root Canal" data-price="2500">Single-Sitting Root Canal — ₹2,500</option>
+            <option value="Laser Teeth Whitening" data-price="3000">Laser Teeth Whitening — ₹3,000</option>
+            <option value="Dental Implant Consultation" data-price="18000">Dental Implants — ₹18,000</option>
           </select>
         </div>
-        <button onclick="bookDentalWhatsApp()" class="w-full py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all">
-          <span>Confirm on WhatsApp (Instant Reply)</span>
-          <span>💬</span>
+
+        <div class="estimate-box" aria-live="polite">
+          <div>
+            <span>Live estimate</span>
+            <small id="estimate-note">Consultation ₹200 + selected treatment</small>
+          </div>
+          <strong id="estimate-total">₹200</strong>
+        </div>
+
+        <button type="button" class="booking-submit" onclick="bookOnWhatsApp()">
+          <span>Confirm on WhatsApp</span><span aria-hidden="true">💬</span>
         </button>
+        <p class="booking-summary" id="booking-summary" aria-live="polite">Pick a date and time to see your visit summary.</p>
+        <p class="booking-note"><span aria-hidden="true">🔒</span> No payment now · Instant confirmation on WhatsApp</p>
       </div>
     </div>
   </section>
 
-  <!-- Transparent Pricing & Services -->
-  <section class="py-12 px-4 sm:px-6 max-w-5xl mx-auto">
-    <div class="text-center mb-8">
-      <span class="text-xs font-bold uppercase tracking-wider text-cyan-600">Transparent Fees</span>
-      <h3 class="text-2xl font-bold text-slate-900 mt-1">Our Dental Treatments & Fees</h3>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-      <!-- Card 1 -->
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-cyan-500 transition-colors">
-        <div>
-          <div class="text-2xl mb-2">✨</div>
-          <h4 class="font-bold text-slate-900 text-base">Ultrasonic Teeth Cleaning</h4>
-          <p class="text-xs text-slate-500 mt-1">Removes plaque, tartar, and coffee/tea stains safely without enamel damage.</p>
-          <div class="text-xl font-extrabold text-cyan-700 mt-4">₹800 <span class="text-xs text-slate-400 font-normal">/ session</span></div>
+  <!-- About -->
+  <section class="white-section" id="about" aria-labelledby="about-title">
+    <div class="wrap editorial">
+      <div class="editorial-label">01 / About us</div>
+      <div class="editorial-copy">
+        <div class="eyebrow">Our commitment</div>
+        <h2 id="about-title" style="font-family:var(--display);font-size:clamp(30px,4.4vw,52px);line-height:1.06;letter-spacing:-.05em;margin-bottom:20px;">Modern dentistry, without the clinical chill.</h2>
+        <p>We built <strong>me.aid</strong> around one idea: excellent dental care should feel human. That means honest pricing, unhurried appointments, and a team that explains every step before it happens.</p>
+        <p>From a first clean to a full implant, your treatment plan is yours to see — with fixed fees, no surprise add-ons, and a direct WhatsApp line to the clinic.</p>
+        <div class="value-row">
+          <div class="value"><b>Transparent fees</b><span>Every treatment price is published and confirmed before booking.</span></div>
+          <div class="value"><b>Board-certified team</b><span>MDS specialists across restorative, surgical and cosmetic dentistry.</span></div>
+          <div class="value"><b>Calm by design</b><span>Noise-softened rooms, gentle sedation options and same-day care.</span></div>
         </div>
-        <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20book%20Teeth%20Cleaning%20(₹800)." target="_blank" class="mt-4 py-2 rounded-lg bg-slate-100 hover:bg-cyan-50 text-cyan-700 font-semibold text-xs text-center border border-slate-200 transition-colors">
-          Book Cleaning →
-        </a>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="bg-white p-5 rounded-xl border-2 border-cyan-500/40 shadow-sm flex flex-col justify-between relative">
-        <span class="absolute -top-2.5 right-4 bg-cyan-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Most Common</span>
-        <div>
-          <div class="text-2xl mb-2">🔬</div>
-          <h4 class="font-bold text-slate-900 text-base">Single-Sitting Root Canal (RCT)</h4>
-          <p class="text-xs text-slate-500 mt-1">Painless rotary endodontic procedure with digital X-ray and ceramic crown option.</p>
-          <div class="text-xl font-extrabold text-cyan-700 mt-4">₹2,500 <span class="text-xs text-slate-400 font-normal">flat fee</span></div>
-        </div>
-        <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20to%20book%20Single-Sitting%20Root%20Canal%20(₹2500)." target="_blank" class="mt-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs text-center transition-colors">
-          Book Painless RCT →
-        </a>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-cyan-500 transition-colors">
-        <div>
-          <div class="text-2xl mb-2">💎</div>
-          <h4 class="font-bold text-slate-900 text-base">Permanent Dental Implants</h4>
-          <p class="text-xs text-slate-500 mt-1">Swiss titanium grade implant with lifetime warranty for missing teeth.</p>
-          <div class="text-xl font-extrabold text-cyan-700 mt-4">₹18,000 <span class="text-xs text-slate-400 font-normal">starting</span></div>
-        </div>
-        <a href="https://wa.me/917410123901?text=Hi%2C%20I%20want%20a%20consultation%20for%20Dental%20Implants." target="_blank" class="mt-4 py-2 rounded-lg bg-slate-100 hover:bg-cyan-50 text-cyan-700 font-semibold text-xs text-center border border-slate-200 transition-colors">
-          Book Consultation →
-        </a>
       </div>
     </div>
   </section>
 
-  <!-- Clinic Timings & Location -->
-  <section class="bg-white py-12 px-4 sm:px-6 border-t border-slate-200">
-    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-      <div class="space-y-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-cyan-600">Find Us Easily</span>
-        <h3 class="text-2xl font-bold text-slate-900">Clinic Timings & Address</h3>
-        <div class="space-y-2 text-sm text-slate-600">
-          <p>📍 <strong>Address:</strong> 2nd Floor, Apex Health Square, MG Road (Near Metro Station Gate 2)</p>
-          <p>⏰ <strong>Morning:</strong> 9:00 AM – 1:30 PM</p>
-          <p>⏰ <strong>Evening:</strong> 4:30 PM – 8:30 PM</p>
-          <p>📞 <strong>Direct Call:</strong> +91 7410123901</p>
+  <!-- Treatments -->
+  <section id="treatments" aria-labelledby="treatments-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">02 / Treatment fees</div>
+          <h2 id="treatments-title">Clear prices. No surprises.</h2>
         </div>
+        <p>Select a treatment to add it to your live estimate, then reserve a slot in the booking card above.</p>
       </div>
-      <div class="bg-slate-100 p-6 rounded-2xl border border-slate-200 text-center space-y-3">
-        <div class="text-3xl">🗺️</div>
-        <h4 class="font-bold text-slate-900 text-base">Integrated Google Maps Navigation</h4>
-        <p class="text-xs text-slate-500">Tap below to open turn-by-turn navigation directly on your phone.</p>
-        <a href="https://maps.google.com" target="_blank" class="inline-block px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold">
-          Open in Google Maps ↗
-        </a>
+
+      <div class="fee-grid">
+        <article class="fee-card" data-treatment="Ultrasonic Teeth Cleaning" data-price="800">
+          <div class="fee-icon" aria-hidden="true">✨</div>
+          <h3>Ultrasonic Teeth Cleaning</h3>
+          <p>Gentle scaling and polishing to remove tartar, plaque and surface stains.</p>
+          <div class="fee-price">₹800 <small>/ session</small></div>
+          <div class="fee-meta">● 45 minutes · zero enamel damage</div>
+          <button type="button" class="fee-select" onclick="selectTreatment('Ultrasonic Teeth Cleaning', 800)">Add to estimate</button>
+        </article>
+
+        <article class="fee-card popular" data-treatment="Single-Sitting Root Canal" data-price="2500">
+          <span class="fee-badge">Most booked</span>
+          <div class="fee-icon" aria-hidden="true">🔬</div>
+          <h3>Single-Sitting Root Canal</h3>
+          <p>Painless rotary endodontics with digital X-ray and a ceramic crown option.</p>
+          <div class="fee-price">₹2,500 <small>flat fee</small></div>
+          <div class="fee-meta">● 60–90 minutes · single visit</div>
+          <button type="button" class="fee-select" onclick="selectTreatment('Single-Sitting Root Canal', 2500)">Add to estimate</button>
+        </article>
+
+        <article class="fee-card" data-treatment="Laser Teeth Whitening" data-price="3000">
+          <div class="fee-icon" aria-hidden="true">💎</div>
+          <h3>Laser Teeth Whitening</h3>
+          <p>In-chair laser whitening with desensitising gel for a brighter, even smile.</p>
+          <div class="fee-price">₹3,000 <small>/ session</small></div>
+          <div class="fee-meta">● 60 minutes · enamel-safe</div>
+          <button type="button" class="fee-select" onclick="selectTreatment('Laser Teeth Whitening', 3000)">Add to estimate</button>
+        </article>
+
+        <article class="fee-card" data-treatment="Dental Implant Consultation" data-price="18000">
+          <div class="fee-icon" aria-hidden="true">🦷</div>
+          <h3>Dental Implants</h3>
+          <p>Swiss titanium implant with CBCT planning, abutment and lifetime warranty.</p>
+          <div class="fee-price">₹18,000 <small>starting</small></div>
+          <div class="fee-meta">● 2 visits · 10-year warranty</div>
+          <button type="button" class="fee-select" onclick="selectTreatment('Dental Implant Consultation', 18000)">Add to estimate</button>
+        </article>
+      </div>
+
+      <div class="fee-footnote">
+        <span>💡 <strong>Fee promise:</strong> the price you see is the price you pay. Consultation is ₹200 and is adjusted against any treatment booked the same day.</span>
+        <a href="#booking">Reserve a slot →</a>
       </div>
     </div>
   </section>
 
-  <!-- Floating Sticky Action Bar -->
-  <aside aria-label="Booking Bar" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 flex items-center justify-between max-w-md mx-auto sm:hidden shadow-lg">
-    <div>
-      <div class="text-[10px] text-slate-500">Dr. Amit Sharma</div>
-      <div class="text-xs font-bold text-emerald-600">● Available Today</div>
+  <!-- Dentists -->
+  <section class="white-section" id="dentists" aria-labelledby="dentists-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">03 / Your dental team</div>
+          <h2 id="dentists-title">Specialists who listen first.</h2>
+        </div>
+        <p>Every clinician is board-certified, insured and trained in gentle, anxiety-aware care.</p>
+      </div>
+      <div class="doctor-grid">
+        <article class="doctor">
+          <div class="doctor-top">
+            <div class="avatar" aria-hidden="true">TS</div>
+            <div><h3>Dr. Talya Sulami</h3><div class="doctor-role">Head of clinic · Prosthodontist</div></div>
+          </div>
+          <p>Leads restorative and implant dentistry with 14 years of clinical experience and a focus on full-mouth rehabilitation.</p>
+          <div class="doctor-tags"><span class="tag">MDS Prosthodontics</span><span class="tag">Implants</span><span class="tag">Smile design</span></div>
+          <div class="doctor-cred">🎓 14+ years · 2,400+ patients</div>
+        </article>
+        <article class="doctor">
+          <div class="doctor-top">
+            <div class="avatar" aria-hidden="true">TC</div>
+            <div><h3>Dr. Tom Chie</h3><div class="doctor-role">Family dentist · Endodontist</div></div>
+          </div>
+          <p>Specialises in painless root canals and preventive family care, with a calm chair-side manner for nervous patients.</p>
+          <div class="doctor-tags"><span class="tag">MDS Endodontics</span><span class="tag">Root canals</span><span class="tag">Family care</span></div>
+          <div class="doctor-cred">🎓 11+ years · 3,100+ procedures</div>
+        </article>
+        <article class="doctor">
+          <div class="doctor-top">
+            <div class="avatar" aria-hidden="true">EJ</div>
+            <div><h3>Dr. Elinor Jonas</h3><div class="doctor-role">Cosmetic dentist · Orthodontist</div></div>
+          </div>
+          <p>Creates natural-looking whitening, veneer and aligner plans tailored to each face and bite — never one-size-fits-all.</p>
+          <div class="doctor-tags"><span class="tag">MDS Orthodontics</span><span class="tag">Veneers</span><span class="tag">Invisalign</span></div>
+          <div class="doctor-cred">🎓 9+ years · 1,800+ smiles</div>
+        </article>
+      </div>
     </div>
-    <a href="https://wa.me/917410123901?text=Hi%20Doctor%2C%20I%20would%20like%20to%20book%20an%20appointment." target="_blank" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
-      <span>Book via WhatsApp</span>
-      <span>💬</span>
-    </a>
-  </aside>
+  </section>
 
-  <script>
-    function bookDentalWhatsApp() {
-      const name = document.getElementById('patient-name')?.value || 'Guest';
-      const service = document.getElementById('dental-service')?.value || 'Dental Checkup';
-      const text = encodeURIComponent(`*Apex Dental Appointment Request* 🦷\n\n• Patient Name: ${name}\n• Service: ${service}\n\nHi Doctor, please let me know your available slots for today/tomorrow!`);
-      window.open(`https://wa.me/917410123901?text=${text}`, '_blank');
+  <!-- Reviews -->
+  <section id="reviews" aria-labelledby="reviews-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">04 / Patient stories</div>
+          <h2 id="reviews-title">A calmer kind of dental visit.</h2>
+        </div>
+        <p>Real words from patients who came in nervous and left smiling.</p>
+      </div>
+      <div class="review-grid">
+        <article class="review">
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p>“I've avoided dentists for years. The team explained everything, the root canal was genuinely painless, and the fee was exactly what was quoted.”</p>
+          <div class="reviewer"><div class="avatar" aria-hidden="true">ER</div><div><b>Eden Rachim</b><span>Root canal · verified patient</span></div></div>
+        </article>
+        <article class="review">
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p>“Booked on WhatsApp at 9am and was in the chair by lunch. The mint-green studio feels more like a spa than a clinic. My whole family comes here now.”</p>
+          <div class="reviewer"><div class="avatar" aria-hidden="true">ND</div><div><b>Naya Denner</b><span>Family cleaning · verified patient</span></div></div>
+        </article>
+        <article class="review">
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <p>“The implant consultation was incredibly thorough — scans, options, costs. No pressure at all. Six months on, it feels like my own tooth.”</p>
+          <div class="reviewer"><div class="avatar" aria-hidden="true">LY</div><div><b>Lenny Yliuay</b><span>Implant · verified patient</span></div></div>
+        </article>
+      </div>
+      <div class="review-stat">
+        <strong>4.9</strong>
+        <span>average rating<br>from 320+ verified reviews</span>
+        <span class="grow"></span>
+        <a href="https://wa.me/917410123901?text=Hi%20me.aid%2C%20I%27d%20like%20to%20ask%20about%20a%20treatment." target="_blank" rel="noopener">Ask the clinic on WhatsApp →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" aria-labelledby="contact-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <div class="eyebrow">05 / Visit us</div>
+          <h2 id="contact-title">Your best smile starts with a hello.</h2>
+          <p>Walk in or reserve a same-day slot. We are two minutes from the metro, with evening appointments for working families.</p>
+          <div class="contact-actions">
+            <a class="btn btn-primary" href="#booking">Book a slot <span aria-hidden="true">→</span></a>
+            <a class="btn btn-outline" href="https://wa.me/917410123901?text=Hi%20me.aid%2C%20I%27d%20like%20to%20book%20a%20dental%20appointment." target="_blank" rel="noopener">WhatsApp us</a>
+          </div>
+        </div>
+        <div class="contact-info">
+          <div class="contact-row"><span aria-hidden="true">📍</span><div><b>Clinic</b>2nd Floor, Apex Health Square, MG Road<br>Near Metro Gate 2</div></div>
+          <div class="contact-row"><span aria-hidden="true">⏰</span><div><b>Opening hours</b>Mon–Sat · 9:00 AM – 8:30 PM<br>Sunday · 10:00 AM – 2:00 PM</div></div>
+          <div class="contact-row"><span aria-hidden="true">📞</span><div><b>Call or WhatsApp</b><a href="tel:+917410123901">+91 74101 23901</a></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span><strong>me.aid</strong> · Dentist &amp; healthcare demo · <span id="footer-year"></span> Convertix Studio</span>
+    <div class="footer-links">
+      <a href="../#portfolio">All demos</a>
+      <a href="../#pricing">Claim this site</a>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  (function(){
+    'use strict';
+
+    const PHONE = '917410123901';
+    const CONSULT_FEE = 200;
+    const state = { date: '', time: '', treatment: 'Consultation & Checkup', price: 0, dateLabel: '' };
+
+    const dateStrip = document.getElementById('date-strip');
+    const timeGrid = document.getElementById('time-grid');
+    const treatmentSelect = document.getElementById('treatment-select');
+    const estimateTotal = document.getElementById('estimate-total');
+    const summary = document.getElementById('booking-summary');
+    const toast = document.getElementById('toast');
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+    document.getElementById('booking-month').textContent = new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+
+    function money(n){ return '₹' + Number(n).toLocaleString('en-IN'); }
+
+    function showToast(message, isError){
+      toast.textContent = message;
+      toast.className = 'toast show' + (isError ? ' error' : '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(function(){ toast.className = 'toast'; }, 3800);
     }
-  </script>
+
+    function buildDates(){
+      const slots = ['09:00', '10:30', '12:00', '16:30', '18:00', '19:30'];
+      const today = new Date();
+      for (let i = 0; i < 7; i++){
+        const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i, 12, 0, 0);
+        const iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        const label = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'date-btn';
+        btn.dataset.date = iso;
+        btn.dataset.label = label;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.innerHTML = '<small>' + d.toLocaleDateString('en-IN', { weekday: 'short' }) + '</small><b>' + d.getDate() + '</b><small>' + d.toLocaleDateString('en-IN', { month: 'short' }) + '</small>';
+        btn.disabled = (i === 0 && today.getHours() >= 18);
+        btn.addEventListener('click', function(){ pickDate(btn, iso, label, i); });
+        dateStrip.appendChild(btn);
+      }
+      const first = dateStrip.querySelector('.date-btn:not(:disabled)');
+      if (first) first.click();
+      // keep a list of time slots globally for date-specific availability
+      window.__timeSlots = slots;
+      buildTimes(0);
+    }
+
+    function pickDate(btn, iso, label, index){
+      dateStrip.querySelectorAll('.date-btn').forEach(function(b){ b.setAttribute('aria-pressed', 'false'); });
+      btn.setAttribute('aria-pressed', 'true');
+      state.date = iso;
+      state.dateLabel = label;
+      state.time = '';
+      buildTimes(index);
+      updateSummary();
+    }
+
+    function buildTimes(dateIndex){
+      timeGrid.innerHTML = '';
+      const slots = window.__timeSlots || ['09:00','10:30','12:00','16:30','18:00','19:30'];
+      slots.forEach(function(slot, i){
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'time-btn';
+        btn.textContent = slot;
+        btn.dataset.time = slot;
+        btn.setAttribute('aria-pressed', 'false');
+        // Simulate live availability: deterministic gaps per date + slot
+        const taken = ((dateIndex * 3 + i * 2) % 7 === 0) || (dateIndex === 0 && i < 2);
+        btn.disabled = taken;
+        btn.title = taken ? 'Already booked' : 'Available';
+        btn.addEventListener('click', function(){
+          timeGrid.querySelectorAll('.time-btn').forEach(function(b){ b.setAttribute('aria-pressed', 'false'); });
+          btn.setAttribute('aria-pressed', 'true');
+          state.time = slot;
+          updateSummary();
+        });
+        timeGrid.appendChild(btn);
+      });
+    }
+
+    function updateEstimate(){
+      const total = CONSULT_FEE + state.price;
+      estimateTotal.textContent = money(total);
+      document.getElementById('estimate-note').textContent = 'Consultation ₹200 + ' + (state.price > 0 ? state.treatment : 'selected treatment');
+      updateSummary();
+    }
+
+    function updateSummary(){
+      if (state.date && state.time){
+        summary.textContent = state.dateLabel + ' at ' + state.time + ' · ' + state.treatment + ' · ' + money(CONSULT_FEE + state.price);
+      } else {
+        summary.textContent = 'Pick a date and time to see your visit summary.';
+      }
+    }
+
+    window.selectTreatment = function(name, price){
+      state.treatment = name;
+      state.price = Number(price) || 0;
+      treatmentSelect.value = name;
+      if (treatmentSelect.selectedIndex === -1) {
+        // fall back to matching option text if exact value is missing
+        Array.from(treatmentSelect.options).forEach(function(o){ if (o.value === name) treatmentSelect.value = o.value; });
+      }
+      document.querySelectorAll('.fee-card').forEach(function(card){
+        card.classList.toggle('is-selected', card.dataset.treatment === name);
+      });
+      document.querySelectorAll('.fee-select').forEach(function(btn){
+        const card = btn.closest('.fee-card');
+        btn.textContent = card && card.dataset.treatment === name ? '✓ Added to estimate' : 'Add to estimate';
+      });
+      updateEstimate();
+      document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast(name + ' added — your estimate is ' + money(CONSULT_FEE + state.price));
+    };
+
+    treatmentSelect.addEventListener('change', function(){
+      const opt = treatmentSelect.options[treatmentSelect.selectedIndex];
+      state.treatment = opt.value;
+      state.price = Number(opt.dataset.price) || 0;
+      document.querySelectorAll('.fee-card').forEach(function(card){
+        card.classList.toggle('is-selected', card.dataset.treatment === state.treatment);
+      });
+      document.querySelectorAll('.fee-select').forEach(function(btn){
+        const card = btn.closest('.fee-card');
+        btn.textContent = card && card.dataset.treatment === state.treatment ? '✓ Added to estimate' : 'Add to estimate';
+      });
+      updateEstimate();
+    });
+
+    window.bookOnWhatsApp = function(){
+      const name = document.getElementById('patient-name').value.trim();
+      const phone = document.getElementById('patient-phone').value.trim();
+      const digits = phone.replace(/\D/g, '');
+      if (!name || name.length < 2){ showToast('Please enter your name so the clinic can confirm your slot.', true); document.getElementById('patient-name').focus(); return; }
+      if (digits.length < 10){ showToast('Please enter a valid phone number (at least 10 digits).', true); document.getElementById('patient-phone').focus(); return; }
+      if (!state.date || !state.time){ showToast('Choose a date and time to lock your preferred slot.', true); document.getElementById('date-strip').scrollIntoView({behavior:'smooth', block:'center'}); return; }
+      const total = CONSULT_FEE + state.price;
+      const text = '*New Appointment Request — me.aid Dental* 🦷\n\n' +
+        '• Patient: ' + name + '\n' +
+        '• Phone: ' + phone + '\n' +
+        '• Treatment: ' + state.treatment + '\n' +
+        '• Date: ' + state.dateLabel + '\n' +
+        '• Time: ' + state.time + '\n' +
+        '• Estimated total: ' + money(total) + '\n\n' +
+        'Hi me.aid, please confirm this appointment slot. Thank you!';
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+      showToast('Opening WhatsApp — your booking summary is ready to send.');
+    };
+
+    buildDates();
+    updateEstimate();
+    treatmentSelect.value = 'Consultation & Checkup';
+  })();
+</script>
 </body>
 </html>
