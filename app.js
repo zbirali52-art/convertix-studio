@@ -401,27 +401,36 @@
     });
   }
 
-  /* ---------------- 7. Fluid Aurora Ambient Canvas Engine ---------------- */
+  /* ---------------- 7. Exact Datox 3D Multi-Layered Sine-Ribbon Wave & Optical Flare Engine ---------------- */
 
   const THEME_AURORA_PALETTES = {
-    obsidian: [
-      { r: 122, g: 100, b: 255, a: 0.38, rx: 0.30, ry: 0.26, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
-      { r: 255, g: 51, b: 122, a: 0.32, rx: 0.28, ry: 0.30, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
-      { r: 94, g: 151, b: 255, a: 0.28, rx: 0.32, ry: 0.24, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
-      { r: 16, g: 185, b: 129, a: 0.22, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
-    ],
-    midnight: [
-      { r: 29, g: 78, b: 216, a: 0.40, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
-      { r: 56, g: 189, b: 248, a: 0.35, rx: 0.26, ry: 0.28, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
-      { r: 67, g: 56, b: 202, a: 0.30, rx: 0.30, ry: 0.22, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
-      { r: 147, g: 197, b: 253, a: 0.25, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
-    ],
-    emerald: [
-      { r: 52, g: 211, b: 153, a: 0.35, rx: 0.28, ry: 0.24, speedX: 0.0006, speedY: 0.0008, phaseX: 0, phaseY: 1.2, baseX: 0.25, baseY: 0.3 },
-      { r: 5, g: 150, b: 105, a: 0.35, rx: 0.26, ry: 0.28, speedX: 0.0007, speedY: 0.0005, phaseX: 2.1, phaseY: 0.5, baseX: 0.75, baseY: 0.35 },
-      { r: 16, g: 185, b: 129, a: 0.30, rx: 0.30, ry: 0.22, speedX: 0.0005, speedY: 0.0009, phaseX: 4.2, phaseY: 3.1, baseX: 0.65, baseY: 0.75 },
-      { r: 20, g: 184, b: 166, a: 0.25, rx: 0.24, ry: 0.26, speedX: 0.0008, speedY: 0.0006, phaseX: 1.5, phaseY: 4.5, baseX: 0.3, baseY: 0.7 }
-    ]
+    obsidian: {
+      strands: [
+        { color: 'rgba(122, 100, 255, 0.72)', core: 'rgba(122, 100, 255, 0.95)', freq: 0.0018, speed: 0.0008, amp: 75, phase: 0.0, yOffset: 0.38, width: 28 },
+        { color: 'rgba(255, 51, 122, 0.68)', core: 'rgba(255, 51, 122, 0.90)', freq: 0.0022, speed: 0.0011, amp: 85, phase: 1.8, yOffset: 0.45, width: 32 },
+        { color: 'rgba(0, 242, 254, 0.65)', core: 'rgba(0, 242, 254, 0.90)', freq: 0.0015, speed: 0.0006, amp: 65, phase: 3.4, yOffset: 0.32, width: 24 }
+      ],
+      flareColor: 'rgba(122, 100, 255, 0.45)',
+      ringColors: ['rgba(0, 242, 254, 0.35)', 'rgba(255, 51, 122, 0.3)', 'rgba(122, 100, 255, 0.25)']
+    },
+    midnight: {
+      strands: [
+        { color: 'rgba(59, 130, 246, 0.75)', core: 'rgba(96, 165, 250, 0.95)', freq: 0.0018, speed: 0.0008, amp: 75, phase: 0.0, yOffset: 0.38, width: 28 },
+        { color: 'rgba(56, 189, 248, 0.68)', core: 'rgba(147, 197, 253, 0.90)', freq: 0.0022, speed: 0.0011, amp: 85, phase: 1.8, yOffset: 0.45, width: 32 },
+        { color: 'rgba(99, 102, 241, 0.65)', core: 'rgba(129, 140, 248, 0.90)', freq: 0.0015, speed: 0.0006, amp: 65, phase: 3.4, yOffset: 0.32, width: 24 }
+      ],
+      flareColor: 'rgba(56, 189, 248, 0.45)',
+      ringColors: ['rgba(59, 130, 246, 0.35)', 'rgba(99, 102, 241, 0.3)', 'rgba(56, 189, 248, 0.25)']
+    },
+    emerald: {
+      strands: [
+        { color: 'rgba(16, 185, 129, 0.75)', core: 'rgba(52, 211, 153, 0.95)', freq: 0.0018, speed: 0.0008, amp: 75, phase: 0.0, yOffset: 0.38, width: 28 },
+        { color: 'rgba(52, 211, 153, 0.68)', core: 'rgba(110, 231, 183, 0.90)', freq: 0.0022, speed: 0.0011, amp: 85, phase: 1.8, yOffset: 0.45, width: 32 },
+        { color: 'rgba(20, 184, 166, 0.65)', core: 'rgba(45, 212, 191, 0.90)', freq: 0.0015, speed: 0.0006, amp: 65, phase: 3.4, yOffset: 0.32, width: 24 }
+      ],
+      flareColor: 'rgba(52, 211, 153, 0.45)',
+      ringColors: ['rgba(16, 185, 129, 0.35)', 'rgba(20, 184, 166, 0.3)', 'rgba(52, 211, 153, 0.25)']
+    }
   };
 
   class AmbientCanvas {
@@ -437,11 +446,30 @@
       this.width = 0;
       this.height = 0;
 
-      // Cursor tracking with spring-damped lerp
+      // Cursor tracking with spring damping
       this.mouseX = 0.5;
       this.mouseY = 0.5;
       this.targetMouseX = 0.5;
       this.targetMouseY = 0.5;
+
+      // Scroll velocity impulse
+      this.scrollY = window.scrollY || 0;
+      this.scrollVelocity = 0;
+      this.lastScrollY = window.scrollY || 0;
+
+      // Floating bokeh dust particles
+      this.particles = [];
+      for (let i = 0; i < 24; i++) {
+        this.particles.push({
+          x: Math.random(),
+          y: Math.random(),
+          size: Math.random() * 2.5 + 1,
+          speedX: (Math.random() - 0.5) * 0.0003,
+          speedY: -Math.random() * 0.0004 - 0.0001,
+          alpha: Math.random() * 0.6 + 0.2,
+          pulseSpeed: Math.random() * 0.002 + 0.001
+        });
+      }
 
       this.initEvents();
       this.resize();
@@ -456,12 +484,13 @@
 
     resize() {
       if (!this.canvas) return;
-      const maxW = Math.min(window.innerWidth, 1920);
-      const maxH = Math.min(window.innerHeight, 1080);
-      this.width = Math.max(320, Math.floor(maxW / 2));
-      this.height = Math.max(240, Math.floor(maxH / 2));
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      this.canvas.width = Math.floor(this.width * dpr);
+      this.canvas.height = Math.floor(this.height * dpr);
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.scale(dpr, dpr);
     }
 
     initEvents() {
@@ -472,6 +501,13 @@
           this.targetMouseX = e.clientX / window.innerWidth;
           this.targetMouseY = e.clientY / window.innerHeight;
         }
+      }, { passive: true });
+
+      window.addEventListener('scroll', () => {
+        const currentY = window.scrollY || 0;
+        const delta = currentY - this.lastScrollY;
+        this.lastScrollY = currentY;
+        this.scrollVelocity = Math.max(-40, Math.min(40, delta));
       }, { passive: true });
 
       document.addEventListener('visibilitychange', () => {
@@ -524,56 +560,128 @@
       const { ctx, width: w, height: h } = this;
       if (!ctx || w === 0 || h === 0) return;
 
-      this.mouseX += (this.targetMouseX - this.mouseX) * 0.04;
-      this.mouseY += (this.targetMouseY - this.mouseY) * 0.04;
+      // Smooth mouse spring lerp
+      this.mouseX += (this.targetMouseX - this.mouseX) * 0.05;
+      this.mouseY += (this.targetMouseY - this.mouseY) * 0.05;
 
-      ctx.clearRect(0, 0, w, h);
+      // Scroll velocity decay
+      this.scrollVelocity *= 0.92;
+
+      // Pure jet-black void clear
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, w, h);
 
       const palette = THEME_AURORA_PALETTES[this.theme] || THEME_AURORA_PALETTES.obsidian;
-      const attract = 0.22;
 
-      // 1. Base Aurora Mesh Pass
-      ctx.globalCompositeOperation = 'source-over';
-      palette.forEach(node => {
-        const thetaX = time * node.speedX + node.phaseX;
-        const thetaY = time * node.speedY + node.phaseY;
-        const orbitX = Math.sin(thetaX) * node.rx * w;
-        const orbitY = Math.cos(thetaY) * node.ry * h;
-        const pullX = (this.mouseX * w - node.baseX * w) * attract;
-        const pullY = (this.mouseY * h - node.baseY * h) * attract;
+      // Additive Screen Blending for luminous 3D chromatic ribbons
+      ctx.globalCompositeOperation = 'screen';
 
-        const cx = node.baseX * w + orbitX + pullX;
-        const cy = node.baseY * h + orbitY + pullY;
-        const radius = Math.max(w, h) * 0.45;
+      const mousePullX = (this.mouseX - 0.5) * 80;
+      const mousePullY = (this.mouseY - 0.5) * 90;
+      const scrollImpulse = this.scrollVelocity * 0.4;
 
-        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        grad.addColorStop(0, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a})`);
-        grad.addColorStop(0.5, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a * 0.4})`);
-        grad.addColorStop(1, `rgba(${node.r}, ${node.g}, ${node.b}, 0)`);
+      // 1. Render Multi-Strand Sine-Ribbon Waves
+      palette.strands.forEach((strand, strandIdx) => {
+        ctx.beginPath();
+        const baseCy = h * strand.yOffset + mousePullY * (0.6 + strandIdx * 0.2);
+        const dynamicAmp = strand.amp + Math.abs(scrollImpulse) * 0.8 + (1 - this.mouseY) * 20;
+        const currentPhase = time * strand.speed + strand.phase + mousePullX * 0.01;
 
+        // Draw top curve
+        const step = Math.max(8, Math.floor(w / 120));
+        const topPoints = [];
+        const botPoints = [];
+
+        for (let x = -40; x <= w + 40; x += step) {
+          const harmonic1 = Math.sin(x * strand.freq + currentPhase);
+          const harmonic2 = Math.cos(x * strand.freq * 1.8 - currentPhase * 0.6);
+          const y = baseCy + (harmonic1 * 0.75 + harmonic2 * 0.25) * dynamicAmp;
+          const ribbonThick = strand.width + Math.sin(x * 0.003 + currentPhase) * 12;
+
+          topPoints.push({ x, y: y - ribbonThick * 0.5 });
+          botPoints.push({ x, y: y + ribbonThick * 0.5 });
+        }
+
+        // Draw polygon ribbon band
+        ctx.moveTo(topPoints[0].x, topPoints[0].y);
+        for (let i = 1; i < topPoints.length; i++) {
+          ctx.lineTo(topPoints[i].x, topPoints[i].y);
+        }
+        for (let i = botPoints.length - 1; i >= 0; i--) {
+          ctx.lineTo(botPoints[i].x, botPoints[i].y);
+        }
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(0, baseCy - dynamicAmp, w, baseCy + dynamicAmp);
+        grad.addColorStop(0, strand.color);
+        grad.addColorStop(0.5, strand.core);
+        grad.addColorStop(1, strand.color);
         ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+        ctx.fill();
+
+        // Delicate luminous filament line
+        ctx.beginPath();
+        for (let i = 0; i < topPoints.length; i++) {
+          const midY = (topPoints[i].y + botPoints[i].y) * 0.5;
+          if (i === 0) ctx.moveTo(topPoints[i].x, midY);
+          else ctx.lineTo(topPoints[i].x, midY);
+        }
+        ctx.strokeStyle = strand.core;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
       });
 
-      // 2. Additive Chromatic Refraction Pass (Screen blend mode with alternating spatial dispersion)
-      ctx.globalCompositeOperation = 'screen';
-      palette.forEach((node, i) => {
-        const thetaX = time * node.speedX + node.phaseX;
-        const thetaY = time * node.speedY + node.phaseY;
-        const shiftX = (i % 2 === 0 ? 4 : -4);
-        const shiftY = (i % 2 === 0 ? -3 : 3);
+      // 2. Optical Lens Flare & Concentric Ring Emitter
+      const flareCenterX = w * 0.72 + (this.mouseX - 0.5) * 120;
+      const flareCenterY = h * 0.34 + (this.mouseY - 0.5) * 80;
 
-        const cx = node.baseX * w + Math.sin(thetaX) * node.rx * w + (this.mouseX * w - node.baseX * w) * attract + shiftX;
-        const cy = node.baseY * h + Math.cos(thetaY) * node.ry * h + (this.mouseY * h - node.baseY * h) * attract + shiftY;
-        const radius = Math.max(w, h) * 0.35;
+      // Anamorphic horizontal flare streak
+      const streakGrad = ctx.createLinearGradient(flareCenterX - 350, flareCenterY, flareCenterX + 350, flareCenterY);
+      streakGrad.addColorStop(0, 'rgba(0,0,0,0)');
+      streakGrad.addColorStop(0.3, palette.flareColor);
+      streakGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.75)');
+      streakGrad.addColorStop(0.7, palette.flareColor);
+      streakGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = streakGrad;
+      ctx.fillRect(flareCenterX - 350, flareCenterY - 1.5, 700, 3);
 
-        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        grad.addColorStop(0, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a * 0.35})`);
-        grad.addColorStop(0.7, `rgba(${node.r}, ${node.g}, ${node.b}, ${node.a * 0.08})`);
-        grad.addColorStop(1, `rgba(${node.r}, ${node.g}, ${node.b}, 0)`);
+      // Concentric diffraction rings
+      palette.ringColors.forEach((rc, ringIdx) => {
+        const ringRadius = 45 + ringIdx * 35 + Math.sin(time * 0.0015 + ringIdx) * 6;
+        ctx.beginPath();
+        ctx.arc(flareCenterX, flareCenterY, ringRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = rc;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      });
 
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+      // Central flare orb glow
+      const orbGrad = ctx.createRadialGradient(flareCenterX, flareCenterY, 0, flareCenterX, flareCenterY, 140);
+      orbGrad.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
+      orbGrad.addColorStop(0.3, palette.flareColor);
+      orbGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = orbGrad;
+      ctx.beginPath();
+      ctx.arc(flareCenterX, flareCenterY, 140, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 3. Floating Bokeh Particles
+      this.particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        if (p.y < -0.05) p.y = 1.05;
+        if (p.x < -0.05) p.x = 1.05;
+        if (p.x > 1.05) p.x = -0.05;
+
+        const px = p.x * w;
+        const py = p.y * h;
+        const pAlpha = p.alpha * (0.6 + Math.sin(time * p.pulseSpeed) * 0.4);
+
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${pAlpha})`;
+        ctx.fill();
       });
 
       ctx.globalCompositeOperation = 'source-over';
@@ -1014,6 +1122,134 @@
     setTimeout(() => {
       if (btn) btn.textContent = 'Generate Instant Digital Pass 🎟️';
     }, 3500);
+  };
+
+  /* ---------------- 13. Interactive Client Showcase Sample Handlers ---------------- */
+  let currentDentalDoctor = 'Dr. Amit Sharma (Lead Surgeon)';
+  let currentDentalSlot = '11:00 AM';
+
+  window.setDentalDoctor = function(btn, doctorName) {
+    currentDentalDoctor = doctorName;
+    const group = document.getElementById('dental-doctor-group');
+    if (group) {
+      group.querySelectorAll('.interactive-pill-btn').forEach(b => b.classList.remove('is-active'));
+    }
+    btn.classList.add('is-active');
+    const label = document.getElementById('dental-doctor-label');
+    if (label) label.textContent = doctorName;
+    updateDentalToast();
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.setDentalSlot = function(btn, slotTime) {
+    currentDentalSlot = slotTime;
+    const group = document.getElementById('dental-slots-group');
+    if (group) {
+      group.querySelectorAll('.interactive-pill-btn').forEach(b => b.classList.remove('is-active'));
+    }
+    btn.classList.add('is-active');
+    updateDentalToast();
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  function updateDentalToast() {
+    const text = document.getElementById('dental-toast-text');
+    if (text) text.textContent = `Selected: Today at ${currentDentalSlot} with ${currentDentalDoctor.split(' ')[1]}`;
+    const cta = document.getElementById('dental-whatsapp-cta');
+    if (cta) {
+      const msg = encodeURIComponent(`Hi, I want to book a slot at Apex Dental for Today at ${currentDentalSlot} with ${currentDentalDoctor}.`);
+      cta.href = `https://wa.me/${AGENCY_PHONE}?text=${msg}`;
+    }
+  }
+
+  // Atra Elite Car Rentals
+  let currentAtraVehicle = 'Aston Martin DBS';
+  let currentAtraRate = 4500;
+
+  window.setAtraVehicle = function(btn, vehicleName, rate) {
+    currentAtraVehicle = vehicleName;
+    currentAtraRate = rate;
+    const group = document.getElementById('atra-vehicle-group');
+    if (group) {
+      group.querySelectorAll('.interactive-pill-btn').forEach(b => b.classList.remove('is-active'));
+    }
+    btn.classList.add('is-active');
+    const badge = document.getElementById('atra-price-badge');
+    if (badge) badge.textContent = `₹${rate.toLocaleString('en-IN')} / hr`;
+    window.updateAtraEstimate();
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.updateAtraEstimate = function() {
+    const hoursSelect = document.getElementById('atra-hours-select');
+    const locSelect = document.getElementById('atra-location-select');
+    const hours = hoursSelect ? parseInt(hoursSelect.value, 10) : 4;
+    const loc = locSelect ? locSelect.value : 'Beverly Hills Flagship';
+    const total = currentAtraRate * hours;
+    const totalEl = document.getElementById('atra-total-val');
+    if (totalEl) totalEl.textContent = `₹${total.toLocaleString('en-IN')} INR`;
+    const cta = document.getElementById('atra-whatsapp-cta');
+    if (cta) {
+      const msg = encodeURIComponent(`Hi, I want to reserve the ${currentAtraVehicle} for ${hours} hours at ${loc} (Estimated Total: ₹${total.toLocaleString('en-IN')}).`);
+      cta.href = `https://wa.me/${AGENCY_PHONE}?text=${msg}`;
+    }
+  };
+
+  // Aura Botanicals
+  let currentAuraVariant = '30ml Travel Size';
+  let auraCartCount = 0;
+
+  window.setAuraVariant = function(btn, variantName, usd, inr) {
+    currentAuraVariant = variantName;
+    const group = document.getElementById('aura-size-group');
+    if (group) {
+      group.querySelectorAll('.interactive-pill-btn').forEach(b => b.classList.remove('is-active'));
+    }
+    btn.classList.add('is-active');
+    const disp = document.getElementById('aura-price-display');
+    if (disp) disp.textContent = `$${usd} USD / ₹${inr.toLocaleString('en-IN')}`;
+    const cta = document.getElementById('aura-whatsapp-cta');
+    if (cta) {
+      const msg = encodeURIComponent(`Hi, I want to order the Aura Botanicals ${variantName} ($${usd} / ₹${inr}).`);
+      cta.href = `https://wa.me/${AGENCY_PHONE}?text=${msg}`;
+    }
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.addToAuraCart = function() {
+    auraCartCount++;
+    const countEl = document.getElementById('aura-cart-count');
+    if (countEl) countEl.textContent = `${auraCartCount} item${auraCartCount > 1 ? 's' : ''}`;
+    const btn = document.getElementById('aura-add-btn');
+    if (btn) {
+      btn.textContent = 'Added ✓';
+      setTimeout(() => { if (btn) btn.textContent = 'Add to Bag +'; }, 1500);
+    }
+    if (window.soundEngine && typeof window.soundEngine.playSweep === 'function') {
+      window.soundEngine.playSweep(true);
+    }
+  };
+
+  // Nocturne Dining
+  let nocturneGuests = 2;
+  window.stepNocturneGuests = function(delta) {
+    nocturneGuests = Math.max(1, Math.min(12, nocturneGuests + delta));
+    const disp = document.getElementById('nocturne-guests-val');
+    if (disp) disp.textContent = `${nocturneGuests} Guest${nocturneGuests > 1 ? 's' : ''}`;
+    window.updateNocturneZone();
+    if (window.soundEngine) window.soundEngine.playClick();
+  };
+
+  window.updateNocturneZone = function() {
+    const zoneSelect = document.getElementById('nocturne-zone-select');
+    const zone = zoneSelect ? zoneSelect.value : "Chef's Counter (Omakase)";
+    const label = document.getElementById('nocturne-hold-label');
+    if (label) label.textContent = `Table held for ${nocturneGuests} guests at ${zone.split(' ')[0]}`;
+    const cta = document.getElementById('nocturne-whatsapp-cta');
+    if (cta) {
+      const msg = encodeURIComponent(`Hi, I want to reserve a table for ${nocturneGuests} Guests at Nocturne (${zone}).`);
+      cta.href = `https://wa.me/${AGENCY_PHONE}?text=${msg}`;
+    }
   };
 
   const footerYear = $('#footer-year');
